@@ -32,7 +32,7 @@ module.exports = async (client, message) => {
 		}
 	}
 
-	if (message.channel.type === 'dm' || !message.channel.viewable || message.author.bot) return;
+	if (!message.channel.viewable || message.author.bot) return;
 
 	client.db.ensure(`${message.guild.id}_prefix`, client.config.configuration.defaultPrefix);
 	const prefix = client.db.get(`${message.guild.id}_prefix`);
