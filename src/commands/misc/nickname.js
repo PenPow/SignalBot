@@ -42,7 +42,7 @@ module.exports = class NicknameCommand extends Command {
             .setTimestamp()
             .setColor(message.guild.me.displayHexColor);
 
-            message.reply(embed);
+            message.reply({ embeds: [embed] });
           } catch (err) {
             this.sendErrorMessage(message, 1, 'Please check the role hierarchy', err.message);
           }

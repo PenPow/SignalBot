@@ -42,6 +42,6 @@ module.exports = class EvalCommand extends Command {
 
         if(output) if(output.includes(this.client.token)) return message.channel.send('(╯°□°)╯︵ ┻━┻ MY token. **MINE**.');
   
-        message.reply(embed);
+        message.reply({ embeds: [embed] });
       };
     };

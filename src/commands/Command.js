@@ -213,7 +213,7 @@ class Command {
                 .setTimestamp()
                 .setColor(message.guild.me.displayHexColor);
 
-                message.reply(embed);
+                message.reply({ embeds: [embed] });
                 return false;
             };
         };
@@ -235,7 +235,7 @@ class Command {
             .setTimestamp()
             .setColor(message.guild.me.displayHexColor);
 
-            message.reply(embed);
+            message.reply({ embeds: [embed] });
             return false;
         } else return true;
     };
@@ -273,7 +273,7 @@ class Command {
 
         if(errorMessage) embed.addField('Error Message', `\`\`\`${errorMessage}\`\`\``);
 
-        return message.reply(embed);
+        return message.reply({ embeds: [embed] });
 
     };
 

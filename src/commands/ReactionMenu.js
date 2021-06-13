@@ -108,7 +108,7 @@ class ReactionMenu {
            .setDescription(description);
        };
 
-       this.channel.send(first).then(message => {
+       this.channel.send({ embeds: [first] }).then(message => {
 
            /**
             * The menu message

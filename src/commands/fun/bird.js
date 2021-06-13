@@ -30,7 +30,7 @@ module.exports = class BirdCommand extends Command {
             .setTimestamp()
             .setColor(message.guild.me.displayHexColor);
 
-            message.reply(embed)
+            message.reply({ embeds: [embed] });
           } catch(err) {
             message.client.logger.error(err.stack);
             this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);

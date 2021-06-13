@@ -54,7 +54,7 @@ module.exports = class YoutubeCommand extends Command {
         .setColor(message.guild.me.displayHexColor);
 
         if(message.channel.nsfw) embed.setImage(result.thumbnails.high.url);
-        message.reply(embed);
+        message.reply({ embeds: [embed] });
       };
 
       async slashRun(interaction, args) {

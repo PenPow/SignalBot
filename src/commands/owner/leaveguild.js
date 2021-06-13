@@ -43,6 +43,6 @@ module.exports = class LeaveGuildCommand extends Command {
           .setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
           .setTimestamp()
           .setColor(message.guild.me.displayHexColor);
-        message.reply(embed);
+        message.reply({ embeds: [embed] });
       };
     };

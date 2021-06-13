@@ -19,7 +19,7 @@ module.exports = class ChannelInfoCommand extends Command {
       aliases: ['channel', 'ci'],
       usage: 'channelinfo [channel mention/ID]',
       description: oneLine`
-        Fetches information about the provided channel. 
+        Fetches information about the channel. 
         If no channel is given, the current channel will be used.
       `,
       type: client.types.INFO,
@@ -72,7 +72,7 @@ module.exports = class ChannelInfoCommand extends Command {
       ' or provide a valid text, announcement, or voice channel ID'
     );
     if (channel.topic) embed.addField('Topic', channel.topic);
-    message.channel.send(embed);
+    message.reply({ embeds: [embed] });
   };
 
   // async slashRun(interaction, args) {

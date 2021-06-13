@@ -56,7 +56,7 @@ module.exports = class EmojifyCommand extends Command {
         .setTimestamp()
         .setColor(message.guild.me.displayHexColor);
 
-        message.reply(embed)
+        message.reply({ embeds: [embed] });
       };
 
       async slashRun(interaction, args) {

@@ -32,7 +32,7 @@ module.exports = class ServersCommand extends Command {
 
         if(servers.length <= 10) {
           const range = (servers.length == 1) ? '[1]' : `[1 - ${servers.length}]`;
-          message.reply(embed.setTitle(`Server List ${range}`).setDescription(servers.join('\n')))
+          message.reply({ embeds: [embed.setTitle(`Server List ${range}`).setDescription(servers.join('\n'))] })
         } else {
           let member = await message.guild.members.fetch(message.author.id)
           new ReactionMenu(message.client, message.channel, member, embed, servers)

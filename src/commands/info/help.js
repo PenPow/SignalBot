@@ -101,7 +101,7 @@ module.exports = class HelpCommand extends Command {
             );
         };
 
-        message.channel.send(embed)
+        message.reply({ embeds: [embed] });
     };
 
     async slashRun(interaction, args) {
