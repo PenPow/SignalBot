@@ -22,7 +22,7 @@ module.exports = class BotInfoCommand extends Command {
 		const prefix = message.client.db.get(`${message.guild.id}_prefix`);
 		const tech = stripIndent`
       Version     :: ${pkg.version}
-      Library     :: Discord.js Master Branch
+      Library     :: Discord.js@dev
       Environment :: Node.js v14.15.2
       Database    :: SQLite
     `;

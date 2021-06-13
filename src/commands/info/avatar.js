@@ -16,7 +16,7 @@ module.exports = class AvatarCommand extends Command {
 		});
 	}
 	async run(message, args) {
-		const member = (await this.getUserFromMention(message, args[0])) || message.author;
+		const member = (await this.getUserFromMention(message, args[0])) || message.guild.members.cache.get(args[0]) || message.author;
 
 		const embed = new MessageEmbed()
 			.setTitle(`${member.username}'s Avatar`)
@@ -28,7 +28,7 @@ module.exports = class AvatarCommand extends Command {
 	}
 
 	slashRun(interaction, args) {
-		const member = interaction.guild.members.cache.get(args?.first()?.user.id) || interaction.member;
+		const member = args?.first()?.member || interaction.member;
 
 		const embed = new MessageEmbed()
 			.setTitle(`${member.displayName}'s Avatar`)

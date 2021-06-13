@@ -19,9 +19,9 @@ module.exports = class ChannelInfoCommand extends Command {
 			aliases: ['channel', 'ci'],
 			usage: 'channelinfo [channel mention/ID]',
 			description: oneLine`
-        Fetches information about the channel. 
-        If no channel is given, the current channel will be used.
-      `,
+      			  Fetches information about the channel. 
+      			  If no channel is given, the current channel will be used.
+      			`,
 			type: client.types.INFO,
 			guilds: ['GLOBAL'],
 			examples: ['channelinfo #general', 'channel #general', 'ci #general'],
