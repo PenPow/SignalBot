@@ -22,13 +22,11 @@ module.exports = class AvatarCommand extends Command {
         });
       }
       async run(message, args) {
-        const member =  this.getMemberFromMention(message, args[0]) || 
-        message.guild.members.cache.get(args[0]) || 
-        message.member;
+        const member =  (await this.getUserFromMention(message, args[0])) || message.author;
 
         const embed = new MessageEmbed()
-          .setTitle(`${member.displayName}'s Avatar`)
-          .setImage(member.user.displayAvatarURL({ dynamic: true, size: 512 }))
+          .setTitle(`${member.username}'s Avatar`)
+          .setImage(member.displayAvatarURL({ dynamic: true, size: 512 }))
           .setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
           .setTimestamp()
           .setColor(member.displayHexColor);
@@ -36,15 +34,15 @@ module.exports = class AvatarCommand extends Command {
       };
 
       async slashRun(interaction, args) {
-        const member = interaction.guild.members.cache.get(args[0]?.value) || 
-        interaction.member;
+        const member = interaction.guild.members.cache.get(args?.first()?.user.id) || interaction.member;
 
         const embed = new MessageEmbed()
-          .setTitle(`${member.displayName}'s Avatar`)
-          .setImage(member.user.displayAvatarURL({ dynamic: true, size: 2048 }))
-          .setFooter(interaction.member.displayName,  interaction.user.displayAvatarURL({ dynamic: true }))
-          .setTimestamp()
-          .setColor(interaction.displayHexColor);
-          interaction.reply({ ephemeral: true, embeds: [embed] });
+        .setTitle(`${member.displayName}'s Avatar`)
+        .setImage(member.user.displayAvatarURL({ dynamic: true, size: 512 }))
+        .setFooter(interaction.member.displayName,  interaction.user.displayAvatarURL({ dynamic: true }))
+        .setTimestamp()
+        .setColor(member.displayHexColor);
+        
+        interaction.reply({ ephemeral: true, embeds: [embed] });
       };
 };

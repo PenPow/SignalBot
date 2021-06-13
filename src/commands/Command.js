@@ -143,6 +143,22 @@ class Command {
         return await message.guild.members.fetch(id);
     };
 
+    
+    /**
+     * Gets user from mention
+     * @param {Message} message
+     * @param {string} mention
+     */
+     async getUserFromMention(message, mention) {
+        if(!mention) return null;
+        const matches = mention.match(/^<@!?(\d+)>$/);
+  
+        if(!matches) return null;
+
+        const id = matches[1];
+
+        return await message.client.users.fetch(id);
+    };
     /**
      * Gets a role from a mention
      * @param {Message} message

@@ -36,7 +36,7 @@ module.exports = class BotInfoCommand extends Command {
       `)
       .addField('Prefix', `\`${prefix}\``, true)
       .addField('Client ID', `\`${message.client.user.id}\``, true)
-      .addField(`Developer ${owner}`, botOwner, true)
+      .addField(`Developer ${owner}`, `\`${botOwner.tag}\``, true)
       .addField('Tech', `\`\`\`asciidoc\n${tech}\`\`\``)
       .addField(
         'Links', 
@@ -69,7 +69,7 @@ module.exports = class BotInfoCommand extends Command {
       `)
       .addField('Prefix', `\`${prefix}\``, true)
       .addField('Client ID', `\`${interaction.client.user.id}\``, true)
-      .addField(`Developer ${owner}`, botOwner, true)
+      .addField(`Developer ${owner}`, `\`${botOwner.tag}\``, true)
       .addField('Tech', `\`\`\`asciidoc\n${tech}\`\`\``)
       .addField(
         'Links', 
