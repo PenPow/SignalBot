@@ -14,11 +14,6 @@ module.exports = class RollCommand extends Command {
 			examples: ['roll 6', 'dice 12', 'r 20'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'sides',
-				type: 'INTEGER',
-				description: 'How many sides do you want on the dice.',
-			}],
 		});
 	}
 	async run(message, args) {
@@ -39,7 +34,7 @@ module.exports = class RollCommand extends Command {
 	}
 
 	slashRun(interaction, args) {
-		const limit = args[0]?.value || 6;
+		const limit = args.first()?.value || 6;
 
 		const n = Math.floor(Math.random() * limit + 1);
 
@@ -53,5 +48,18 @@ module.exports = class RollCommand extends Command {
 			.setColor(interaction.guild.me.displayHexColor);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'sides',
+				type: 'INTEGER',
+				description: 'How many sides do you want on the dice.',
+				required: false,
+			}],
+		};
 	}
 };

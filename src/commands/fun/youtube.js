@@ -18,12 +18,6 @@ module.exports = class YoutubeCommand extends Command {
 			examples: ['youtube Baby Shark', 'yt Despacito'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'searchterm',
-				type: 'STRING',
-				description: 'The youtube video search term',
-				required: true,
-			}],
 		});
 	}
 	async run(message, args) {
@@ -59,7 +53,7 @@ module.exports = class YoutubeCommand extends Command {
 
 	async slashRun(interaction, args) {
 		const apiKey = interaction.client.apiKeys.googleApi.token;
-		const videoName = args[0].value;
+		const videoName = args.first()?.value;
 		const searchOptions = { maxResults: 1, key: apiKey, type: 'video' };
 		if (!interaction.channel.nsfw) searchOptions['safeSearch'] = 'strict';
 
@@ -85,5 +79,18 @@ module.exports = class YoutubeCommand extends Command {
 
 		if(interaction.channel.nsfw) embed.setImage(result.thumbnails.high.url);
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'search_term',
+				type: 'STRING',
+				description: 'The youtube video search term',
+				required: true,
+			}],
+		};
 	}
 };

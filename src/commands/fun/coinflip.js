@@ -53,4 +53,11 @@ module.exports = class CoinFlipCommand extends Command {
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+		};
+	}
 };

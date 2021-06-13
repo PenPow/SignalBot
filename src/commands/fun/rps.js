@@ -17,12 +17,6 @@ module.exports = class RPSCommand extends Command {
 			examples: ['rps rock'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'option',
-				type: 'STRING',
-				description: 'Rock, paper or scissors',
-				required: true,
-			}],
 		});
 	}
 	run(message, args) {
@@ -50,9 +44,7 @@ module.exports = class RPSCommand extends Command {
 	}
 
 	slashRun(interaction, args) {
-		if(!args[0].value || (args && !rps.includes(args[0].value.toLowerCase()))) return this.sendSlashErrorMessage(interaction, 0, 'Please enter rock, paper, or scissors');
-
-		const userChoice = rps.indexOf(args[0].value.toLowerCase());
+		const userChoice = rps.indexOf(args.first()?.value.toLowerCase());
 		const botChoice = Math.floor(Math.random() * 3);
 
 		let result;
@@ -71,5 +63,32 @@ module.exports = class RPSCommand extends Command {
 			.setColor(interaction.guild.me.displayHexColor);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'option',
+				type: 'STRING',
+				description: 'Rock, paper or scissors',
+				required: true,
+				choices: [
+					{
+						name: 'Rock',
+						value: 'rock',
+					},
+					{
+						name: 'Paper',
+						value: 'paper',
+					},
+					{
+						name: 'Scissors',
+						value: 'scissors',
+					},
+				],
+			}],
+		};
 	}
 };

@@ -82,4 +82,11 @@ module.exports = class BotInfoCommand extends Command {
 			.setColor(interaction.guild.me.displayHexColor);
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+		};
+	}
 };

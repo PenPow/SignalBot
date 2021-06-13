@@ -15,12 +15,6 @@ module.exports = class HelpCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			//   userPermissions: ['CHANGE_NICKNAME'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'command',
-				type: 'STRING',
-				description: '(Optional) Get Detailed Information about a command',
-				required: false,
-			}],
 		});
 	}
 	async run(message, args) {
@@ -186,5 +180,18 @@ module.exports = class HelpCommand extends Command {
 		}
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'command',
+				type: 'STRING',
+				description: '(Optional) Get Detailed Information about a command',
+				required: false,
+			}],
+		};
 	}
 };

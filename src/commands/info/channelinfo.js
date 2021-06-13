@@ -26,12 +26,6 @@ module.exports = class ChannelInfoCommand extends Command {
 			guilds: ['GLOBAL'],
 			examples: ['channelinfo #general', 'channel #general', 'ci #general'],
 			clientPermissions: ['EMBED_LINKS'],
-			arguments: [{
-				name: 'channel',
-				type: 'CHANNEL',
-				description: '(Optional) Info about the channel specified, defaults to this channel if none is given.',
-				required: false,
-			}],
 		});
 	}
 	async run(message, args) {
@@ -81,7 +75,7 @@ module.exports = class ChannelInfoCommand extends Command {
 	}
 
 	async slashRun(interaction, args) {
-		const channel = interaction.guild.channels.cache.get(args?.first().value) || interaction.channel;
+		const channel = interaction.guild.channels.cache.get(args?.first()?.value) || interaction.channel;
 
 		const embed = new MessageEmbed()
 			.setTitle('Channel Information')
@@ -121,5 +115,18 @@ module.exports = class ChannelInfoCommand extends Command {
 		}
 		if (channel.topic) embed.addField('Topic', channel.topic);
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'channel',
+				type: 'CHANNEL',
+				description: '(Optional) Info about the channel specified, defaults to this channel if none is given.',
+				required: false,
+			}],
+		};
 	}
 };

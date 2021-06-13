@@ -37,15 +37,9 @@ module.exports = class EightBallCommand extends Command {
 			examples: ['8ball Am I going to become a superhero?', 'fortune Is Signal a good bot?'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'question',
-				type: 'STRING',
-				description: 'Question to ask the mystical eight ball',
-				required: true,
-			}],
 		});
 	}
-	async run(message, args) {
+	run(message, args) {
 		const question = args.join(' ');
 
 		if (!question) return this.sendErrorMessage(message, 0, 'Please provide a question to ask');
@@ -62,7 +56,7 @@ module.exports = class EightBallCommand extends Command {
 	}
 
 	slashRun(interaction, args) {
-		const question = args[0].value;
+		const question = args.first()?.value;
 
 		const embed = new MessageEmbed()
 			.setTitle(`${fun} Magic 8-Ball 🎱`)
@@ -73,5 +67,18 @@ module.exports = class EightBallCommand extends Command {
 			.setColor(interaction.guild.me.dispayHexColor);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'question',
+				type: 'STRING',
+				description: 'Question to ask the mystical eight ball',
+				required: true,
+			}],
+		};
 	}
 };

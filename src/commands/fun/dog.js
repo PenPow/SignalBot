@@ -57,4 +57,11 @@ module.exports = class DogCommand extends Command {
 			this.sendSlashErrorMessage(interaction, 1, 'Please try again in a few seconds', err.message);
 		}
 	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+		};
+	}
 };

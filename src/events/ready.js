@@ -21,42 +21,11 @@ module.exports = async (client) => {
 
 	const commandArray = [];
 
-	client.commands.forEach(async command => {
+	client.commands.each(async command => {
 		if(command.disabled) return table.addRow(command.name, client.utils.capitalize(command.type), 'Fail');
 		if(command.ownerOnly || command.type === client.types.OWNER) return table.addRow(command.name, client.utils.capitalize(command.type), 'Fail');
 
-		const data = {
-			name: command.name.toLowerCase(),
-			description: command.description,
-		};
-
-		const options = [];
-
-		if(command.arguments) {
-
-			for(let i = 0; i < command.arguments.length; i++) {
-				options.push({
-					name: command.arguments[i].name.toLowerCase(),
-					type: command.arguments[i].type.toUpperCase(),
-					description: command.arguments[i].description,
-					required: Boolean(command.arguments[i].required),
-				});
-			}
-
-		}
-
-		if(options) data.options = options;
-
-		// if(command.guilds && commands.guilds[0] !== "GLOBAL") {
-		//     for(let i = 0; i < command.guilds.length; i++) {
-		//         let guild;
-
-		//         try {
-		//             guild = await client.guilds.fetch(commands.guilds[i])
-		//         }
-		//     }
-		// }
-		commandArray.push(data);
+		commandArray.push(command.generateSlashCommand());
 
 		table.addRow(command.name, client.utils.capitalize(command.type), 'Pass');
 	});

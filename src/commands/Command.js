@@ -101,12 +101,6 @@ class Command {
          * @type {Array<string>}
          */
 		this.errorTypes = ['Invalid Argument', 'Command Failure', 'Invalid Usage'];
-
-		/**
-         * Arguments for Slash Command
-         * @type {Array<object>}
-         */
-		this.arguments = options.arguments || null;
 	}
 
 	/**
@@ -119,12 +113,20 @@ class Command {
 	}
 
 	/**
-     *
+     * Runs the Slash Command Variant of the Command
      * @param {Interaction} interaction
      * @param {Array<options>} args
      */
 	slashRun(interaction, args) { // eslint-disable-line
 		throw new Error(`${this.name} has no slashRun() method`);
+	}
+
+	/**
+     * Generates the Data Object Needed for Setting the Slash Command
+     * @returns {Object} data
+     */
+	generateSlashCommand() {
+		throw new Error(`${this.name} has no generateSlashCommand() method`);
 	}
 
 	/**
@@ -370,6 +372,7 @@ class Command {
      * Code modified from: https://github.com/discordjs/Commando/blob/master/src/commands/base.js
      * @param {Client} client
      * @param {Object} options
+     * @static
      */
 	static validateOptions(client, options) {
 		if(!client) throw new Error('No client was found');

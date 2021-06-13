@@ -14,12 +14,6 @@ module.exports = class FeedbackCommand extends Command {
 			examples: ['feedback I really like this bot', 'feedback Could you add a new feature?'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'message',
-				type: 'STRING',
-				description: 'Message to send to our team',
-				required: true,
-			}],
 		});
 	}
 	async run(message, args) {
@@ -67,7 +61,7 @@ module.exports = class FeedbackCommand extends Command {
 	}
 
 	async slashRun(interaction, args) {
-		let feedback = args[0].value;
+		let feedback = args.first()?.value;
 
 		let feedbackChannel;
 
@@ -90,7 +84,7 @@ module.exports = class FeedbackCommand extends Command {
 			.setTimestamp()
 			.setColor(interaction.guild.me.displayHexColor);
 
-		feedbackChannel.send(feedbackEmbed);
+		feedbackChannel.send({ embeds: [feedbackEmbed] });
 
 		if (feedback.length > 1024) feedback = feedback.slice(0, 1021) + '...';
 
@@ -100,12 +94,24 @@ module.exports = class FeedbackCommand extends Command {
 			.setDescription(oneLine`
           Successfully sent feedback!
         `)
-			.addField('Member', interaction.member, true)
 			.addField('Message', feedback)
 			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor(interaction.guild.me.displayHexColor);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'message',
+				type: 'STRING',
+				description: 'Message to send to our team',
+				required: true,
+			}],
+		};
 	}
 };

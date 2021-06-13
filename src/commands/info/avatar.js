@@ -13,12 +13,6 @@ module.exports = class AvatarCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			//   userPermissions: ['CHANGE_NICKNAME'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'user',
-				type: 'USER',
-				description: '(Optional) Gets the user\'s avatar, defaults to you if none is given.',
-				required: false,
-			}],
 		});
 	}
 	async run(message, args) {
@@ -33,7 +27,7 @@ module.exports = class AvatarCommand extends Command {
 		message.reply({ embeds: [embed] });
 	}
 
-	async slashRun(interaction, args) {
+	slashRun(interaction, args) {
 		const member = interaction.guild.members.cache.get(args?.first()?.user.id) || interaction.member;
 
 		const embed = new MessageEmbed()
@@ -44,5 +38,18 @@ module.exports = class AvatarCommand extends Command {
 			.setColor(member.displayHexColor);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'user',
+				type: 'USER',
+				description: '(Optional) Gets the user\'s avatar, defaults to you if none is given.',
+				required: false,
+			}],
+		};
 	}
 };

@@ -27,12 +27,6 @@ module.exports = class EmojifyCommand extends Command {
 			examples: ['emojify Hello World', 'sayemoji How are you'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'message',
-				type: 'STRING',
-				description: 'Message to emojify',
-				required: true,
-			}],
 		});
 	}
 	async run(message, args) {
@@ -60,7 +54,7 @@ module.exports = class EmojifyCommand extends Command {
 	}
 
 	async slashRun(interaction, args) {
-		let msg = args[0].value.slice(args[0].value.indexOf(args[0].value), args[0].value.length);
+		let msg = args.first()?.value.slice(args.first()?.value.indexOf(args.first()?.value), args.first()?.value.length);
 		msg = msg.split('').map(c => {
 			if(c === ' ') return c;
 			else if (/[0-9]/.test(c)) return numberMap[c];
@@ -80,5 +74,18 @@ module.exports = class EmojifyCommand extends Command {
 			.setColor(interaction.guild.me.displayHexColor);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'message',
+				type: 'STRING',
+				description: 'Message to emojify',
+				required: true,
+			}],
+		};
 	}
 };

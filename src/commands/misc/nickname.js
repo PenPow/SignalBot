@@ -14,12 +14,6 @@ module.exports = class NicknameCommand extends Command {
 			clientPermissions: ['EMBED_LINKS', 'MANAGE_NICKNAMES'],
 			userPermissions: ['CHANGE_NICKNAME', 'MANAGE_NICKNAMES'],
 			guilds: ['GLOBAL'],
-			arguments: [{
-				name: 'nickname',
-				type: 'STRING',
-				description: 'What do you want your nickname to be updated to',
-				required: true,
-			}],
 		});
 	}
 	async run(message, args) {
@@ -51,7 +45,7 @@ module.exports = class NicknameCommand extends Command {
 	}
 
 	async slashRun(interaction, args) {
-		const nickname = args[0].value;
+		const nickname = args.first()?.value;
 
 		if (nickname.length > 32) {return this.sendSlashErrorMessage(interaction, 0, 'Please ensure the nickname is no larger than 32 characters');}
 		else if(interaction.user.id === interaction.guild.ownerID) {return this.sendSlashErrorMessage(interaction, 1, 'Unable to change the nickname of server owner');}
@@ -63,7 +57,6 @@ module.exports = class NicknameCommand extends Command {
 				const embed = new MessageEmbed()
 					.setTitle(`${success} Change Nickname`)
 					.setDescription(`${interaction.member}'s nickname was successfully updated.`)
-					.addField('Member', interaction.member, true)
 					.addField('Nickname', nicknameStatus, true)
 					.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
 					.setTimestamp()
@@ -75,5 +68,18 @@ module.exports = class NicknameCommand extends Command {
 				this.sendSlashErrorMessage(interaction, 1, 'Please check the role hierarchy', err.message);
 			}
 		}
+	}
+
+	generateSlashCommand() {
+		return {
+			name: this.name,
+			description: this.description,
+			options: [{
+				name: 'nickname',
+				type: 'STRING',
+				description: 'What do you want your nickname to be updated to',
+				required: true,
+			}],
+		};
 	}
 };

@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint .",
     "fix": "eslint . --fix",
-    "start": "node ."
+    "start": "node .",
+    "deploy": "eslint . --fix && node ."
   },
   "keywords": [],
   "author": "PenPow",
