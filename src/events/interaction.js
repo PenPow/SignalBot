@@ -1,6 +1,8 @@
 module.exports = async (client, interaction) => {
 	if(!interaction.isCommand()) return;
 
+	client.db.ensure(`${interaction.guild.id}_prefix`, 's!');
+
 	const cmd = interaction.commandName;
 
 	const command = client.commands.get(cmd);
