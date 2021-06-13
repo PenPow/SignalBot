@@ -1,161 +1,165 @@
 const AsciiTable = require('ascii-table');
 
 module.exports = async (client) => {
-    const activities = [
-    {
-        name: 'your commands',
-        type: 'LISTENING'
-    },
-    {
-        name: 'to @Signal',
-        type: 'LISTENING'
-    },
-    {
-        name: 'the messages go by',
-        type: 'WATCHING'
-    }, ];
+	const activities = [
+		{
+			name: 'your commands',
+			type: 'LISTENING',
+		},
+		{
+			name: 'to @Signal',
+			type: 'LISTENING',
+		},
+		{
+			name: 'the messages go by',
+			type: 'WATCHING',
+		} ];
 
-    client.logger.info("Loading Slash Commands...");
-    let table = new AsciiTable('Slash Commands');
-    table.setHeading('Command Name', 'Type', 'Status');
+	client.logger.info('Loading Slash Commands...');
+	const table = new AsciiTable('Slash Commands');
+	table.setHeading('Command Name', 'Type', 'Status');
 
-    const commandArray = [];
+	const commandArray = [];
 
-    client.commands.forEach(async command => {
-        if(command.disabled) return table.addRow(command.name, client.utils.capitalize(command.type), "Fail");
-        if(command.ownerOnly || command.type === client.types.OWNER) return table.addRow(command.name, client.utils.capitalize(command.type), "Fail");
-        
-        const data = {
-            name: command.name.toLowerCase(),
-            description: command.description,
-        };
+	client.commands.forEach(async command => {
+		if(command.disabled) return table.addRow(command.name, client.utils.capitalize(command.type), 'Fail');
+		if(command.ownerOnly || command.type === client.types.OWNER) return table.addRow(command.name, client.utils.capitalize(command.type), 'Fail');
 
-        let options = [];
+		const data = {
+			name: command.name.toLowerCase(),
+			description: command.description,
+		};
 
-        if(command.arguments) {
+		const options = [];
 
-            for(let i = 0; i < command.arguments.length; i++) {
-                options.push({
-                    name: command.arguments[i].name.toLowerCase(),
-                    type: command.arguments[i].type.toUpperCase(),
-                    description: command.arguments[i].description,
-                    required: Boolean(command.arguments[i].required)
-                })
-            }
+		if(command.arguments) {
 
-        }
+			for(let i = 0; i < command.arguments.length; i++) {
+				options.push({
+					name: command.arguments[i].name.toLowerCase(),
+					type: command.arguments[i].type.toUpperCase(),
+					description: command.arguments[i].description,
+					required: Boolean(command.arguments[i].required),
+				});
+			}
 
-        if(options) data.options = options;
+		}
 
-        // if(command.guilds && commands.guilds[0] !== "GLOBAL") {
-        //     for(let i = 0; i < command.guilds.length; i++) {
-        //         let guild;
+		if(options) data.options = options;
 
-        //         try {
-        //             guild = await client.guilds.fetch(commands.guilds[i]) 
-        //         }
-        //     }
-        // }
-        commandArray.push(data);
+		// if(command.guilds && commands.guilds[0] !== "GLOBAL") {
+		//     for(let i = 0; i < command.guilds.length; i++) {
+		//         let guild;
 
-        table.addRow(command.name, client.utils.capitalize(command.type), "Pass");
-    });
+		//         try {
+		//             guild = await client.guilds.fetch(commands.guilds[i])
+		//         }
+		//     }
+		// }
+		commandArray.push(data);
 
-    const guild = await client.guilds.fetch('789215359878168586');
-    guild.commands.set(commandArray);
-    client.logger.log(table.toString());
+		table.addRow(command.name, client.utils.capitalize(command.type), 'Pass');
+	});
 
-    client.user.setPresence({
-        status: 'online',
-        activity: activities[0]
-    });
+	const test_guild = await client.guilds.fetch('789215359878168586');
+	test_guild.commands.set(commandArray);
+	client.logger.log(table.toString());
 
-    let activity = 0
+	client.user.setPresence({
+		status: 'online',
+		activity: activities[0],
+	});
 
-    setInterval(() => {
-        if(activity > 3) activity = 0;
-        client.user.setActivity(activities[activity]);
-        activity++
-    }, 30000);
+	let activity = 0;
 
-    client.logger.warn('Updating Database');
+	setInterval(() => {
+		if(activity > 3) activity = 0;
+		client.user.setActivity(activities[activity]);
+		activity++;
+	}, 30000);
 
-    for(const guild of client.guilds.cache.values()) {
-        const modLog = guild.channels.cache.find(c => c.name.replace('-', '').replace('s', '') === 'modlog' || c.name.replace('-', '').replace('s', '') === 'moderatorlog' || c.name.replace('-', '').replace('s', '') === 'log' || c.name.replace('-', '').replace('s', '') === 'serverlogs' || c.name.replace('-', '').replace('s', '') === 'auditlog' || c.name.replace('-', '').replace('s', '') === 'auditlogs');
-        const adminRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'admin' || r.name.toLowerCase().replace(/[^a-z]/g, '') === 'administrator');
-        const modRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'mod' || r.name.toLowerCase().replace(/[^a-z]/g, '') === 'moderator');
-        let muteRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
+	client.logger.warn('Updating Database');
 
-        if(!muteRole) {
-            try {
-                muteRole = await guild.roles.create({
-                    data: {
-                        name: 'Muted',
-                        permissions: [],
-                        reason: "Creating Mute Role Automatically"
-                    }
-                });
-            } catch (err) {
-                muteRole = undefined;
-            };
-        }
+	for(const guild of client.guilds.cache.values()) {
+		const modLog = guild.channels.cache.find(c => c.name.replace('-', '').replace('s', '') === 'modlog' || c.name.replace('-', '').replace('s', '') === 'moderatorlog' || c.name.replace('-', '').replace('s', '') === 'log' || c.name.replace('-', '').replace('s', '') === 'serverlogs' || c.name.replace('-', '').replace('s', '') === 'auditlog' || c.name.replace('-', '').replace('s', '') === 'auditlogs');
+		const adminRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'admin' || r.name.toLowerCase().replace(/[^a-z]/g, '') === 'administrator');
+		const modRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'mod' || r.name.toLowerCase().replace(/[^a-z]/g, '') === 'moderator');
+		let muteRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 
-        if(muteRole) {
-            for(const channel of guild.channels.cache.values()) {
-                try {
-                    if(channel.viewable && channel.permissionsFor(guild.me).has('MANAGE_ROLES')) {
-                        if(channel.type === 'text') {
-                            await channel.updateOverwrite(muteRole, {
-                                'SEND_MESSAGES': false,
-                                'ADD_REACTIONS': false,
-                            });
-                        } else if(channel.type === 'voice' && channel.editable) {
-                            await channel.updateOverwrite(muteRole, {
-                                'SPEAK': false,
-                                'STREAM': false
-                            });
-                        }
-                    }
-                } catch (err) {
+		if(!muteRole) {
+			try {
+				muteRole = await guild.roles.create({
+					data: {
+						name: 'Muted',
+						permissions: [],
+						reason: 'Creating Mute Role Automatically',
+					},
+				});
+			}
+			catch (err) {
+				muteRole = undefined;
+			}
+		}
 
-                }
-            }
-        }
+		if(muteRole) {
+			for(const channel of guild.channels.cache.values()) {
+				try {
+					if(channel.viewable && channel.permissionsFor(guild.me).has('MANAGE_ROLES')) {
+						if(channel.type === 'text') {
+							await channel.updateOverwrite(muteRole, {
+								'SEND_MESSAGES': false,
+								'ADD_REACTIONS': false,
+							});
+						}
+						else if(channel.type === 'voice' && channel.editable) {
+							await channel.updateOverwrite(muteRole, {
+								'SPEAK': false,
+								'STREAM': false,
+							});
+						}
+					}
+				}
+				catch (err) {
+					this.client.logger.error(err.stack);
+				}
+			}
+		}
 
-        if(!client.db.get(guild.id)) {
+		if(!client.db.get(guild.id)) {
 
-            await client.db.set(guild.id, {
-                id: guild.id,
-                name: guild.name,
-                modLog: modLog ? modLog.id : false,
-                adminRole: adminRole ? adminRole.id : false,
-                modRole: modRole ? modRole.id : false,
-                muteRole: muteRole ? muteRole.id : false,
-            });
+			await client.db.set(guild.id, {
+				id: guild.id,
+				name: guild.name,
+				modLog: modLog ? modLog.id : false,
+				adminRole: adminRole ? adminRole.id : false,
+				modRole: modRole ? modRole.id : false,
+				muteRole: muteRole ? muteRole.id : false,
+			});
 
-        }
+		}
 
-        await guild.members.cache.forEach(member => {
-            let joinedAt = undefined;
+		await guild.members.cache.forEach(member => {
+			let joinedAt = undefined;
 
-            try {
-                joinedAt = member.joinedAt().toString();
-            } catch {
-                joinedAt = undefined;
-            }
+			try {
+				joinedAt = member.joinedAt().toString();
+			}
+			catch {
+				joinedAt = undefined;
+			}
 
-            if(!client.db.get(`${guild.id}_${member.id}`)) {
+			if(!client.db.get(`${guild.id}_${member.id}`)) {
 
-                client.db.set(`${guild.id}_${member.id}`, {
-                    guildId: guild.id,
-                    guildName: guild.name,
-                    joinedAt: joinedAt ? joinedAt : null,
-                    bot: member.user.bot ? true : false,
-                });
-            }
-        });
-    };
+				client.db.set(`${guild.id}_${member.id}`, {
+					guildId: guild.id,
+					guildName: guild.name,
+					joinedAt: joinedAt ? joinedAt : null,
+					bot: member.user.bot ? true : false,
+				});
+			}
+		});
+	}
 
-    client.logger.success('Signal is now online');
-    client.logger.info(`Signal is running on ${client.guilds.cache.size} servers`);
+	client.logger.success('Signal is now online');
+	client.logger.info(`Signal is running on ${client.guilds.cache.size} servers`);
 };
