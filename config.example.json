@@ -1,0 +1,18 @@
+{
+    "apiKeys": {
+        "discord": {
+            "token": ""
+        },
+        "catApi": {
+            "token": ""
+        },
+        "googleApi": {
+            "token": ""
+        }
+    },
+    
+    "configuration": {
+        "defaultPrefix": "",
+        "ownerId": ""
+    }
+}

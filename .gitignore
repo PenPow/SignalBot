@@ -53,6 +53,9 @@ typings/
 # Optional eslint cache
 .eslintcache
 
+# eslint Declaration Files
+.eslint.json
+
 # Microbundle cache
 .rpt2_cache/
 .rts2_cache_cjs/
@@ -105,3 +108,6 @@ dist
 
 # Enmap Files
 data/
+
+# Config Files
+config.json
