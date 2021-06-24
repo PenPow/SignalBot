@@ -1,10 +1,23 @@
-module.exports = async (client, member) => {
-	client.logger.log(`${member.guild.name} - ${member.user.tag} has joined the server`);
+const { promisify } = require('util');
 
-	client.db.set(`${member.guild.id}_${member.id}`, {
-		guildId: member.guild.id,
-		guildName: member.guild.name,
-		joinedAt: member.joinedAt.toString(),
-		bot: member.user.bot ? true : false,
-	});
+module.exports = async (client, member) => {
+	const exists = promisify(client.redis.exists).bind(client.redis);
+
+	const { id, guild } = member;
+
+	const muteRole = client.db.get(`muterole-${guild.id}`) || guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
+
+	if(!muteRole) return;
+
+	const caseID = client.db.get(`lastcase-mute-${id}`)?.caseInfo?.caseID;
+	const result = await exists(`mute-${guild.id}-${caseID}`);
+
+	if(result) {
+		try {
+			await member.roles.add(muteRole.id);
+		}
+		catch(e) {
+			return;
+		}
+	}
 };

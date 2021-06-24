@@ -42,17 +42,70 @@ module.exports = async (client) => {
 	let activity = 0;
 
 	setInterval(() => {
-		if(activity > 3) activity = 0;
+		if(activity >= 3) activity = 0;
 		client.user.setActivity(activities[activity]);
 		activity++;
 	}, 30000);
 
 	client.logger.warn('Updating Database');
 
+	client.logger.warn('Checking For Expired Punishments');
+	client.db.ensure('global_mutes', []);
+	client.db.ensure('global_bans', []);
+
+	const mutes = client.db.get('global_mutes');
+	const bans = client.db.get('global_bans');
+
+	client.expire((message) => {
+		const messageArray = message.split('-');
+		const caseInfo = client.db.get(`case-${messageArray[1]}-${messageArray[2]}`);
+
+		if(caseInfo.caseInfo.type === 'mute') {
+			for(let i = 0; i < mutes.length; i++) {
+				if(mutes[i].caseInfo.caseID.toString() === caseInfo.caseInfo.caseID.toString()) mutes.splice(i, 1);
+				client.db.set('global_mutes', mutes);
+			}
+
+			client.utils.unmute(client, caseInfo);
+		}
+		else if(caseInfo.caseInfo.type === 'ban') {
+			for(let i = 0; i < bans.length; i++) {
+				if(bans[i].caseInfo.caseID.toString() === caseInfo.caseInfo.caseID.toString()) bans.splice(i, 1);
+				client.db.set('global_bans', bans);
+			}
+
+
+			client.utils.unban(client, caseInfo);
+		}
+	});
+
+	for(let i = 0; i < mutes.length; i++) {
+		if(mutes[i].caseInfo.expiry < Math.floor(new Date(Date.now()).getTime())) {
+			client.utils.unmute(client, mutes[i]);
+			mutes.splice(i);
+			client.db.set('global_mutes', mutes);
+		}
+
+		const guild = await client.guilds.fetch(mutes[i].guild);
+		const muteRole = client.db.get(`muterole-${guild.id}`) || guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
+
+		if(!muteRole) return;
+
+		const member = await guild.members.fetch(mutes[i].caseInfo.target);
+
+		await member.roles.add(muteRole.id);
+	}
+
+	for(let i = 0; i < bans.length; i++) {
+		if(bans[i].caseInfo.expiry < Math.floor(new Date(Date.now()).getTime())) {
+			if(bans[i].caseInfo.expiry === null) continue;
+			client.utils.unban(client, bans[i]);
+			bans.splice(i, 1);
+			client.db.set('global_bans', bans);
+		}
+	}
+
 	for(const guild of client.guilds.cache.values()) {
-		const modLog = guild.channels.cache.find(c => c.name.replace('-', '').replace('s', '') === 'modlog' || c.name.replace('-', '').replace('s', '') === 'moderatorlog' || c.name.replace('-', '').replace('s', '') === 'log' || c.name.replace('-', '').replace('s', '') === 'serverlogs' || c.name.replace('-', '').replace('s', '') === 'auditlog' || c.name.replace('-', '').replace('s', '') === 'auditlogs');
-		const adminRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'admin' || r.name.toLowerCase().replace(/[^a-z]/g, '') === 'administrator');
-		const modRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'mod' || r.name.toLowerCase().replace(/[^a-z]/g, '') === 'moderator');
 		let muteRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 
 		if(!muteRole) {
@@ -65,9 +118,7 @@ module.exports = async (client) => {
 					},
 				});
 			}
-			catch (err) {
-				muteRole = undefined;
-			}
+			catch (err) {} // eslint-disable-line 
 		}
 
 		if(muteRole) {
@@ -88,45 +139,10 @@ module.exports = async (client) => {
 						}
 					}
 				}
-				catch (err) {
-					this.client.logger.error(err.stack);
-				}
+				catch (err) {} // eslint-disable-line 
 			}
+			client.db.set(`muterole-${guild.id}`, muteRole);
 		}
-
-		if(!client.db.get(guild.id)) {
-
-			await client.db.set(guild.id, {
-				id: guild.id,
-				name: guild.name,
-				modLog: modLog ? modLog.id : false,
-				adminRole: adminRole ? adminRole.id : false,
-				modRole: modRole ? modRole.id : false,
-				muteRole: muteRole ? muteRole.id : false,
-			});
-
-		}
-
-		await guild.members.cache.forEach(member => {
-			let joinedAt = undefined;
-
-			try {
-				joinedAt = member.joinedAt().toString();
-			}
-			catch {
-				joinedAt = undefined;
-			}
-
-			if(!client.db.get(`${guild.id}_${member.id}`)) {
-
-				client.db.set(`${guild.id}_${member.id}`, {
-					guildId: guild.id,
-					guildName: guild.name,
-					joinedAt: joinedAt ? joinedAt : null,
-					bot: member.user.bot ? true : false,
-				});
-			}
-		});
 	}
 
 	client.logger.success('Signal is now online');

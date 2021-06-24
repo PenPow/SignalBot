@@ -1,6 +1,5 @@
 const Command = require('../Command.js');
 const { MessageEmbed } = require('discord.js');
-const moment = require('moment');
 const { mem, cpu, os } = require('node-os-utils');
 const { stripIndent } = require('common-tags');
 
@@ -11,22 +10,22 @@ module.exports = class StatsCommand extends Command {
 			usage: 'stats',
 			aliases: ['statistics', 'metrics'],
 			description: 'Fetches Signal\'s statistics.',
-			type: client.types.FUN,
+			type: client.types.INFO,
 			examples: ['stats', 'statistics', 'metrics'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
 		});
 	}
 	async run(message) {
-		const d = moment.duration(message.client.uptime);
-		const days = (d.days() == 1) ? `${d.days()} day` : `${d.days()} days`;
-		const hours = (d.hours() == 1) ? `${d.hours()} hour` : `${d.hours()} hours`;
+		const days = parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60) : parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60);
+		const hours = parseInt((this.client.uptime / (1000 * 60 * 60)) % 24) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60)) % 24) : parseInt((this.client.uptime / (1000 * 60 * 60)) % 24);
+		const minutes = parseInt((this.client.uptime / (1000 * 60)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60)) % 60) : parseInt((this.client.uptime / (1000 * 60)) % 60);
 		const clientStats = stripIndent`
 		  Servers   :: ${message.client.guilds.cache.size}
 		  Users     :: ${message.client.users.cache.size}
 		  Channels  :: ${message.client.channels.cache.size}
 		  WS Ping   :: ${Math.round(message.client.ws.ping)}ms
-		  Uptime    :: ${days} and ${hours}
+		  Uptime    :: ${days} days, ${hours} hours, and ${minutes} minutes
 		`;
 		const { totalMemMb, usedMemMb } = await mem.info();
 		let platform = await os.oos();
@@ -37,7 +36,7 @@ module.exports = class StatsCommand extends Command {
 		  Cores     :: ${cpu.count()}
 		  CPU Usage :: ${await cpu.usage()} %
 		  RAM       :: ${totalMemMb} MB
-		  RAM Usage :: ${usedMemMb} MB 
+		  RAM Usage :: ${(Math.round((usedMemMb / totalMemMb) * 1e4) / 1e2).toString()}%
 		`;
 		const embed = new MessageEmbed()
 			.setTitle('Signal\'s Statistics')
@@ -57,15 +56,15 @@ module.exports = class StatsCommand extends Command {
 	}
 
 	async slashRun(interaction) {
-		const d = moment.duration(interaction.client.uptime);
-		const days = (d.days() == 1) ? `${d.days()} day` : `${d.days()} days`;
-		const hours = (d.hours() == 1) ? `${d.hours()} hour` : `${d.hours()} hours`;
+		const days = parseInt((interaction.client.uptime / (1000 * 60 * 60 * 24)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60) : parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60);
+		const hours = parseInt((this.client.uptime / (1000 * 60 * 60)) % 24) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60)) % 24) : parseInt((this.client.uptime / (1000 * 60 * 60)) % 24);
+		const minutes = parseInt((this.client.uptime / (1000 * 60)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60)) % 60) : parseInt((this.client.uptime / (1000 * 60)) % 60);
 		const clientStats = stripIndent`
 		  Servers   :: ${interaction.client.guilds.cache.size}
 		  Users     :: ${interaction.client.users.cache.size}
 		  Channels  :: ${interaction.client.channels.cache.size}
 		  WS Ping   :: ${Math.round(interaction.client.ws.ping)}ms
-		  Uptime    :: ${days} and ${hours}
+		  Uptime    :: ${days} days, ${hours} hours, and ${minutes} minutes
 		`;
 		const { totalMemMb, usedMemMb } = await mem.info();
 		let platform = await os.oos();
@@ -76,8 +75,9 @@ module.exports = class StatsCommand extends Command {
 		  Cores     :: ${cpu.count()}
 		  CPU Usage :: ${await cpu.usage()} %
 		  RAM       :: ${totalMemMb} MB
-		  RAM Usage :: ${usedMemMb} MB 
+		  RAM Usage :: ${(Math.round((usedMemMb / totalMemMb) * 1e4) / 1e2).toString()}%
 		`;
+
 		const embed = new MessageEmbed()
 			.setTitle('Signal\'s Statistics')
 			.addField('Commands', `\`${interaction.client.commands.size}\` commands`, true)

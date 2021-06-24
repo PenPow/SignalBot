@@ -1,3 +1,5 @@
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+
 /**
 * Capitalize First Letter of String
 * @param {string} string
@@ -96,25 +98,9 @@ function getOrdinalNumeral(number) {
  * Gets the next moderation case number
  * @param {Client} client
  * @param {Guild} guild
- * @param {TextChannel} modLog
  */
-async function getCaseNumber(client, guild, modLog) {
-
-	const message = (await modLog.messages.fetch({ limit: 100 })).filter(m => m.member === guild.me &&
-      m.embeds[0] &&
-      m.embeds[0].type == 'rich' &&
-      m.embeds[0].footer &&
-      m.embeds[0].footer.text &&
-      m.embeds[0].footer.text.startsWith('Case'),
-	).first();
-
-	if (message) {
-		const footer = message.embeds[0].footer.text;
-		const num = parseInt(footer.split('#').pop());
-		if (!isNaN(num)) return num + 1;
-	}
-
-	return 1;
+function getCaseNumber(client, guild) {
+	return parseInt(client.db.get(`case-${guild.id}`) ?? 0) + 1;
 }
 
 /**
@@ -145,11 +131,109 @@ function replaceKeywords(message) {
 
 /**
  * Sleeps for the specified number of ms
- * @param {integer} ms
+ * @param {int} ms
  * @returns {Promise}
  */
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Creates a confirmation box
+ * @param {Message} message
+ * @param {string} content
+ * @returns {Promise}
+ */
+async function confirmation(message, content, authorID) {
+	const row = new MessageActionRow()
+		.addComponents(
+			new MessageButton()
+				.setCustomID('yes')
+				.setLabel('Yes')
+				.setStyle('SUCCESS'),
+			new MessageButton()
+				.setCustomID('no')
+				.setLabel('No')
+				.setStyle('DANGER'),
+		);
+
+	const embed = new MessageEmbed()
+		.setTitle(':exclamation: Confirmation')
+		.setFooter(`This will expire in 10 Seconds • ${message.member.displayName}`, message.author?.displayAvatarURL({ dynamic: true }) || message.user?.displayAvatarURL({ dynamic: true }))
+		.setTimestamp()
+		.setDescription(content)
+		.setColor(message.guild.me.displayHexColor);
+
+	const msg = await message.reply({ embeds: [embed], components: [row] });
+
+	const collector = msg.createMessageComponentInteractionCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === authorID, { time: 10000 });
+
+	return new Promise((resolve) => {
+		collector.on('collect', async (i) => {
+			switch (i.customID) {
+			case 'yes':
+				await i.update({ embeds: [embed], components: [] });
+				resolve(true);
+				break;
+			case 'no':
+				await i.update({ embeds: [embed], components: [] });
+				resolve(false);
+				break;
+			}
+		});
+
+		collector.on('end', collected => {
+			if(collected.size < 1) resolve(false);
+		});
+	});
+}
+
+/**
+ * Unbans the User Specified
+ * @param {Client} client
+ * @param {Object} caseInfo
+ */
+async function unmute(client, caseInfo) {
+	const guild = await client.guilds.fetch(caseInfo.guild);
+	const member = await client.users.fetch(caseInfo.caseInfo.target);
+	const moderator = await client.users.fetch(caseInfo.caseInfo.moderator);
+	const role = client.db.get(`muterole-${guild.id}`) || guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
+
+	client.redis.del(`mute-${guild.id}-${caseInfo.caseInfo.caseID}`);
+
+	try {
+		const guildmember = await guild.members.fetch(member.id);
+		guildmember.roles.remove(role.id);
+	}
+	catch(e) {
+		// eslint disable-line
+	}
+
+	const embed = new MessageEmbed()
+		.setTitle(`${require('./emojis.js').mod} Your Mute Expired (or was removed) in ${guild.name}`)
+		.setFooter(`Case #${caseInfo.caseInfo.caseID} • ${moderator.tag}`, moderator.displayAvatarURL({ dynamic: true }))
+		.setTimestamp()
+		.setColor(guild.me.displayHexColor);
+
+	member.send({ embeds: [embed] }).catch();
+}
+
+/**
+ * Unbans the User Specified
+ * @param {Client} client
+ * @param {Object} caseInfo
+ */
+async function unban(client, caseInfo) {
+	const guild = await client.guilds.fetch(caseInfo.guild);
+	const member = await client.users.fetch(caseInfo.caseInfo.target);
+
+	try {
+		await guild.bans.fetch();
+		await guild.bans.remove(member.id, 'Ban Revoked/Expired');
+	}
+	catch(e) {
+		// eslint disable-line
+	}
 }
 
 module.exports = {
@@ -164,4 +248,7 @@ module.exports = {
 	getStatus,
 	replaceKeywords,
 	sleep,
+	confirmation,
+	unmute,
+	unban,
 };

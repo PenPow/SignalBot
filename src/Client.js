@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const { readdir, readdirSync } = require('fs');
 const { join, resolve } = require('path');
 const Enmap = require('enmap');
+const redis = require('redis');
 
 const AsciiTable = require('ascii-table');
 
@@ -36,7 +37,7 @@ class Client extends Discord.Client {
 		this.db = new Enmap({
 			name: 'database',
 			persistent: true,
-			fetchAll: false,
+			fetchAll: true,
 			autoFetch: true,
 		});
 
@@ -64,12 +65,6 @@ class Client extends Discord.Client {
          * @type {Collection<string, Command>}
          */
 		this.aliases = new Discord.Collection();
-
-		/**
-         * Voice Channel Queue
-         * @type {Collection<Guild_ID, Queue>}
-         */
-		this.queue = new Discord.Collection();
 
 		/**
          * Discord Token
@@ -100,6 +95,12 @@ class Client extends Discord.Client {
          * @type {Object}
          */
 		this.utils = require('./utils/utils.js');
+
+		/**
+		 * Redis Database
+		 * @type {*}
+		 */
+		this.redis = null;
 
 		this.logger.info('Initalizing...');
 	}
@@ -167,6 +168,48 @@ class Client extends Discord.Client {
 
 		this.logger.info(`Command Load Status\n${table.toString()}`);
 		return this;
+	}
+
+	/**
+	 * Loads Redis Commands
+	 * @param {string} redisPath
+	 */
+	loadRedis(redisPath) {
+		this.logger.info('Loading Redis');
+
+		const redisClient = redis.createClient({
+			url: redisPath,
+			enable_offline_queue: true,
+		});
+
+		redisClient.on('ready', () => {
+			this.logger.success('Connected to Redis Successfully');
+		});
+
+		redisClient.on('error', (err) => {
+			this.logger.error(`Redis ${err.stack}`);
+			redisClient.quit();
+		});
+
+		this.redis = redisClient;
+	}
+
+	/**
+	 * Redis Expiry Database
+	 * @returns {Callback}
+	 */
+	expire(callback) {
+		const expired = () => {
+			const sub = redis.createClient({ url: this.config.apiKeys.redis.url });
+			sub.subscribe('__keyevent@0__:expired', () => {
+				sub.on('message', (channel, message) => {
+					callback(message);
+				});
+			});
+		};
+
+		const pub = redis.createClient({ url: this.config.apiKeys.redis.url });
+		pub.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], expired());
 	}
 
 	/**

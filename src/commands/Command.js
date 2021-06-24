@@ -240,6 +240,37 @@ class Command {
 	}
 
 	/**
+     * Checks the user permissions (Slash Commands)
+     * Code modified from: https://github.com/discordjs/Commando/blob/master/src/commands/base.js
+     * @param {Message} message
+     * @param {boolean} ownerOverride
+     */
+	checkSlashUserPermissions(message, ownerOverride = true) {
+		if(!this.ownerOnly && !this.userPermissions) return true;
+		if(ownerOverride && this.client.isOwner(message.user)) return true;
+
+		if(this.ownerOnly && !this.client.isOwner(message.author)) return false;
+
+		if(message.guild.members.cache.get(message.user.id).permissions.has('ADMINISTRATOR')) return true;
+		if(this.userPermissions !== null) {
+			const missingPermissions = message.channel.permissionsFor(message.user).missing(this.userPermissions).map(p => permissions[p]);
+			if(missingPermissions.length !== 0) {
+				const embed = new MessageEmbed()
+					.setAuthor(`${message.user.tag}`, message.user.displayAvatarURL({ dynamic: true }))
+					.setTitle(`${fail} Missing User Permissions`)
+					.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``)
+					.setTimestamp()
+					.setColor(message.guild.me.displayHexColor);
+
+				message.reply({ ephemeral: true, embeds: [embed] });
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
      * Checks the Client Permissions
      * @param {Message} message
      */
@@ -328,42 +359,123 @@ class Command {
 		if(errorMessage) embed.addField('Error Message', `\`\`\`${errorMessage}\`\`\``);
 
 		return interaction.reply({ ephemeral: true, embeds: [embed] });
-
 	}
 
 	/**
      * Creates and Sends Mod Log Embed
      * @param {Message} message
      * @param {string} reason
+	 * @param {User} target
      * @param {Object} fields
      */
-	async sendModLogMessage(message, reason, fields = {}) {
+	async sendModLogMessage(message, reason, target, action, fields = {}) {
 		await message.guild.channels.fetch();
-		const modLog = message.guild.channels.cache.find(channel => channel.name.toLowerCase().replace(/[^a-z]/gi, ''));
+		const user = await message.client.users.fetch(target);
+		const modLog = message.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
 
 		if(modLog && modLog.viewable && modLog.permissionsFor(message.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
-			const caseNumber = await message.client.utils.getCaseNumber(message.client, message.guild, modLog);
+			const caseNumber = parseInt(message.client.utils.getCaseNumber(message.client, message.guild, modLog)) - 1;
 			const prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
-
-			if(reason === null) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
+			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
 			const embed = new MessageEmbed()
-				.setTitle(`Action: \`${message.client.utils.capitalize(this.name)}\``)
-				.addField('Moderator', message.author.tag, true)
 				.setFooter(`Case #${caseNumber}`)
 				.setTimestamp()
-				.setColor(message.guild.me.displayHexColor);
+				.setThumbnail(user.displayAvatarURL({ dynamic: true }))
+				.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL({ dynamic: true }));
+
+			switch(action) {
+
+			case 'mute':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Context:** [Link](${message.url})\n**Reason:** ${reason}`);
+				embed.setColor('#ffcc00');
+				break;
+
+			case 'unmute':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#7ef31f');
+				break;
+
+			case 'unban':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#7ef31f');
+				break;
+
+			case 'ban':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#ff1a00');
+				break;
+
+			case 'default':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#ff1a00');
+				break;
+			}
 
 			for(const field in fields) {
 				embed.addField(field, fields[field], true);
 			}
 
-			embed.addField('Reason', reason);
-			const sentMessage = modLog.send(embed).catch(err => message.client.logger.error(err.stack));
+			const sentMessage = await modLog.send({ embeds: [embed] }).catch(err => message.client.logger.error(err.stack));
 
-			return {
-				caseNumber: caseNumber,
-				modLogMessage: sentMessage.id,
-			};
+			return sentMessage.id;
+		}
+	}
+
+	/**
+     * Creates and Sends Mod Log Embed (Slash Command)
+     * @param {CommandInteraction} interaction
+     * @param {string} reason
+	 * @param {User} target
+     * @param {Object} fields
+     */
+	async sendSlashModLogMessage(interaction, reason, target, action, fields = {}) {
+		await interaction.guild.channels.fetch();
+		const user = await interaction.client.users.fetch(target);
+		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+		if(modLog && modLog.viewable && modLog.permissionsFor(interaction.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
+			const caseNumber = parseInt(interaction.client.utils.getCaseNumber(interaction.client, interaction.guild, modLog)) - 1;
+			const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`) || interaction.client.prefix;
+			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
+			const embed = new MessageEmbed()
+				.setFooter(`Case #${caseNumber}`)
+				.setTimestamp()
+				.setThumbnail(user.displayAvatarURL({ dynamic: true }))
+				.setAuthor(`${interaction.user.tag} (${interaction.user.id})`, interaction.user.displayAvatarURL({ dynamic: true }));
+			switch(action) {
+
+			case 'mute':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Context:** *Not Avaliable due to Slash Command Usage*\n**Reason:** ${reason}`);
+				embed.setColor('#ffcc00');
+				break;
+
+			case 'unmute':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#7ef31f');
+				break;
+
+			case 'unban':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#7ef31f');
+				break;
+
+			case 'ban':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#ff1a00');
+				break;
+
+			case 'default':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#ff1a00');
+				break;
+
+			}
+
+			for(const field in fields) {
+				embed.addField(field, fields[field], true);
+			}
+			const sentMessage = await modLog.send({ embeds: [embed] }).catch(err => interaction.client.logger.error(err.stack));
+
+			return sentMessage.id;
 		}
 	}
 

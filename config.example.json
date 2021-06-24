@@ -8,6 +8,9 @@
         },
         "googleApi": {
             "token": ""
+        },
+        "redis": {
+            "password": ""
         }
     },
     

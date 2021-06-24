@@ -14,7 +14,6 @@ module.exports = class BugReportCommand extends Command {
 			examples: ['reportbug The bot doesnt work', 'bugreport it broke', 'report it went offline', 'bug it didnt run command correctly', 'rb the profile was broken', 'br prefix didnt change'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
-			ownerOnly: false,
 		});
 	}
 	async run(message, args) {
@@ -37,7 +36,7 @@ module.exports = class BugReportCommand extends Command {
 			.setThumbnail(feedbackChannel.guild.iconURL({ dynamic: true }))
 			.setDescription(feedback)
 			.addField('User', `<@${message.author.id}>`, true)
-			.addField('Server', message.guild.name, true)
+			.addField('Server', message?.guild?.name || 'Direct Messsage', true)
 			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor(message.guild.me.displayHexColor);
@@ -80,7 +79,7 @@ module.exports = class BugReportCommand extends Command {
 			.setThumbnail(feedbackChannel.guild.iconURL({ dynamic: true }))
 			.setDescription(feedback)
 			.addField('User', `<@${interaction.user.id}>`, true)
-			.addField('Server', interaction.guild.name, true)
+			.addField('Server', interaction?.guild?.name || 'Direct Messsage', true)
 			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor(interaction.guild.me.displayHexColor);

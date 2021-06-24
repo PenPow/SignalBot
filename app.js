@@ -44,10 +44,11 @@ const client = new Client(config, {
  * Initalizes the Client
  * @type {Function}
  */
-function init() {
-	client.loadEvents('./src/events');
-	client.loadCommands('./src/commands');
-	client.login(client.token);
+async function init() {
+	await client.loadEvents('./src/events');
+	await client.loadCommands('./src/commands');
+	await client.loadRedis(config.apiKeys.redis.url);
+	await client.login(client.token);
 }
 
 init();

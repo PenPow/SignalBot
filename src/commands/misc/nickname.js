@@ -14,6 +14,7 @@ module.exports = class NicknameCommand extends Command {
 			clientPermissions: ['EMBED_LINKS', 'MANAGE_NICKNAMES'],
 			userPermissions: ['CHANGE_NICKNAME', 'MANAGE_NICKNAMES'],
 			guilds: ['GLOBAL'],
+			guildOnly: true,
 		});
 	}
 	async run(message, args) {
