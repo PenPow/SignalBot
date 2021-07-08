@@ -50,7 +50,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["discord.js", "npm:13.0.0-dev.0d0c8f07f2535dd315ca95abe35e848c13d0ddf5"],
             ["enmap", "npm:5.8.5"],
             ["erlpack", "https://github.com/discord/erlpack.git#commit=e27db8f82892bdb9b28a0547cc394d68b5d2242d"],
-            ["eslint", "npm:7.29.0"],
+            ["eslint", "npm:7.30.0"],
             ["eslint-config-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:8.3.0"],
             ["eslint-plugin-import", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:2.23.4"],
             ["eslint-plugin-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:3.4.0"],
@@ -222,6 +222,27 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["js-yaml", "npm:3.14.1"],
             ["minimatch", "npm:3.0.4"],
             ["strip-json-comments", "npm:3.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@humanwhocodes/config-array", [
+        ["npm:0.5.0", {
+          "packageLocation": "./.yarn/cache/@humanwhocodes-config-array-npm-0.5.0-5ded120470-71e3c1fef4.zip/node_modules/@humanwhocodes/config-array/",
+          "packageDependencies": [
+            ["@humanwhocodes/config-array", "npm:0.5.0"],
+            ["@humanwhocodes/object-schema", "npm:1.2.0"],
+            ["debug", "virtual:428f325a939c2653ad822eb3d75efb02ac311523dd0d4f9645afc39ea00bd86eceac35a9d59c9b6977d76b670a4ef0ae057ea572338a44729aa592711a8c05a3#npm:4.3.2"],
+            ["minimatch", "npm:3.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@humanwhocodes/object-schema", [
+        ["npm:1.2.0", {
+          "packageLocation": "./.yarn/cache/@humanwhocodes-object-schema-npm-1.2.0-6bc0ff9fda-ef533ee0d2.zip/node_modules/@humanwhocodes/object-schema/",
+          "packageDependencies": [
+            ["@humanwhocodes/object-schema", "npm:1.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -1802,12 +1823,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["eslint", [
-        ["npm:7.29.0", {
-          "packageLocation": "./.yarn/cache/eslint-npm-7.29.0-aec1968387-812f8c5123.zip/node_modules/eslint/",
+        ["npm:7.30.0", {
+          "packageLocation": "./.yarn/cache/eslint-npm-7.30.0-8a8a06f9b4-028048847e.zip/node_modules/eslint/",
           "packageDependencies": [
-            ["eslint", "npm:7.29.0"],
+            ["eslint", "npm:7.30.0"],
             ["@babel/code-frame", "npm:7.12.11"],
             ["@eslint/eslintrc", "npm:0.4.2"],
+            ["@humanwhocodes/config-array", "npm:0.5.0"],
             ["ajv", "npm:6.12.6"],
             ["chalk", "npm:4.1.1"],
             ["cross-spawn", "npm:7.0.3"],
@@ -1862,7 +1884,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["eslint-config-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:8.3.0"],
             ["@types/eslint", null],
-            ["eslint", "npm:7.29.0"]
+            ["eslint", "npm:7.30.0"]
           ],
           "packagePeers": [
             "@types/eslint",
@@ -1910,7 +1932,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["array.prototype.flat", "npm:1.2.4"],
             ["debug", "virtual:fa0173d26738ef894de6f639abae81ef8c1dc3fb742f450a622367c86186d9f4d23dbd3bcc38bbe27382c39f87e11cad6137dd70480a36e752eee25974706e2c#npm:2.6.9"],
             ["doctrine", "npm:2.1.0"],
-            ["eslint", "npm:7.29.0"],
+            ["eslint", "npm:7.30.0"],
             ["eslint-import-resolver-node", "npm:0.3.4"],
             ["eslint-module-utils", "npm:2.6.1"],
             ["find-up", "npm:2.1.0"],
@@ -1944,7 +1966,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:3.4.0"],
             ["@types/eslint", null],
             ["@types/prettier", null],
-            ["eslint", "npm:7.29.0"],
+            ["eslint", "npm:7.30.0"],
             ["eslint-config-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:8.3.0"],
             ["prettier", "npm:2.3.1"],
             ["prettier-linter-helpers", "npm:1.0.0"]
@@ -4644,7 +4666,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["discord.js", "npm:13.0.0-dev.0d0c8f07f2535dd315ca95abe35e848c13d0ddf5"],
             ["enmap", "npm:5.8.5"],
             ["erlpack", "https://github.com/discord/erlpack.git#commit=e27db8f82892bdb9b28a0547cc394d68b5d2242d"],
-            ["eslint", "npm:7.29.0"],
+            ["eslint", "npm:7.30.0"],
             ["eslint-config-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:8.3.0"],
             ["eslint-plugin-import", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:2.23.4"],
             ["eslint-plugin-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:3.4.0"],
