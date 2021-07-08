@@ -1,4 +1,4 @@
-const Command = require('../Command.js');
+const Command = require('../../structures/Command');
 const { MessageEmbed } = require('discord.js');
 const { success, mod } = require('../../utils/emojis');
 const ms = require('ms');
@@ -118,7 +118,6 @@ module.exports = class MuteCommand extends Command {
 		this.client.db.set(`lastcase-mute-${member.id}`, muteObject);
 
 		message.reply({ embeds: [embed] });
-
 	}
 
 	async slashRun(interaction, args) {

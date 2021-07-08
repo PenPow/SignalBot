@@ -82,7 +82,7 @@ class Client extends Discord.Client {
          * Configuration
          * @type {Object}
          */
-		this.config = require('../config.json');
+		this.config = require('../../config.json');
 
 		/**
          * Signal Owner ID
@@ -94,7 +94,7 @@ class Client extends Discord.Client {
          * Utility Functions
          * @type {Object}
          */
-		this.utils = require('./utils/utils.js');
+		this.utils = require('../utils/utils');
 
 		/**
 		 * Redis Database
