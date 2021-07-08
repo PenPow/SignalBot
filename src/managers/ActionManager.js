@@ -1,7 +1,6 @@
 const { join, resolve } = require('path');
 const { readdirSync, readdir } = require('fs');
 const { createClient, RedisClient } = require('redis');
-const Command = require('../structures/Command');
 
 /**
  * Signal's Custom Action Manager
