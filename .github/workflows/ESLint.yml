@@ -1,0 +1,19 @@
+name: ESLint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Repository
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+      - run: yarn set version from sources
+      - run: yarn install --check-cache
+      - name: Run ESLint
+      - run: eslint . --ext .js,.jsx,.ts,.tsx
