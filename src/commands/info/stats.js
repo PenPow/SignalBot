@@ -1,4 +1,4 @@
-const Command = require('../Command.js');
+const Command = require('../../structures/Command');
 const { MessageEmbed } = require('discord.js');
 const { mem, cpu, os } = require('node-os-utils');
 const { stripIndent } = require('common-tags');

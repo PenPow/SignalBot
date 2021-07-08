@@ -1,5 +1,5 @@
 const config = require('./config.json');
-const Client = require('./src/Client.js');
+const Client = require('./src/structures/Client');
 const { Intents } = require('discord.js');
 
 /**
@@ -45,10 +45,7 @@ const client = new Client(config, {
  * @type {Function}
  */
 async function init() {
-	await client.loadEvents('./src/events');
-	await client.loadCommands('./src/commands');
-	await client.loadRedis(config.apiKeys.redis.url);
-	await client.login(client.token);
+	await client.init()
 }
 
 init();
