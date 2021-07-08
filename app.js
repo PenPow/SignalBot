@@ -45,7 +45,7 @@ const client = new Client(config, {
  * @type {Function}
  */
 async function init() {
-	await client.init()
+	await client.init();
 }
 
 init();
