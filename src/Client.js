@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const Discord = require('discord.js')
 const { readdir, readdirSync } = require('fs');
 const { join, resolve } = require('path');
 const Enmap = require('enmap');
