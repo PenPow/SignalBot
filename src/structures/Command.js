@@ -374,7 +374,7 @@ class Command {
 		const modLog = message.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
 
 		if(modLog && modLog.viewable && modLog.permissionsFor(message.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
-			const caseNumber = parseInt(message.client.utils.getCaseNumber(message.client, message.guild, modLog)) - 1;
+			const caseNumber = parseInt(message.client.utils.getCaseNumber(message.client, message.guild, modLog));
 			const prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
 			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
 			const embed = new MessageEmbed()
@@ -433,7 +433,7 @@ class Command {
 		const user = await interaction.client.users.fetch(target);
 		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
 		if(modLog && modLog.viewable && modLog.permissionsFor(interaction.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
-			const caseNumber = parseInt(interaction.client.utils.getCaseNumber(interaction.client, interaction.guild, modLog)) - 1;
+			const caseNumber = parseInt(interaction.client.utils.getCaseNumber(interaction.client, interaction.guild, modLog));
 			const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`) || interaction.client.prefix;
 			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
 			const embed = new MessageEmbed()

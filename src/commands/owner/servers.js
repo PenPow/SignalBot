@@ -1,7 +1,7 @@
-const Command = require('../Command.js');
+const Command = require('../../structures/Command');
 const { MessageEmbed } = require('discord.js');
 const { success } = require('../../utils/emojis');
-const ReactionMenu = require('../ReactionMenu.js');
+const ReactionMenu = require('../../structures/ReactionMenu');
 
 module.exports = class ServersCommand extends Command {
 	constructor(client) {

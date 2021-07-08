@@ -1,4 +1,4 @@
-const Command = require('../Command.js');
+const Command = require('../../structures/Command');
 const { MessageEmbed } = require('discord.js');
 const pkg = require(__basedir + '/package.json'); // eslint-disable-line
 const { owner } = require('../../utils/emojis.js');
