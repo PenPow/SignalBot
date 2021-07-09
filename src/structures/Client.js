@@ -1,10 +1,7 @@
 const Discord = require('discord.js');
-const { readdir, readdirSync } = require('fs');
-const { join, resolve } = require('path');
 const Enmap = require('enmap');
 const redis = require('redis');
-const AsciiTable = require('ascii-table');
-const ActionManager = require('../managers/ActionManager')
+const ActionManager = require('../managers/ActionManager');
 
 /**
  * Signal's Custom Discord Client
@@ -117,11 +114,12 @@ class Client extends Discord.Client {
 	 */
 	async init() {
 		try {
-			this.actionManager.initCommands(this);
+			// this.actionManager.initCommands(this);
 			this.actionManager.initEvents(this);
 			this.redis = this.actionManager.initRedis(this);
 			await this.login(this.token);
-		} catch (e) {
+		}
+		catch (e) {
 			this.logger.error(`Failed to Init: ${e.stack}`);
 		}
 	}
