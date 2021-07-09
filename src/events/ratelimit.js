@@ -1,9 +1,11 @@
-module.exports = async (client, rateLimitInfo) => {
-	client.logger.warn(`Ratelimit Hit (${millisToMinutesAndSeconds(rateLimitInfo.timeout)}) on Route ${rateLimitInfo.route}\n${rateLimitInfo.path}`);
-};
+class RateLimit {
+	constructor(client) {
+		this.client = client;
+	}
 
-function millisToMinutesAndSeconds(millis) {
-	const minutes = Math.floor(millis / 60000);
-	const seconds = ((millis % 60000) / 1000).toFixed(0);
-	return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+	run(args) {
+		this.client.logger.warn(`Ratelimit Hit (${this.client.utils.millisToMinutesAndSeconds(args[0].timeout)}) on Route ${args[0].route}\n${args[0].path}`);
+	}
 }
+
+module.exports = RateLimit;

@@ -236,6 +236,16 @@ async function unban(client, caseInfo) {
 	}
 }
 
+/**
+ * Converts Milliseconds to Minutes and Seconds
+ * @param {number} millis
+ */
+function millisToMinutesAndSeconds(millis) {
+	const minutes = Math.floor(millis / 60000);
+	const seconds = ((millis % 60000) / 1000).toFixed(0);
+	return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
+
 module.exports = {
 	capitalize,
 	clean,
@@ -251,4 +261,5 @@ module.exports = {
 	confirmation,
 	unmute,
 	unban,
+	millisToMinutesAndSeconds,
 };
