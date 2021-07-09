@@ -56,6 +56,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:3.4.0"],
             ["fancy-log", "npm:1.3.3"],
             ["ffmpeg-static", "npm:4.4.0"],
+            ["fs", "npm:0.0.1-security"],
             ["he", "npm:1.2.0"],
             ["libsodium-wrappers", "npm:0.7.9"],
             ["lodash", "npm:4.17.21"],
@@ -2333,6 +2334,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["asynckit", "npm:0.4.0"],
             ["combined-stream", "npm:1.0.8"],
             ["mime-types", "npm:2.1.31"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["fs", [
+        ["npm:0.0.1-security", {
+          "packageLocation": "./.yarn/cache/fs-npm-0.0.1-security-5060b47e87-d23d3c0dd4.zip/node_modules/fs/",
+          "packageDependencies": [
+            ["fs", "npm:0.0.1-security"]
           ],
           "linkType": "HARD",
         }]
@@ -4672,6 +4682,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:3.4.0"],
             ["fancy-log", "npm:1.3.3"],
             ["ffmpeg-static", "npm:4.4.0"],
+            ["fs", "npm:0.0.1-security"],
             ["he", "npm:1.2.0"],
             ["libsodium-wrappers", "npm:0.7.9"],
             ["lodash", "npm:4.17.21"],
