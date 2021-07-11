@@ -1,58 +1,26 @@
-const AsciiTable = require('ascii-table');
-
 class Ready {
 	constructor(client) {
 		this.client = client;
 	}
 
 	async run() {
-		const activities = [
-			{
-				name: 'your commands',
-				type: 'LISTENING',
-			},
-			{
-				name: 'to @Signal',
-				type: 'LISTENING',
-			},
-			{
-				name: 'the messages go by',
-				type: 'WATCHING',
-			} ];
 
-		this.client.logger.info('Loading Slash Commands...');
-		const table = new AsciiTable('Slash Commands');
-		table.setHeading('Command Name', 'Type', 'Status');
+		// this.client.logger.info('Loading Slash Commands...');
 
-		const commandArray = [];
+		// const commandArray = [];
 
-		this.client.commands.each(async command => {
-			if(command.disabled) return table.addRow(command.name, this.client.utils.capitalize(command.type), 'Fail');
-			if(command.ownerOnly || command.type === this.client.types.OWNER) return table.addRow(command.name, this.client.utils.capitalize(command.type), 'Fail');
+		// this.client.commands.each(async command => {
+		// 	if(command.disabled) return table.addRow(command.name, this.client.utils.capitalize(command.type), 'Fail');
+		// 	if(command.ownerOnly || command.type === this.client.types.OWNER) return table.addRow(command.name, this.client.utils.capitalize(command.type), 'Fail');
 
-			commandArray.push(command.generateSlashCommand());
+		// 	commandArray.push(command.generateSlashCommand());
 
-			table.addRow(command.name, this.client.utils.capitalize(command.type), 'Pass');
-		});
+		// 	table.addRow(command.name, this.client.utils.capitalize(command.type), 'Pass');
+		// });
 
 		// const test_guild = await this.client.guilds.fetch('789215359878168586');
 		// test_guild.commands.set(commandArray);
-		this.client.logger.log(table.toString());
 
-		this.client.user.setPresence({
-			status: 'online',
-			activity: activities[0],
-		});
-
-		let activity = 0;
-
-		setInterval(() => {
-			if(activity >= 3) activity = 0;
-			this.client.user.setActivity(activities[activity]);
-			activity++;
-		}, 30000);
-
-		this.client.logger.warn('Updating Database');
 
 		this.client.logger.warn('Checking For Expired Punishments');
 		this.client.db.ensure('global_mutes', []);

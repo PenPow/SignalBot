@@ -17,10 +17,10 @@ class ActionManager {
      * @returns {void}
     */
 	initCommands(client) {
-		readdirSync('../events').filter(f => !f.endsWith('.js')).forEach(dir => {
-			const commands = readdirSync(resolve(join('../commands', dir))).filter(f => f.endsWith('js'));
+		readdirSync(join(global.__basedir, 'src/commands')).filter(f => !f.endsWith('.js')).forEach(dir => {
+			const commands = readdirSync(resolve(join(join(global.__basedir, 'src/commands'), dir))).filter(f => f.endsWith('js'));
 			commands.forEach(f => {
-				const Command = require(resolve(join('../commands', dir, f)));
+				const Command = require(resolve(join(join(global.__basedir, 'src/commands'), dir, f)));
 				const command = new Command(client);
 				if(command.name && !command.disabled) {
 					client.commands.set(command.name, command);
@@ -41,7 +41,7 @@ class ActionManager {
      * @returns {void}
     */
 	initEvents(client) {
-		readdir((global.__basedir, 'src/events'), (err, files) => {
+		readdir(join(global.__basedir, 'src/events'), (err, files) => {
 			if (err) client.logger.error(err);
 
 			files.forEach(evt => {
@@ -55,7 +55,7 @@ class ActionManager {
 				const eventName = evt.split('.')[0];
 
 				client.on(
-					eventName.charAt(0).toLowerCase() + eventName.slice(1),
+					eventName,
 					(...args) => event.run(args),
 				);
 			});
@@ -68,18 +68,6 @@ class ActionManager {
      * @returns {RedisClient}
      */
 	initRedis(client) {
-        const expired = (callback) => { // eslint-disable-line
-			const sub = createClient({ url: client.config.apiKeys.redis.url });
-			sub.subscribe('__keyevent@0__:expired', () => {
-				sub.on('message', (channel, message) => {
-					callback(message);
-				});
-			});
-		};
-
-		const pub = createClient({ url: client.config.apiKeys.redis.url });
-		pub.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], expired());
-
 		return createClient({
 			url: client.config.apiKeys.redis.url,
 			enable_offline_queue: true,
