@@ -4,19 +4,6 @@ class Ready {
 	}
 
 	async run() {
-		const activities = [
-			{
-				name: 'your commands',
-				type: 'LISTENING',
-			},
-			{
-				name: 'to @Signal',
-				type: 'LISTENING',
-			},
-			{
-				name: 'the messages go by',
-				type: 'WATCHING',
-			} ];
 
 		// this.client.logger.info('Loading Slash Commands...');
 
@@ -34,20 +21,6 @@ class Ready {
 		// const test_guild = await this.client.guilds.fetch('789215359878168586');
 		// test_guild.commands.set(commandArray);
 
-		this.client.user.setPresence({
-			status: 'online',
-			activity: activities[0],
-		});
-
-		let activity = 0;
-
-		setInterval(() => {
-			if(activity >= 3) activity = 0;
-			this.client.user.setActivity(activities[activity]);
-			activity++;
-		}, 30000);
-
-		this.client.logger.warn('Updating Database');
 
 		this.client.logger.warn('Checking For Expired Punishments');
 		this.client.db.ensure('global_mutes', []);
