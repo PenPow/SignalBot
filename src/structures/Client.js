@@ -114,7 +114,7 @@ class Client extends Discord.Client {
 	 */
 	async init() {
 		try {
-			// this.actionManager.initCommands(this);
+			this.actionManager.initCommands(this);
 			this.actionManager.initEvents(this);
 			this.redis = this.actionManager.initRedis(this);
 			await this.login(this.token);

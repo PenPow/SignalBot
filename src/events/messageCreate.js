@@ -49,7 +49,7 @@ class messageCreate {
 
 			if(cmdArgs.charAt(prefix.length + 1 === ' ')) cmdArgs.substring(prefix.length + 1, '');
 
-			cmdArgs = args.split(' ');
+			cmdArgs = cmdArgs.split(' ');
 
 			const cmd = cmdArgs.shift().toLowerCase();
 
@@ -67,7 +67,7 @@ class messageCreate {
 
 				if(permissions) {
 					message.command = true;
-					return command.run(message, args);
+					return command.run(message, cmdArgs);
 				}
 
 			}

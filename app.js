@@ -38,6 +38,10 @@ const client = new Client(config, {
 	intents: intents,
 	allowedMentions: { parse: ['users', 'everyone', 'roles'], repliedUser: false },
 	partials: ['USER', 'CHANNEL', 'MESSAGE'],
+	presence: {
+		status: 'online',
+		activities: [{ name: 'to @Signal', type: 'LISTENING' }],
+	},
 });
 
 /**
