@@ -1,5 +1,3 @@
-const AsciiTable = require('ascii-table');
-
 class Ready {
 	constructor(client) {
 		this.client = client;
@@ -19,25 +17,6 @@ class Ready {
 				name: 'the messages go by',
 				type: 'WATCHING',
 			} ];
-
-		this.client.logger.info('Loading Slash Commands...');
-		const table = new AsciiTable('Slash Commands');
-		table.setHeading('Command Name', 'Type', 'Status');
-
-		const commandArray = [];
-
-		this.client.commands.each(async command => {
-			if(command.disabled) return table.addRow(command.name, this.client.utils.capitalize(command.type), 'Fail');
-			if(command.ownerOnly || command.type === this.client.types.OWNER) return table.addRow(command.name, this.client.utils.capitalize(command.type), 'Fail');
-
-			commandArray.push(command.generateSlashCommand());
-
-			table.addRow(command.name, this.client.utils.capitalize(command.type), 'Pass');
-		});
-
-		// const test_guild = await this.client.guilds.fetch('789215359878168586');
-		// test_guild.commands.set(commandArray);
-		this.client.logger.log(table.toString());
 
 		this.client.user.setPresence({
 			status: 'online',
