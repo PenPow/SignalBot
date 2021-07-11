@@ -27,6 +27,4 @@ Released under the [GNU Affero General Public License v3.0](https://www.gnu.org/
 ## Credits
 
 * **PenPow** - *Development* - [github](https://github.com/PenPow)
-* **allyourbase#0001** - *Motivation*
-* **Epsilon#6666** - *Always there to be a pain*
-* **benjamin** - he is so cool
+* **KyomiDev** - *Development* - [github](https://github.com/KyomiDev)
