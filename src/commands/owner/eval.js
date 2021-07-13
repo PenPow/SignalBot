@@ -88,7 +88,7 @@ module.exports = class EvalCommand extends Command {
 					headers: { 'Content-Type': 'text/plain' },
 				})
 					.then((res) => res.json())
-					.then((json) => { 
+					.then((json) => {
 						bin = 'https://hastebin.com/' + json.key + '.js';
 						download = 'https://hastebin.com/raw/' + json.key + '.js';
 					})
