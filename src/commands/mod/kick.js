@@ -6,7 +6,7 @@ module.exports = class KickCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'kick',
-			usage: 'kick <user mention/ID> [time] [reason]',
+			usage: 'kick <user mention/ID> [reason]',
 			description: 'Kicks a user from the server.',
 			type: client.types.MOD,
 			examples: ['kick @PenPow He was mean', 'kick @PenPow Naughty'],
@@ -106,10 +106,6 @@ module.exports = class KickCommand extends Command {
 		if (!reason) reason = '`No Reason Provided`';
 		if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
 
-		const approved = await this.client.utils.slashConfirmation(interaction, `Are you sure you want to kick \`${member.user.tag}\`?`, interaction.user.id);
-
-		if(!approved.resolved) return this.sendSlashErrorMessage(interaction, 1, 'Cancelled Command (Command Timed Out or Confirmation Declined)');
-
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 
 		const embed = new MessageEmbed()
@@ -124,7 +120,7 @@ module.exports = class KickCommand extends Command {
 
 		const embed2 = new MessageEmbed()
 			.setTitle(`${mod} You were Kicked from ${interaction.guild.name}`)
-			.addField('Moderator', `<@${interaction.author.id}>`, true)
+			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Reason', reason)
 			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
@@ -133,7 +129,7 @@ module.exports = class KickCommand extends Command {
 
 		await member.user.send({ embeds: [embed2] }).catch();
 
-		await member.kick({ reason: `Kicked by ${interaction.user.tag} | Case #${caseID}` });
+		// await member.kick({ reason: `Kicked by ${interaction.user.tag} | Case #${caseID}` });
 
 		const kickObject = {
 			guild: interaction.guild.id,
@@ -151,7 +147,7 @@ module.exports = class KickCommand extends Command {
 		this.client.db.set(`case-${interaction.guild.id}`, caseID);
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, kickObject);
 
-		approved.interaction.update({ ephemeral: false, embeds: [embed] });
+		interaction.reply({ ephemeral: false, embeds: [embed] });
 	}
 
 	generateSlashCommand() {

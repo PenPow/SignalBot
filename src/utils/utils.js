@@ -172,9 +172,11 @@ async function confirmation(message, content, authorID) {
 		collector.on('collect', async (i) => {
 			switch (i.customId) {
 			case 'yes':
+				i.update({ embeds: [embed], components: [] });
 				resolve(true);
 				break;
 			case 'no':
+				i.update({ embeds: [embed], components: [] });
 				resolve(false);
 				break;
 			}
@@ -196,11 +198,11 @@ async function slashConfirmation(interaction, content, authorID) {
 	const row = new MessageActionRow()
 		.addComponents(
 			new MessageButton()
-				.setCustomID('yes')
+				.setCustomId('yes')
 				.setLabel('Yes')
 				.setStyle('SUCCESS'),
 			new MessageButton()
-				.setCustomID('no')
+				.setCustomId('no')
 				.setLabel('No')
 				.setStyle('DANGER'),
 		);
@@ -215,31 +217,25 @@ async function slashConfirmation(interaction, content, authorID) {
 	await interaction.reply({ embeds: [embed], components: [row] });
 
 	const collector = interaction.channel.createMessageComponentCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === authorID, { time: 10000 });
-	let buttonInteraction;
-	let resolved = false;
 
-	collector.on('collect', async (i) => {
-		buttonInteraction = i;
-		switch (i.customId) {
-		case 'yes':
-			await i.update({ embeds: [embed], components: [] });
-			resolved = true;
-			break;
-		case 'no':
-			await i.update({ embeds: [embed], components: [] });
-			resolved = false;
-			break;
-		}
+	return new Promise((resolve) => {
+		collector.on('collect', async (i) => {
+			switch (i.customId) {
+			case 'yes':
+				i.update({ embeds: [embed], components: [] });
+				resolve(true);
+				break;
+			case 'no':
+				i.update({ embeds: [embed], components: [] });
+				resolve(false);
+				break;
+			}
+		});
+
+		collector.on('end', collected => {
+			if(collected.size < 1) resolve(false);
+		});
 	});
-
-	collector.on('end', collected => {
-		if(collected.size < 1) resolved = false;
-	});
-
-	return {
-		interaction: buttonInteraction,
-		resolved: resolved,
-	};
 }
 
 /**

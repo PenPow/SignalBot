@@ -358,7 +358,7 @@ class Command {
 
 		if(errorMessage) embed.addField('Error Message', `\`\`\`${errorMessage}\`\`\``);
 
-		return interaction.reply({ ephemeral: true, embeds: [embed] });
+		return interaction.replied ? interaction.followUp({ ephemeral: true, embeds: [embed] }) : interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
 
 	/**
