@@ -148,11 +148,11 @@ async function confirmation(message, content, authorID) {
 	const row = new MessageActionRow()
 		.addComponents(
 			new MessageButton()
-				.setCustomID('yes')
+				.setCustomId('yes')
 				.setLabel('Yes')
 				.setStyle('SUCCESS'),
 			new MessageButton()
-				.setCustomID('no')
+				.setCustomId('no')
 				.setLabel('No')
 				.setStyle('DANGER'),
 		);
@@ -166,17 +166,17 @@ async function confirmation(message, content, authorID) {
 
 	const msg = await message.reply({ embeds: [embed], components: [row] });
 
-	const collector = msg.createMessageComponentInteractionCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === authorID, { time: 10000 });
+	const collector = msg.channel.createMessageComponentCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === authorID, { time: 10000 });
 
 	return new Promise((resolve) => {
 		collector.on('collect', async (i) => {
-			switch (i.customID) {
+			switch (i.customId) {
 			case 'yes':
-				await i.update({ embeds: [embed], components: [] });
+				i.update({ embeds: [embed], components: [] });
 				resolve(true);
 				break;
 			case 'no':
-				await i.update({ embeds: [embed], components: [] });
+				i.update({ embeds: [embed], components: [] });
 				resolve(false);
 				break;
 			}

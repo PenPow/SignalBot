@@ -5,20 +5,20 @@ const { success, mod } = require('../../utils/emojis');
 module.exports = class ReasonCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'reason',
-			usage: 'reason <caseID | latest> <reason>',
-			description: 'Edits the reason for the case',
+			name: 'case',
+			usage: 'case <caseID | latest>',
+			aliases: ['caseinfo'],
+			description: 'Gets the detailed information about a case.',
 			type: client.types.MOD,
-			examples: ['ban @PenPow 1w He was mean', 'ban @PenPow 365y Naughty'],
+			examples: ['case 1', 'caseinfo latest'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
-			userPermissions: ['ADMINISTRATOR'],
+			userPermissions: [],
 			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
 	async run(message, args) {
 		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide a case ID or use \'latest\'');
-		if(!args[1]) return this.sendErrorMessage(message, 0, 'Please provide a reason');
 
 		let caseID;
 
@@ -34,47 +34,16 @@ module.exports = class ReasonCommand extends Command {
 			m.embeds[0].footer.text.startsWith('Case #'),
 			).first();
 			caseID = sentMessage.embeds[0].footer.text.substring(6);
-
-			if(!sentMessage?.embeds[0]) return this.sendErrorMessage(message, 1, 'Failed to find a message to update.');
-
-			const descriptionArray = sentMessage.embeds[0].description.split('\n');
-			descriptionArray[descriptionArray.length - 1] = `**Reason:** ${args.slice(1).join(' ')}`;
-
-			const finalArray = descriptionArray.join('\n');
-			const embed = sentMessage.embeds[0];
-
-			embed.description = finalArray;
-
-			sentMessage.edit({ embeds: [embed] });
 		}
-		else {
-			const caseInformation = this.client.db.get(`case-${message.guild.id}-${args[0]}`);
-			if(!caseInformation) return this.sendErrorMessage(message, 1, 'No Case Found');
-			const modLog = message.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
-
-			const sentMessage = await modLog.messages.fetch(caseInformation.caseInfo.auditId);
-
-			if(!sentMessage?.embeds[0]) return this.sendErrorMessage(message, 1, 'Failed to find a message to update.');
-			caseID = sentMessage.embeds[0].footer.text.substring(6);
-
-			const descriptionArray = sentMessage.embeds[0].description.split('\n');
-			descriptionArray[descriptionArray.length - 1] = `**Reason:** ${args.slice(1).join(' ')}`;
-
-			const finalArray = descriptionArray.join('\n');
-			const embed = sentMessage.embeds[0];
-
-			embed.description = finalArray;
-
-			sentMessage.edit({ embeds: [embed] });
-		}
+		else { caseID = args[0]; }
 
 		const caseInfo = this.client.db.get(`case-${message.guild.id}-${caseID}`);
-		caseInfo.caseInfo.reason = args.slice(1).join(' ');
-		this.client.db.set(`case-${message.guild.id}-${caseID}`, caseInfo);
+		const target = await this.client.users.fetch(caseInfo.caseInfo.target);
+		const moderator = await message.guild.members.fetch(caseInfo.caseInfo.moderator);
 
 		const embed = new MessageEmbed()
-			.setTitle(`${success} Updated Reason for Case #${caseID} ${mod}`)
-			.setDescription(`Updated the reason for the case to ${args[1]}`)
+			.setTitle(`Case #${caseID} ${mod}`)
+			.setDescription(`**Member**\n\`${target.tag}\`(${caseInfo.caseInfo.target})\n**Action:** \`${message.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Moderator**\n\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`)
 			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor(message.guild.me.displayHexColor);
@@ -123,14 +92,8 @@ module.exports = class ReasonCommand extends Command {
 			options: [{
 				name: 'caseid',
 				type: 'INTEGER',
-				description: 'CaseID to edit the reason for',
-				required: true,
-			},
-			{
-				name: 'reason',
-				type: 'STRING',
-				description: 'Reason to replace the old one',
-				required: true,
+				description: '(Optional) CaseID to edit the reason for',
+				required: false,
 			}],
 		};
 	}

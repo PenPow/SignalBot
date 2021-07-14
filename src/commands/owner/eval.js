@@ -25,10 +25,9 @@ module.exports = class EvalCommand extends Command {
 	}
 	async run(message, args) {
 		try {
-			const code = args.join(' ');
-			let evaled = eval(`( async () => {
-				return ${code}
-			  })()`);
+			let code = args.join(' ');
+			if (code.substring(0, 3) === '```') code = code.replace(/^[^\n]+\n/, '');
+			let evaled = eval(code = code.replace(/`/g, ''));
 			const raw = evaled;
 			let promise, output, bin, download, type, color;
 
