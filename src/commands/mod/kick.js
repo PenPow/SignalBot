@@ -129,7 +129,7 @@ module.exports = class KickCommand extends Command {
 
 		await member.user.send({ embeds: [embed2] }).catch();
 
-		// await member.kick({ reason: `Kicked by ${interaction.user.tag} | Case #${caseID}` });
+		await member.kick({ reason: `Kicked by ${interaction.user.tag} | Case #${caseID}` });
 
 		const kickObject = {
 			guild: interaction.guild.id,
