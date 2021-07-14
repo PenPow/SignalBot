@@ -148,11 +148,11 @@ async function confirmation(message, content, authorID) {
 	const row = new MessageActionRow()
 		.addComponents(
 			new MessageButton()
-				.setCustomID('yes')
+				.setCustomId('yes')
 				.setLabel('Yes')
 				.setStyle('SUCCESS'),
 			new MessageButton()
-				.setCustomID('no')
+				.setCustomId('no')
 				.setLabel('No')
 				.setStyle('DANGER'),
 		);
@@ -166,17 +166,15 @@ async function confirmation(message, content, authorID) {
 
 	const msg = await message.reply({ embeds: [embed], components: [row] });
 
-	const collector = msg.createMessageComponentInteractionCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === authorID, { time: 10000 });
+	const collector = msg.channel.createMessageComponentCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === authorID, { time: 10000 });
 
 	return new Promise((resolve) => {
 		collector.on('collect', async (i) => {
-			switch (i.customID) {
+			switch (i.customId) {
 			case 'yes':
-				await i.update({ embeds: [embed], components: [] });
 				resolve(true);
 				break;
 			case 'no':
-				await i.update({ embeds: [embed], components: [] });
 				resolve(false);
 				break;
 			}
@@ -186,6 +184,62 @@ async function confirmation(message, content, authorID) {
 			if(collected.size < 1) resolve(false);
 		});
 	});
+}
+
+/**
+ * Creates a confirmation box
+ * @param {CommandInteraction} interaction
+ * @param {string} content
+ * @returns {Promise}
+ */
+async function slashConfirmation(interaction, content, authorID) {
+	const row = new MessageActionRow()
+		.addComponents(
+			new MessageButton()
+				.setCustomID('yes')
+				.setLabel('Yes')
+				.setStyle('SUCCESS'),
+			new MessageButton()
+				.setCustomID('no')
+				.setLabel('No')
+				.setStyle('DANGER'),
+		);
+
+	const embed = new MessageEmbed()
+		.setTitle(':exclamation: Confirmation')
+		.setFooter(`This will expire in 10 Seconds • ${interaction.member.displayName}`, interaction.user?.displayAvatarURL({ dynamic: true }) || interaction.user?.displayAvatarURL({ dynamic: true }))
+		.setTimestamp()
+		.setDescription(content)
+		.setColor(interaction.guild.me.displayHexColor);
+
+	await interaction.reply({ embeds: [embed], components: [row] });
+
+	const collector = interaction.channel.createMessageComponentCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === authorID, { time: 10000 });
+	let buttonInteraction;
+	let resolved = false;
+
+	collector.on('collect', async (i) => {
+		buttonInteraction = i;
+		switch (i.customId) {
+		case 'yes':
+			await i.update({ embeds: [embed], components: [] });
+			resolved = true;
+			break;
+		case 'no':
+			await i.update({ embeds: [embed], components: [] });
+			resolved = false;
+			break;
+		}
+	});
+
+	collector.on('end', collected => {
+		if(collected.size < 1) resolved = false;
+	});
+
+	return {
+		interaction: buttonInteraction,
+		resolved: resolved,
+	};
 }
 
 /**
@@ -262,4 +316,5 @@ module.exports = {
 	unmute,
 	unban,
 	millisToMinutesAndSeconds,
+	slashConfirmation,
 };

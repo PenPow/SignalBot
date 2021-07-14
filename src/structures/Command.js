@@ -405,6 +405,11 @@ class Command {
 				embed.setColor('#ff1a00');
 				break;
 
+			case 'kick':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#f98406');
+				break;
+
 			case 'default':
 				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#ff1a00');
@@ -461,6 +466,11 @@ class Command {
 			case 'ban':
 				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#ff1a00');
+				break;
+
+			case 'kick':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#f98406');
 				break;
 
 			case 'default':

@@ -10,7 +10,7 @@ module.exports = class BanCommand extends Command {
 			usage: 'ban <user mention/ID> [time] [reason]',
 			description: 'Bans a user for the specified amount of time (defaults to lifetime)',
 			type: client.types.MOD,
-			examples: ['ban @PenPow 1w He was mean', 'ban @PenPow 365y Naughty'],
+			examples: ['ban @PenPow He was mean', 'ban @PenPow 365y Naughty'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'BAN_MEMBERS'],
 			userPermissions: ['BAN_MEMBERS'],
 			guilds: ['GLOBAL'],
@@ -31,7 +31,7 @@ module.exports = class BanCommand extends Command {
 		if (member === message.member) return this.sendErrorMessage(message, 0, 'You cannot ban yourself');
 		if (member === message.guild.me) return this.sendErrorMessage(message, 0, 'You cannot ban me');
 		if (!member.bannable) return this.sendErrorMessage(message, 0, 'Provided member is not bannable');
-		if (member.roles.highest.position >= message.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(message, 0, 'You cannot mute someone with an equal or higher role');
+		if (member.roles.highest.position >= message.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(message, 0, 'You cannot ban someone with an equal or higher role');
 		if (member.user.bot) return this.sendErrorMessage(message, 0, 'I cannot punish a bot.');
 
 		let time = ms(args[1]);

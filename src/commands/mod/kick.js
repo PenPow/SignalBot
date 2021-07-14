@@ -1,18 +1,17 @@
 const Command = require('../../structures/Command');
 const { MessageEmbed } = require('discord.js');
 const { success, mod } = require('../../utils/emojis');
-const ms = require('ms');
 
-module.exports = class BanCommand extends Command {
+module.exports = class KickCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'ban',
-			usage: 'ban <user mention/ID> [time] [reason]',
-			description: 'Bans a user for the specified amount of time (defaults to lifetime)',
+			name: 'kick',
+			usage: 'kick <user mention/ID> [time] [reason]',
+			description: 'Kicks a user from the server.',
 			type: client.types.MOD,
-			examples: ['ban @PenPow 1w He was mean', 'ban @PenPow 365y Naughty'],
-			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'BAN_MEMBERS'],
-			userPermissions: ['BAN_MEMBERS'],
+			examples: ['kick @PenPow He was mean', 'kick @PenPow Naughty'],
+			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'KICK_MEMBERS'],
+			userPermissions: ['KICK_MEMBERS'],
 			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
@@ -28,48 +27,36 @@ module.exports = class BanCommand extends Command {
 		}
 
 		if (!args[0] || !member) return this.sendErrorMessage(message, 0, 'Please mention a user or provide a valid user ID');
-		if (member === message.member) return this.sendErrorMessage(message, 0, 'You cannot ban yourself');
-		if (member === message.guild.me) return this.sendErrorMessage(message, 0, 'You cannot ban me');
-		if (!member.bannable) return this.sendErrorMessage(message, 0, 'Provided member is not bannable');
-		if (member.roles.highest.position >= message.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(message, 0, 'You cannot mute someone with an equal or higher role');
+		if (member === message.member) return this.sendErrorMessage(message, 0, 'You cannot kick yourself');
+		if (member === message.guild.me) return this.sendErrorMessage(message, 0, 'You cannot kick me');
+		if (!member.kickable) return this.sendErrorMessage(message, 0, 'Provided member is not kickable');
+		if (member.roles.highest.position >= message.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(message, 0, 'You cannot kick someone with an equal or higher role');
 		if (member.user.bot) return this.sendErrorMessage(message, 0, 'I cannot punish a bot.');
 
-		let time = ms(args[1]);
-
-		if(!isNaN(time) && Math.sign(time) < 0) parseInt(time *= -1);
-
-		let reason;
-		if(!isNaN(time)) reason = args.slice(2).join(' ');
-		else reason = args.slice(1).join(' ');
+		let reason = args.slice(1).join(' ');
 		if (!reason) reason = '`No Reason Provided`';
 		if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
 
-		const approved = await this.client.utils.confirmation(message, `Are you sure you want to ban \`${member.user.tag}\`?`, message.author.id);
+		const approved = await this.client.utils.confirmation(message, `Are you sure you want to kick \`${member.user.tag}\`?`, message.author.id);
 
 		if(!approved) return this.sendErrorMessage(message, 1, 'Cancelled Command (Command Timed Out or Confirmation Declined)');
 
 		const caseID = this.client.utils.getCaseNumber(this.client, message.guild);
 
-		let msTime = 'no expiration date';
-		if(time) msTime = ms(time, { long: true });
-
 		const embed = new MessageEmbed()
-			.setTitle(`${success} Banned Member ${mod}`)
-			.setDescription(`${member} has now been banned for **${msTime}**.`)
+			.setTitle(`${success} Kicked Member ${mod}`)
+			.setDescription(`${member} has now been kicked.`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
-			.addField('Time', `\`${msTime === 'no expiration date' ? 'Permanent' : ms(time, { long: false })}\``, true)
 			.addField('Reason', reason)
 			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor(message.guild.me.displayHexColor);
 
 		const embed2 = new MessageEmbed()
-			.setTitle(`${mod} You were Banned from ${message.guild.name}`)
-			.setDescription(`You were banned for **${msTime}**.`)
+			.setTitle(`${mod} You were Kicked from ${message.guild.name}`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
-			.addField('Time', `\`${msTime === 'no expiration date' ? 'Permanent' : ms(time, { long: false })}\``, true)
 			.addField('Reason', reason)
 			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
@@ -77,90 +64,68 @@ module.exports = class BanCommand extends Command {
 
 		await member.user.send({ embeds: [embed2] }).catch();
 
-		await member.ban({ reason: `Banned by ${message.author.tag} | Case #${caseID}` });
+		await member.kick({ reason: `Kicked by ${message.author.tag} | Case #${caseID}` });
 
-		const redisClient = this.client.redis;
-
-		const expireDate = new Date(Date.now()).getTime();
-
-		const banObject = {
+		const kickObject = {
 			guild: message.guild.id,
 			channel: message.channel.id,
 			caseInfo: {
 				caseID: caseID,
-				type: 'ban',
+				type: 'kick',
 				target: member.id,
 				moderator: message.author.id,
 				reason: reason,
-				expiry: new Date(expireDate + time).getTime(),
-				auditId: await this.sendModLogMessage(message, reason, member.id, 'ban'),
+				auditId: await this.sendModLogMessage(message, reason, member.id, 'kick'),
 			},
 		};
 
-		try {
-			const redisKey = `ban-${message.guild.id}-${caseID}`;
-			if(!isNaN(time)) redisClient.set(redisKey, 'Banned', 'EX', Math.round(time / 1000));
-			else redisClient.set(redisKey, 'Banned');
-		}
-		catch(e) {
-			this.client.logger.error(e.stack);
-		}
-
-		this.client.db.push('global_bans', banObject);
 		this.client.db.set(`case-${message.guild.id}`, caseID);
-		this.client.db.set(`case-${message.guild.id}-${caseID}`, banObject);
-		this.client.db.set(`lastcase-ban-${member.id}`, banObject);
+		this.client.db.set(`case-${message.guild.id}-${caseID}`, kickObject);
 
 		message.reply({ embeds: [embed] });
-
 	}
 
 	async slashRun(interaction, args) {
 		let member;
 
 		try {
-			member = await args.get('user').member;
+			member = args.get('user')?.member;
 		}
 		catch(e) {
 			// eslint disable-line
 		}
 
-		if (!member) return this.sendSlashErrorMessage(interaction, 0, 'Please mention a user or provide a valid user ID');
-		if (member === interaction.member) return this.sendSlashErrorMessage(interaction, 0, 'You cannot ban yourself');
-		if (member === interaction.guild.me) return this.sendSlashErrorMessage(interaction, 0, 'You cannot ban me');
-		if (!member.bannable) return this.sendSlashErrorMessage(interaction, 0, 'Provided member is not bannable');
-		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendSlashErrorMessage(interaction, 0, 'You cannot ban someone with an equal or higher role');
+		if (!member) return this.sendSlashErrorMessage(interaction, 0, 'Please provide a user');
+		if (member === interaction.member) return this.sendSlashErrorMessage(interaction, 0, 'You cannot kick yourself');
+		if (member === interaction.guild.me) return this.sendSlashErrorMessage(interaction, 0, 'You cannot kick me');
+		if (!member.kickable) return this.sendSlashErrorMessage(interaction, 0, 'Provided member is not kickable');
+		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendSlashErrorMessage(interaction, 0, 'You cannot kick someone with an equal or higher role');
 		if (member.user.bot) return this.sendSlashErrorMessage(interaction, 0, 'I cannot punish a bot.');
-		let time = ms(args.get('time')?.value);
-
-		if(!isNaN(time) && Math.sign(time) < 0) parseInt(time *= -1);
 
 		let reason = args.get('reason')?.value;
 		if (!reason) reason = '`No Reason Provided`';
 		if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
 
+		const approved = await this.client.utils.slashConfirmation(interaction, `Are you sure you want to kick \`${member.user.tag}\`?`, interaction.user.id);
+
+		if(!approved.resolved) return this.sendSlashErrorMessage(interaction, 1, 'Cancelled Command (Command Timed Out or Confirmation Declined)');
+
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 
-		let msTime = 'no expiration date';
-		if(time) msTime = ms(time, { long: true });
-
 		const embed = new MessageEmbed()
-			.setTitle(`${success} Banned Member ${mod}`)
-			.setDescription(`${member} has now been banned for **${msTime}**.`)
+			.setTitle(`${success} Kicked Member ${mod}`)
+			.setDescription(`${member} has now been kicked.`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
-			.addField('Time', `\`${msTime === 'no expiration date' ? 'Permanent' : ms(time, { long: false })}\``, true)
 			.addField('Reason', reason)
 			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
 			.setColor(interaction.guild.me.displayHexColor);
 
 		const embed2 = new MessageEmbed()
-			.setTitle(`${mod} You were Banned from ${interaction.guild.name}`)
-			.setDescription(`You were banned for **${msTime}**.`)
-			.addField('Moderator', `<@${interaction.user.id}>`, true)
+			.setTitle(`${mod} You were Kicked from ${interaction.guild.name}`)
+			.addField('Moderator', `<@${interaction.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
-			.addField('Time', `\`${msTime === 'no expiration date' ? 'Permanent' : ms(time, { long: false })}\``, true)
 			.addField('Reason', reason)
 			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
 			.setTimestamp()
@@ -168,41 +133,25 @@ module.exports = class BanCommand extends Command {
 
 		await member.user.send({ embeds: [embed2] }).catch();
 
-		await member.ban({ reason: `Banned by ${interaction.user.tag} | Case #${caseID}` });
+		await member.kick({ reason: `Kicked by ${interaction.user.tag} | Case #${caseID}` });
 
-		const redisClient = this.client.redis;
-
-		const expireDate = new Date(Date.now()).getTime();
-
-		const banObject = {
+		const kickObject = {
 			guild: interaction.guild.id,
 			channel: interaction.channel.id,
 			caseInfo: {
 				caseID: caseID,
-				type: 'ban',
+				type: 'kick',
 				target: member.id,
 				moderator: interaction.user.id,
 				reason: reason,
-				expiry: new Date(expireDate + time).getTime(),
-				auditId: await this.sendSlashModLogMessage(interaction, reason, member.id, 'ban'),
+				auditId: await this.sendSlashModLogMessage(interaction, reason, member.id, 'kick'),
 			},
 		};
 
-		try {
-			const redisKey = `ban-${interaction.guild.id}-${caseID}`;
-			if(!isNaN(time)) redisClient.set(redisKey, 'Banned', 'EX', Math.round(time / 1000));
-			else redisClient.set(redisKey, 'Banned');
-		}
-		catch(e) {
-			this.client.logger.error(e.stack);
-		}
-
-		this.client.db.push('global_bans', banObject);
 		this.client.db.set(`case-${interaction.guild.id}`, caseID);
-		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, banObject);
-		this.client.db.set(`lastcase-ban-${member.id}`, banObject);
+		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, kickObject);
 
-		interaction.reply({ ephemeral: false, embeds: [embed] });
+		approved.interaction.update({ ephemeral: false, embeds: [embed] });
 	}
 
 	generateSlashCommand() {
@@ -214,12 +163,6 @@ module.exports = class BanCommand extends Command {
 				type: 'USER',
 				description: 'User to apply the moderation actions to',
 				required: true,
-			},
-			{
-				name: 'time',
-				type: 'STRING',
-				description: '(Optional) Length of time (1s/m/h/d/w/y)',
-				required: false,
 			},
 			{
 				name: 'reason',
