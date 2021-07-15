@@ -9,7 +9,7 @@ global.__basedir = __dirname; // eslint-disable-line
 
 const nodeMajorVersion = parseInt(process.versions.node.split('.')[0], 10);
 if (nodeMajorVersion < 14) {
-	console.error('Unsupported NodeJS version! Please install Node.js 12, 13, or 14.');
+	console.error('Unsupported NodeJS version! Please install Node.js 14 or above');
 	process.exit(1);
 }
 
