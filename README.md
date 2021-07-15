@@ -22,7 +22,7 @@ Signal is an open source, fully customizable Discord bot that is constantly grow
 
 ## License
 
-Released under the [MIT ](LICENSE) license.
+Released under the [MIT](LICENSE) license.
 
 ## Credits
 
