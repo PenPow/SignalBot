@@ -29,7 +29,7 @@ module.exports = class NicknameCommand extends Command {
 				const nicknameStatus = `${oldNickname} ➔ ${nickname}`;
 				await message.member.setNickname(nickname);
 				const embed = new SignalEmbed(message)
-					.setTitle(`${success} Change Nickname`)
+					.setTitle(`${success} Changed Nickname`)
 					.setDescription(`${message.member}'s nickname was successfully updated.`)
 					.addField('Member', message.member, true)
 					.addField('Nickname', nicknameStatus, true);
@@ -53,7 +53,7 @@ module.exports = class NicknameCommand extends Command {
 				const nicknameStatus = `${oldNickname} ➔ ${nickname}`;
 				await interaction.member.setNickname(nickname);
 				const embed = new SignalEmbed(interaction)
-					.setTitle(`${success} Change Nickname`)
+					.setTitle(`${success} Changed Nickname`)
 					.setDescription(`${interaction.member}'s nickname was successfully updated.`)
 					.addField('Nickname', nicknameStatus, true);
 

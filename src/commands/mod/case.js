@@ -67,7 +67,7 @@ module.exports = class ReasonCommand extends Command {
 			).first();
 			caseID = sentMessage.embeds[0].footer.text.substring(6);
 		}
-		else { caseID = args[0]; }
+		else { caseID = args.get('caseid') }
 
 		const caseInfo = this.client.db.get(`case-${interaction.guild.id}-${caseID}`);
 		const target = await this.client.users.fetch(caseInfo.caseInfo.target);
