@@ -16,6 +16,7 @@ module.exports = class PlayCommand extends Command {
 		super(client, {
 			name: 'play',
 			usage: 'play <song>',
+			aliases: ['enqueue'],
 			description: 'Plays a song in the channel that you are currently in!',
 			type: client.types.MUSIC,
 			examples: ['play despacito'],
@@ -68,7 +69,7 @@ module.exports = class PlayCommand extends Command {
 			});
 
 			subscription.enqueue(track);
-			return await message.reply({ content: `Added ${track.title} to the queue` });
+			return await message.reply({ content: `Added \`${track.title}\` to the queue` });
 		}
 		catch(e) {
 			this.client.logger.error(e.stack);
@@ -121,7 +122,7 @@ module.exports = class PlayCommand extends Command {
 			});
 
 			subscription.enqueue(track);
-			return await interaction.followUp({ content: `Added ${track.title} to the queue`, ephemeral: true });
+			return await interaction.followUp({ content: `Added \`${track.title}\` to the queue`, ephemeral: true });
 		}
 		catch(e) {
 			this.client.logger.error(e.stack);
