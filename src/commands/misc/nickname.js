@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { success } = require('../../utils/emojis');
 
 module.exports = class NicknameCommand extends Command {
@@ -28,14 +28,11 @@ module.exports = class NicknameCommand extends Command {
 				const oldNickname = message.member.nickname || '`None`';
 				const nicknameStatus = `${oldNickname} ➔ ${nickname}`;
 				await message.member.setNickname(nickname);
-				const embed = new MessageEmbed()
+				const embed = new SignalEmbed(message)
 					.setTitle(`${success} Change Nickname`)
 					.setDescription(`${message.member}'s nickname was successfully updated.`)
 					.addField('Member', message.member, true)
-					.addField('Nickname', nicknameStatus, true)
-					.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-					.setTimestamp()
-					.setColor(message.guild.me.displayHexColor);
+					.addField('Nickname', nicknameStatus, true);
 
 				message.reply({ embeds: [embed] });
 			}
@@ -55,13 +52,10 @@ module.exports = class NicknameCommand extends Command {
 				const oldNickname = interaction.member.nickname || '`None`';
 				const nicknameStatus = `${oldNickname} ➔ ${nickname}`;
 				await interaction.member.setNickname(nickname);
-				const embed = new MessageEmbed()
+				const embed = new SignalEmbed(interaction)
 					.setTitle(`${success} Change Nickname`)
 					.setDescription(`${interaction.member}'s nickname was successfully updated.`)
 					.addField('Nickname', nicknameStatus, true)
-					.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-					.setTimestamp()
-					.setColor(interaction.guild.me.displayHexColor);
 
 				interaction.reply({ ephemeral: true, embeds: [embed] });
 			}
