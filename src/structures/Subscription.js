@@ -38,7 +38,6 @@ class MusicSubscription {
 		this.queueLock = false;
 
 		this.voiceConnection.on('stateChange', async (_, newState) => {
-			if(newState.status === VoiceConnectionStatus.Idle && this.queue.length === 0) this.voiceConnection.destroy();
 			if (newState.status === VoiceConnectionStatus.Disconnected) {
 				if (newState.reason === VoiceConnectionDisconnectReason.WebSocketClose && newState.closeCode === 4014) {
 					/*
@@ -103,12 +102,13 @@ class MusicSubscription {
 			if (newState.status === AudioPlayerStatus.Idle && oldState.status !== AudioPlayerStatus.Idle) {
 				// If the Idle state is entered from a non-Idle state, it means that an audio resource has finished playing.
 				// The queue is then processed to start playing the next track, if one is available.
-				(oldState.resource).metadata.onFinish();
+				(oldState.resource)?.metadata?.onFinish();
+				if(this.queue.length === 0) this.voiceConnection.destroy();
 				void this.processQueue();
 			}
 			else if (newState.status === AudioPlayerStatus.Playing) {
 				// If the Playing state has been entered, then a new track has started playback.
-				(newState.resource).metadata.onStart();
+				(newState.resource)?.metadata?.onStart();
 			}
 		});
 
@@ -139,9 +139,7 @@ class MusicSubscription {
 	 * Attemps to play a track from the queue
 	 */
 	async processQueue() {
-		if (this.queueLock || this.audioPlayer.state.status !== AudioPlayerStatus.Idle || this.queue.length === 0) {
-			return;
-		}
+		if (this.queueLock || this.audioPlayer.state.status !== AudioPlayerStatus.Idle) return;
 
 		this.queueLock = true;
 
