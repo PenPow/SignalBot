@@ -36,7 +36,7 @@ module.exports = class BugReportCommand extends Command {
 			.setThumbnail(feedbackChannel.guild.iconURL({ dynamic: true }))
 			.setDescription(feedback)
 			.addField('User', `<@${message.author.id}>`, true)
-			.addField('Server', message?.guild?.name || 'Direct Messsage', true)
+			.addField('Server', message?.guild?.name || 'Direct Messsage', true);
 
 		feedbackChannel.send(feedbackEmbed);
 
@@ -49,7 +49,7 @@ module.exports = class BugReportCommand extends Command {
           Successfully sent bug report!
         `)
 			.addField('Member', message.member, true)
-			.addField('Message', feedback)
+			.addField('Message', feedback);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -73,7 +73,7 @@ module.exports = class BugReportCommand extends Command {
 			.setThumbnail(feedbackChannel.guild.iconURL({ dynamic: true }))
 			.setDescription(feedback)
 			.addField('User', `<@${interaction.user.id}>`, true)
-			.addField('Server', interaction?.guild?.name || 'Direct Messsage', true)
+			.addField('Server', interaction?.guild?.name || 'Direct Messsage', true);
 
 		feedbackChannel.send({ embeds: [feedbackEmbed] });
 
@@ -85,7 +85,7 @@ module.exports = class BugReportCommand extends Command {
 			.setDescription(oneLine`
           Successfully sent bug report!
         `)
-			.addField('Message', feedback)
+			.addField('Message', feedback);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}

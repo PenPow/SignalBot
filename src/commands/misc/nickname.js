@@ -55,7 +55,7 @@ module.exports = class NicknameCommand extends Command {
 				const embed = new SignalEmbed(interaction)
 					.setTitle(`${success} Change Nickname`)
 					.setDescription(`${interaction.member}'s nickname was successfully updated.`)
-					.addField('Nickname', nicknameStatus, true)
+					.addField('Nickname', nicknameStatus, true);
 
 				interaction.reply({ ephemeral: true, embeds: [embed] });
 			}
