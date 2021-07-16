@@ -18,13 +18,13 @@ module.exports = class PlayCommand extends Command {
 			usage: 'play <song>',
 			description: 'Plays a song in the channel that you are currently in!',
 			type: client.types.MUSIC,
-			examples: ['play youtube despacito'],
+			examples: ['play despacito'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
 		});
 	}
 	async run(message, args) {
-		message.reply('🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.');
+		message.reply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
 		let subscription = this.client.subscriptions.get(message.guild.id);
 		if(!subscription) {
 			if(message.member instanceof GuildMember && message.member.voice.channel) {
@@ -73,17 +73,65 @@ module.exports = class PlayCommand extends Command {
 		}
 	}
 
-	// async slashRun(interaction, args) {
-	// }
+	async slashRun(interaction, args) {
+		await interaction.defer({ ephemeral: true });
+		await interaction.editReply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
+		let subscription = this.client.subscriptions.get(interaction.guild.id);
+		if(!subscription) {
+			if(interaction.member instanceof GuildMember && interaction.member.voice.channel) {
+				subscription = new MusicSubscription(
+					joinVoiceChannel({
+						channelId: interaction.member.voice.channel.id,
+						guildId: interaction.guild.id,
+						adapterCreator: interaction.guild.voiceAdapterCreator,
+					}),
+				);
+				subscription.voiceConnection.on('error', console.warn);
+				this.client.subscriptions.set(interaction.guild.id, subscription);
+			}
+		}
+
+		if (!subscription) {
+			return await interaction.followUp({ content: 'Please join a voice channel', ephemeral: true });
+		}
+
+		try {
+			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 20e3);
+		}
+		catch (e) {
+			this.client.logger.error(e.stack);
+			return this.sendSlashErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', e.message);
+		}
+
+		try {
+			const url = ytdl.validateURL(args.get('song')) ? args.get('song')?.value : (await ytSearch(args.get('song')?.value))?.all[0]?.url;
+			if(!url) return this.sendSlashErrorMessage(interaction, 0, 'I was unable to find a song to play ');
+
+			const track = await Track.from(url, {
+				onStart() {},
+				onFinish() {},
+				onError(e) {
+					this.client.logger.error(e.stack);
+				},
+			});
+
+			subscription.enqueue(track);
+			return await interaction.followUp({ content: `Added ${track.title} to the queue`, ephemeral: true });
+		}
+		catch(e) {
+			this.client.logger.error(e.stack);
+			return this.sendSlashErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', e.message);
+		}
+	}
 
 	generateSlashCommand() {
 		return {
 			name: this.name,
 			description: this.description,
 			options: [{
-				name: 'message',
+				name: 'song',
 				type: 'STRING',
-				description: 'Message to send to our team',
+				description: 'Search Query / URL to play on youtube',
 				required: true,
 			}],
 		};
