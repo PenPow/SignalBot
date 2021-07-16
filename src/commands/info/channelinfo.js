@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const moment = require('moment');
 const { voice } = require('../../utils/emojis.js');
 const { oneLine, stripIndent } = require('common-tags');
@@ -34,7 +34,7 @@ module.exports = class ChannelInfoCommand extends Command {
 			args.shift();
 		}
 		else {channel = message.channel;}
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle('Channel Information')
 			.setThumbnail(message.guild.iconURL({ dynamic: true }))
 			.addField('Channel', `\`${channel.name}\``, true)
@@ -42,10 +42,7 @@ module.exports = class ChannelInfoCommand extends Command {
 			.addField('Type', `\`${channelTypes[channel.type]}\``, true)
 			.addField('Members', `\`${channel.members.size}\``, true)
 			.addField('Bots', `\`${channel.members.array().filter(b => b.user.bot).length}\``, true)
-			.addField('Created On', `\`${moment(channel.createdAt).format('MMM DD YYYY')}\``, true)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.addField('Created On', `\`${moment(channel.createdAt).format('MMM DD YYYY')}\``, true);
 
 		if (channel.type === 'text') {
 			embed
@@ -77,7 +74,7 @@ module.exports = class ChannelInfoCommand extends Command {
 	async slashRun(interaction, args) {
 		const channel = interaction.guild.channels.cache.get(args?.first()?.value) || interaction.channel;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle('Channel Information')
 			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
 			.addField('Channel', `\`${channel.name}\``, true)
@@ -85,10 +82,7 @@ module.exports = class ChannelInfoCommand extends Command {
 			.addField('Type', `\`${channelTypes[channel.type]}\``, true)
 			.addField('Members', `\`${channel.members.size}\``, true)
 			.addField('Bots', `\`${channel.members.array().filter(b => b.user.bot).length}\``, true)
-			.addField('Created On', `\`${moment(channel.createdAt).format('MMM DD YYYY')}\``, true)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.addField('Created On', `\`${moment(channel.createdAt).format('MMM DD YYYY')}\``, true);
 
 		if (channel.type === 'text') {
 			embed

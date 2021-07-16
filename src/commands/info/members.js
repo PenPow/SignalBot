@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const emojis = require('../../utils/emojis.js');
 const { stripIndent } = require('common-tags');
 
@@ -24,7 +24,7 @@ module.exports = class MembersCommand extends Command {
 		const dnd = members.filter((m) => m.presence.status === 'dnd').length;
 		const afk = members.filter((m) => m.presence.status === 'idle').length;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`Member Status [${message.guild.members.cache.size}]`)
 			.setThumbnail(message.guild.iconURL({ dynamic: true }))
 			.setDescription(stripIndent`
@@ -32,10 +32,7 @@ module.exports = class MembersCommand extends Command {
       			  ${emojis.idle} **Idle:** \`${afk}\` members
 				  ${emojis.dnd} **Busy:** \`${dnd}\` members
       			  ${emojis.offline} **Offline:** \`${offline}\` members
-      			`)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+      			`);
 		return message.reply({ embeds: [embed] });
 	}
 
@@ -46,7 +43,7 @@ module.exports = class MembersCommand extends Command {
 		const dnd = members.filter((m) => m.presence.status === 'dnd').length;
 		const afk = members.filter((m) => m.presence.status === 'idle').length;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`Member Status [${interaction.guild.members.cache.size}]`)
 			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
 			.setDescription(stripIndent`
@@ -54,10 +51,7 @@ module.exports = class MembersCommand extends Command {
 				${emojis.idle} **Idle:** \`${afk}\` members
 				${emojis.dnd} **Busy:** \`${dnd}\` members
 				${emojis.offline} **Offline:** \`${offline}\` members
-		  		`)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+		  		`);
 		return interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
 

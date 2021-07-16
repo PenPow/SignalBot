@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { success, mod } = require('../../utils/emojis');
 const ms = require('ms');
 
@@ -62,27 +62,23 @@ module.exports = class MuteCommand extends Command {
 
 		const caseID = this.client.utils.getCaseNumber(this.client, message.guild);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${success} Muted Member ${mod}`)
 			.setDescription(`${member} has now been muted for **${ms(time, { long: true })}**.`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Time', `\`${ms(time)}\``, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(message)
 			.setTitle(`${mod} You were Muted in ${message.guild.name}`)
 			.setDescription(`You are muted for **${ms(time, { long: true })}**.`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Time', `\`${ms(time)}\``, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
 		member.user.send({ embeds: [embed2] }).catch();
 
@@ -155,27 +151,23 @@ module.exports = class MuteCommand extends Command {
 
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${success} Muted Member ${mod}`)
 			.setDescription(`${member} has now been muted for **${ms(time, { long: true })}**.`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Time', `\`${ms(time)}\``, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(interaction)
 			.setTitle(`${mod} You were Muted in ${interaction.guild.name}`)
 			.setDescription(`You are muted for **${ms(time, { long: true })}**.`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Time', `\`${ms(time)}\``, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
 		member.user.send({ embeds: [embed2] }).catch();
 

@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { stripIndent } = require('common-tags');
 const { info, fun, misc, mod, admin, owner } = require('../../utils/emojis');
 
@@ -21,7 +21,7 @@ module.exports = class HelpCommand extends Command {
 		if(!args[0]) args[0] = 'all';
 
 		const all = (args[0] === 'all') ? args[0] : '';
-		const embed = new MessageEmbed();
+		const embed = new SignalEmbed(message);
 		const prefix = message.client.db.get(`${message.guild.id}_prefix`);
 
 		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, MUSIC } = message.client.types;
@@ -34,10 +34,7 @@ module.exports = class HelpCommand extends Command {
 				.setThumbnail(message.client.user.displayAvatarURL())
 				.setDescription(command.description)
 				.addField('Usage', `\`${prefix}${command.usage}\``, true)
-				.addField('Type', `\`${capitalize(command.type)}\``, true)
-				.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(message.guild.me.displayHexColor);
+				.addField('Type', `\`${capitalize(command.type)}\``, true);
 
 			if (command.aliases) embed.addField('Aliases', command.aliases.map(c => `\`${c}\``).join(' '));
 			if (command.examples) embed.addField('Examples', command.examples.map(c => `\`${prefix}${c}\``).join('\n'));
@@ -104,7 +101,7 @@ module.exports = class HelpCommand extends Command {
 	async slashRun(interaction, args) {
 		const all = args?.first()?.value || '';
 
-		const embed = new MessageEmbed();
+		const embed = new SignalEmbed(interaction);
 		const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`);
 
 		const { INFO, FUN, MISC, MOD, ADMIN, OWNER } = interaction.client.types;
@@ -117,10 +114,7 @@ module.exports = class HelpCommand extends Command {
 				.setThumbnail(interaction.client.user.displayAvatarURL())
 				.setDescription(command.description)
 				.addField('Usage', `\`${prefix}${command.usage}\``, true)
-				.addField('Type', `\`${capitalize(command.type)}\``, true)
-				.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(interaction.guild.me.displayHexColor);
+				.addField('Type', `\`${capitalize(command.type)}\``, true);
 
 			if (command.aliases) embed.addField('Aliases', command.aliases.map(c => `\`${c}\``).join(' '));
 			if (command.examples) embed.addField('Examples', command.examples.map(c => `\`${prefix}${c}\``).join('\n'));

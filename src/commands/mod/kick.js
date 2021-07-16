@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { success, mod } = require('../../utils/emojis');
 
 module.exports = class KickCommand extends Command {
@@ -43,24 +43,20 @@ module.exports = class KickCommand extends Command {
 
 		const caseID = this.client.utils.getCaseNumber(this.client, message.guild);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${success} Kicked Member ${mod}`)
 			.setDescription(`${member} has now been kicked.`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(message)
 			.setTitle(`${mod} You were Kicked from ${message.guild.name}`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
 		await member.user.send({ embeds: [embed2] }).catch();
 
@@ -108,24 +104,20 @@ module.exports = class KickCommand extends Command {
 
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${success} Kicked Member ${mod}`)
 			.setDescription(`${member} has now been kicked.`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(interaction)
 			.setTitle(`${mod} You were Kicked from ${interaction.guild.name}`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
 		await member.user.send({ embeds: [embed2] }).catch();
 

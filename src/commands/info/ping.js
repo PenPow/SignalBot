@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { pong } = require('../../utils/emojis.js');
 
 module.exports = class PingCommand extends Command {
@@ -15,9 +15,8 @@ module.exports = class PingCommand extends Command {
 		});
 	}
 	async run(message) {
-		const embed = new MessageEmbed()
-			.setDescription('`Pinging...`')
-			.setColor(message.guild.me.displayHexColor);
+		const embed = new SignalEmbed(message)
+			.setDescription('`Pinging...`');
 
 		const msg = await message.reply({ embeds: [embed] });
 		const timestamp = (message.editedTimestamp) ? message.editedTimestamp : message.createdTimestamp;
@@ -26,17 +25,14 @@ module.exports = class PingCommand extends Command {
 		embed.setTitle(`Pong!  ${pong}`)
 			.setDescription('')
 			.addField('Latency', latency, true)
-			.addField('API Latency', apiLatency, true)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp();
+			.addField('API Latency', apiLatency, true);
 
 		msg.edit({ embeds: [embed] });
 	}
 
 	async slashRun(interaction) {
-		const embed = new MessageEmbed()
-			.setDescription('`Pinging...`')
-			.setColor(interaction.guild.me.displayHexColor);
+		const embed = new SignalEmbed(interaction)
+			.setDescription('`Pinging...`');
 
 		await interaction.reply({ embeds: [embed], empeheral: true });
 		const msg = await interaction.fetchReply();
@@ -46,9 +42,7 @@ module.exports = class PingCommand extends Command {
 		embed.setTitle(`Pong!  ${pong}`)
 			.setDescription('')
 			.addField('Latency', latency, true)
-			.addField('API Latency', apiLatency, true)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp();
+			.addField('API Latency', apiLatency, true);
 
 		interaction.editReply({ embeds: [embed] });
 	}

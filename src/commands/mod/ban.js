@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { success, mod } = require('../../utils/emojis');
 const ms = require('ms');
 
@@ -53,27 +53,23 @@ module.exports = class BanCommand extends Command {
 		let msTime = 'no expiration date';
 		if(time) msTime = ms(time, { long: true });
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${success} Banned Member ${mod}`)
 			.setDescription(`${member} has now been banned for **${msTime}**.`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Time', `\`${msTime === 'no expiration date' ? 'Permanent' : ms(time, { long: false })}\``, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(message)
 			.setTitle(`${mod} You were Banned from ${message.guild.name}`)
 			.setDescription(`You were banned for **${msTime}**.`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Time', `\`${msTime === 'no expiration date' ? 'Permanent' : ms(time, { long: false })}\``, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
 		await member.user.send({ embeds: [embed2] }).catch();
 
@@ -144,27 +140,23 @@ module.exports = class BanCommand extends Command {
 		let msTime = 'no expiration date';
 		if(time) msTime = ms(time, { long: true });
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${success} Banned Member ${mod}`)
 			.setDescription(`${member} has now been banned for **${msTime}**.`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Time', `\`${msTime === 'no expiration date' ? 'Permanent' : ms(time, { long: false })}\``, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(interaction)
 			.setTitle(`${mod} You were Banned from ${interaction.guild.name}`)
 			.setDescription(`You were banned for **${msTime}**.`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Time', `\`${msTime === 'no expiration date' ? 'Permanent' : ms(time, { long: false })}\``, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
 		await member.user.send({ embeds: [embed2] }).catch();
 

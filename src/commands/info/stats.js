@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { mem, cpu, os } = require('node-os-utils');
 const { stripIndent } = require('common-tags');
 
@@ -38,7 +38,7 @@ module.exports = class StatsCommand extends Command {
 		  RAM       :: ${totalMemMb} MB
 		  RAM Usage :: ${(Math.round((usedMemMb / totalMemMb) * 1e4) / 1e2).toString()}%
 		`;
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle('Signal\'s Statistics')
 			.addField('Commands', `\`${message.client.commands.size}\` commands`, true)
 			.addField('Aliases', `\`${message.client.aliases.size}\` aliases`, true)
@@ -48,10 +48,7 @@ module.exports = class StatsCommand extends Command {
 			.addField(
 				'Links',
 				'**[Invite Me](https://discord.com/oauth2/authorize?client_id=789809995478597642&scope=bot&permissions=498330710) | ' +
-				'[Support Server](https://discord.gg/BGDyZMdvbw)**')
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+				'[Support Server](https://discord.gg/BGDyZMdvbw)**');
 		message.reply({ embeds: [embed] });
 	}
 
@@ -78,7 +75,7 @@ module.exports = class StatsCommand extends Command {
 		  RAM Usage :: ${(Math.round((usedMemMb / totalMemMb) * 1e4) / 1e2).toString()}%
 		`;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle('Signal\'s Statistics')
 			.addField('Commands', `\`${interaction.client.commands.size}\` commands`, true)
 			.addField('Aliases', `\`${interaction.client.aliases.size}\` aliases`, true)
@@ -88,10 +85,8 @@ module.exports = class StatsCommand extends Command {
 			.addField(
 				'Links',
 				'**[Invite Me](https://discord.com/oauth2/authorize?client_id=789809995478597642&scope=bot&permissions=498330710) | ' +
-				'[Support Server](https://discord.gg/BGDyZMdvbw)**')
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+				'[Support Server](https://discord.gg/BGDyZMdvbw)**');
+
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
 

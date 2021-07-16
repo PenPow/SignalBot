@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 module.exports = class ServerIconCommand extends Command {
 	constructor(client) {
@@ -15,22 +15,16 @@ module.exports = class ServerIconCommand extends Command {
 		});
 	}
 	async run(message) {
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${message.guild.name}'s Icon`)
-			.setImage(message.guild.iconURL({ dynamic: true, size: 512 }))
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setImage(message.guild.iconURL({ dynamic: true, size: 512 }));
 		message.reply({ embeds: [embed] });
 	}
 
 	slashRun(interaction) {
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${interaction.guild.name}'s Icon`)
-			.setImage(interaction.guild.iconURL({ dynamic: true, size: 512 }))
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setImage(interaction.guild.iconURL({ dynamic: true, size: 512 }));
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
 

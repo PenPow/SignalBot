@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('./SignalEmbed');
 const permissions = require('../utils/permissions.json');
 const { fail } = require('../utils/emojis');
 
@@ -224,12 +224,10 @@ class Command {
 		if(this.userPermissions !== null) {
 			const missingPermissions = message.channel.permissionsFor(message.author).missing(this.userPermissions).map(p => permissions[p]);
 			if(missingPermissions.length !== 0) {
-				const embed = new MessageEmbed()
+				const embed = new SignalEmbed(message)
 					.setAuthor(`${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
 					.setTitle(`${fail} Missing User Permissions`)
-					.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``)
-					.setTimestamp()
-					.setColor(message.guild.me.displayHexColor);
+					.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
 
 				message.reply({ embeds: [embed] });
 				return false;
@@ -255,12 +253,10 @@ class Command {
 		if(this.userPermissions !== null) {
 			const missingPermissions = message.channel.permissionsFor(message.user).missing(this.userPermissions).map(p => permissions[p]);
 			if(missingPermissions.length !== 0) {
-				const embed = new MessageEmbed()
+				const embed = new SignalEmbed(message)
 					.setAuthor(`${message.user.tag}`, message.user.displayAvatarURL({ dynamic: true }))
 					.setTitle(`${fail} Missing User Permissions`)
-					.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``)
-					.setTimestamp()
-					.setColor(message.guild.me.displayHexColor);
+					.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
 
 				message.reply({ ephemeral: true, embeds: [embed] });
 				return false;
@@ -277,12 +273,10 @@ class Command {
 	checkClientPermissions(message) {
 		const missingPermissions = message.channel.permissionsFor(message.guild.me).missing(this.clientPermissions).map(p => permissions[p]);
 		if(missingPermissions.length !== 0) {
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(message)
 				.setAuthor(`${this.client.user.tag}`, message.client.user.displayAvatarURL({ dynamic: true }))
 				.setTitle(`${fail} Missing Bot Permissions`)
-				.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``)
-				.setTimestamp()
-				.setColor(message.guild.me.displayHexColor);
+				.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
 
 			message.reply({ embeds: [embed] });
 			return false;
@@ -303,14 +297,11 @@ class Command {
 
 		const prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
 
-		const embed = new MessageEmbed()
-			.setDescription(`\`\`\`diff\n- ${errorType}\n+ ${reason}\`\`\``)
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+		const embed = new SignalEmbed(message)
+			.setDescription(`\`\`\`diff\n- ${errorType}\n+ ${reason}\`\`\``);
 
 		if(fatal) {
-			embed.setAuthor(`${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
-				.setTitle(`${fail} Fatal Error`)
+			embed.setTitle(`${fail} Fatal Error`)
 				.addField('Fatal Error', 'This is an error with Signal, please report it on the support discord');
 		}
 
@@ -338,14 +329,11 @@ class Command {
 	sendSlashErrorMessage(interaction, errorType, reason, errorMessage, fatal = false) {
 		errorType = this.errorTypes[errorType];
 
-		const embed = new MessageEmbed()
-			.setDescription(`\`\`\`diff\n- ${errorType}\n+ ${reason}\`\`\``)
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+		const embed = new SignalEmbed(interaction)
+			.setDescription(`\`\`\`diff\n- ${errorType}\n+ ${reason}\`\`\``);
 
 		if(fatal) {
-			embed.setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))
-				.setTitle(`${fail} Fatal Error`)
+			embed.setTitle(`${fail} Fatal Error`)
 				.addField('Fatal Error', 'This is an error with Signal, please report it on the support discord');
 		}
 
@@ -377,9 +365,8 @@ class Command {
 			const caseNumber = parseInt(message.client.utils.getCaseNumber(message.client, message.guild, modLog));
 			const prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
 			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(message)
 				.setFooter(`Case #${caseNumber}`)
-				.setTimestamp()
 				.setThumbnail(user.displayAvatarURL({ dynamic: true }))
 				.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL({ dynamic: true }));
 
@@ -446,9 +433,8 @@ class Command {
 			const caseNumber = parseInt(interaction.client.utils.getCaseNumber(interaction.client, interaction.guild, modLog));
 			const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`) || interaction.client.prefix;
 			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(interaction)
 				.setFooter(`Case #${caseNumber}`)
-				.setTimestamp()
 				.setThumbnail(user.displayAvatarURL({ dynamic: true }))
 				.setAuthor(`${interaction.user.tag} (${interaction.user.id})`, interaction.user.displayAvatarURL({ dynamic: true }));
 			switch(action) {
