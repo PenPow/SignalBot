@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -38,14 +38,11 @@ module.exports = class YoutubeCommand extends Command {
 		if(!result) return this.sendErrorMessage(message, 0, 'Unable to find video, please provide a different YouTube video name');
 		const decodedTitle = he.decode(result.title);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${fun} ${decodedTitle}`)
 			.setURL(result.link)
 			.setThumbnail('https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-512.png')
-			.setDescription(result.description)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setDescription(result.description);
 
 		if(message.channel.nsfw) embed.setImage(result.thumbnails.high.url);
 		message.reply({ embeds: [embed] });
@@ -68,14 +65,11 @@ module.exports = class YoutubeCommand extends Command {
 		if(!result) return this.sendSlashErrorMessage(interaction, 0, 'Unable to find video, please provide a different YouTube video name');
 		const decodedTitle = he.decode(result.title);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${fun} ${decodedTitle}`)
 			.setURL(result.link)
 			.setThumbnail('https://cdn1.iconfinder.com/data/icons/logotypes/32/youtube-512.png')
-			.setDescription(result.description)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setDescription(result.description);
 
 		if(interaction.channel.nsfw) embed.setImage(result.thumbnails.high.url);
 		interaction.reply({ ephemeral: true, embeds: [embed] });

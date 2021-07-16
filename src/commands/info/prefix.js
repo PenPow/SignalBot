@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 module.exports = class PrefixCommand extends Command {
 	constructor(client) {
@@ -18,13 +18,10 @@ module.exports = class PrefixCommand extends Command {
 
 		if(!message.member.permissions.has('ADMINISTRATOR') || !args[0]) {
 			const prefix = this.client.db.get(`${message.guild.id}_prefix`);
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(message)
 				.setTitle(`Signal's Prefix for ${message.guild.name}`)
 				.addField('Prefix', `\`${prefix}\``, true)
-				.addField('Example', `\`${prefix}ping\``, true)
-				.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(message.guild.me.displayHexColor);
+				.addField('Example', `\`${prefix}ping\``, true);
 			return message.reply({ embeds: [embed] });
 		}
 
@@ -32,13 +29,10 @@ module.exports = class PrefixCommand extends Command {
 			const prefix = this.client.db.get(`${message.guild.id}_prefix`);
 			this.client.db.set(`${message.guild.id}_prefix`, args[0]);
 
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(message)
 				.setTitle(`Updated Prefix for ${message.guild.name}`)
 				.addField('Prefix', `\`${prefix}\` ➔ \`${args[0]}\``, true)
-				.addField('Example', `\`${args[0]}ping\``, true)
-				.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(message.guild.me.displayHexColor);
+				.addField('Example', `\`${args[0]}ping\``, true);
 			return message.reply({ embeds: [embed] });
 		}
 
@@ -48,13 +42,10 @@ module.exports = class PrefixCommand extends Command {
 
 		if(!interaction.member.permissions.has('ADMINISTRATOR') || !args.first()?.value) {
 			const prefix = this.client.db.get(`${interaction.guild.id}_prefix`);
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(interaction)
 				.setTitle(`Signal's Prefix for ${interaction.guild.name}`)
 				.addField('Prefix', `\`${prefix}\``, true)
-				.addField('Example', `\`${prefix}ping\``, true)
-				.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(interaction.guild.me.displayHexColor);
+				.addField('Example', `\`${prefix}ping\``, true);
 			return interaction.reply({ ephemeral: true, embeds: [embed] });
 		}
 
@@ -62,13 +53,10 @@ module.exports = class PrefixCommand extends Command {
 			const prefix = this.client.db.get(`${interaction.guild.id}_prefix`);
 			this.client.db.set(`${interaction.guild.id}_prefix`, args.first().value);
 
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(interaction)
 				.setTitle(`Updated Prefix for ${interaction.guild.name}`)
 				.addField('Prefix', `\`${prefix}\` ➔ \`${args.first().value}\``, true)
-				.addField('Example', `\`${args.first().value}ping\``, true)
-				.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(interaction.guild.me.displayHexColor);
+				.addField('Example', `\`${args.first().value}ping\``, true);
 			return interaction.reply({ ephemeral: true, embeds: [embed] });
 		}
 

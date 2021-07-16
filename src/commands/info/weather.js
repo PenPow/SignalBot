@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const weather = require('weather-js');
 
 module.exports = class WeatherCommand extends Command {
@@ -23,7 +23,7 @@ module.exports = class WeatherCommand extends Command {
 				const current = result[0].current;
 				const location = result[0].location;
 
-				const embed = new MessageEmbed()
+				const embed = new SignalEmbed(message)
 					.setDescription(`**${current.skytext}**`)
 					.setAuthor(`🌥️ Weather for ${current.observationpoint}`)
 					.setThumbnail(current.imageUrl)
@@ -33,10 +33,7 @@ module.exports = class WeatherCommand extends Command {
 					.addField('**Winds**', `${current.winddisplay}`, true)
 					.addField('**Humidity**', `${current.humidity}%`, true)
 					.addField('**Date**', `${current.date}`, true)
-					.addField('**Day**', `${current.day}`, true)
-					.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-					.setTimestamp()
-					.setColor(message.guild.me.displayHexColor);
+					.addField('**Day**', `${current.day}`, true);
 				message.reply({ embeds: [embed] });
 			});
 		}
@@ -53,7 +50,7 @@ module.exports = class WeatherCommand extends Command {
 				const current = result[0].current;
 				const location = result[0].location;
 
-				const embed = new MessageEmbed()
+				const embed = new SignalEmbed(interaction)
 					.setDescription(`**${current.skytext}**`)
 					.setAuthor(`🌥️ Weather for ${current.observationpoint}`)
 					.setThumbnail(current.imageUrl)
@@ -63,10 +60,7 @@ module.exports = class WeatherCommand extends Command {
 					.addField('**Winds**', `${current.winddisplay}`, true)
 					.addField('**Humidity**', `${current.humidity}%`, true)
 					.addField('**Date**', `${current.date}`, true)
-					.addField('**Day**', `${current.day}`, true)
-					.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-					.setTimestamp()
-					.setColor(interaction.guild.me.displayHexColor);
+					.addField('**Day**', `${current.day}`, true);
 				interaction.reply({ ephemeral: true, embeds: [embed] });
 			});
 		}

@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const moment = require('moment');
 const permissions = require('../../utils/permissions.json');
 
@@ -29,7 +29,7 @@ module.exports = class RoleInfoCommand extends Command {
 
 		const position = `\`${message.guild.roles.cache.size - role.position}\`/\`${message.guild.roles.cache.size}\``;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle('Role Information')
 			.setThumbnail(message.guild.iconURL({ dynamic: true }))
 			.addField('Role', `\`${role.name}\``, true)
@@ -41,10 +41,7 @@ module.exports = class RoleInfoCommand extends Command {
 			.addField('Members', `\`${role.members.size}\``, true)
 			.addField('Hoisted', `\`${role.hoist}\``, true)
 			.addField('Created On', `\`${moment(role.createdAt).format('MMM DD YYYY')}\``, true)
-			.addField('Permissions', `\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(role.hexColor);
+			.addField('Permissions', `\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -62,7 +59,7 @@ module.exports = class RoleInfoCommand extends Command {
 
 		const position = `\`${interaction.guild.roles.cache.size - role.position}\`/\`${interaction.guild.roles.cache.size}\``;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle('Role Information')
 			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
 			.addField('Role', `\`${role.name}\``, true)
@@ -74,10 +71,7 @@ module.exports = class RoleInfoCommand extends Command {
 			.addField('Members', `\`${role.members.size}\``, true)
 			.addField('Hoisted', `\`${role.hoist}\``, true)
 			.addField('Created On', `\`${moment(role.createdAt).format('MMM DD YYYY')}\``, true)
-			.addField('Permissions', `\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(role.hexColor);
+			.addField('Permissions', `\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}

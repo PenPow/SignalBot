@@ -1,6 +1,6 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
-const { success, mod } = require('../../utils/emojis');
+const SignalEmbed = require('../../structures/SignalEmbed');
+const { mod } = require('../../utils/emojis');
 
 module.exports = class ReasonCommand extends Command {
 	constructor(client) {
@@ -18,7 +18,7 @@ module.exports = class ReasonCommand extends Command {
 		});
 	}
 	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide a case ID or use \'latest\'');
+		if(!args[0]) args[0] = 'latest';
 
 		let caseID;
 
@@ -41,48 +41,44 @@ module.exports = class ReasonCommand extends Command {
 		const target = await this.client.users.fetch(caseInfo.caseInfo.target);
 		const moderator = await message.guild.members.fetch(caseInfo.caseInfo.moderator);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`Case #${caseID} ${mod}`)
 			.setDescription(`**Member**\n\`${target.tag}\`(${caseInfo.caseInfo.target})\n**Action:** \`${message.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Moderator**\n\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
 		message.reply({ embeds: [embed] });
 	}
 
 	async slashRun(interaction, args) {
-		const caseInformation = this.client.db.get(`case-${interaction.guild.id}-${args.get('caseid')?.value}`);
-		if(!caseInformation) return this.sendErrorMessage(interaction, 1, 'No Case Found');
-		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+		if(!args.get('caseid')) args.set('caseid', 'latest');
 
-		const sentMessage = await modLog.messages.fetch(caseInformation.caseInfo.auditId);
+		let caseID;
 
-		if(!sentMessage?.embeds[0]) return this.sendSlashErrorMessage(interaction, 1, 'Failed to find a message to update.');
-		const caseID = sentMessage.embeds[0].footer.text.substring(6);
+		if(args.get('caseid').toLowerCase() === 'latest') {
+			await interaction.guild.channels.fetch();
+			const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
 
-		const descriptionArray = sentMessage.embeds[0].description.split('\n');
-		descriptionArray[descriptionArray.length - 1] = `**Reason:** ${args.get('reason')?.value}`;
-
-		const finalArray = descriptionArray.join('\n');
-		const embed = sentMessage.embeds[0];
-
-		embed.description = finalArray;
-
-		sentMessage.edit({ embeds: [embed] });
+			const sentMessage = (await modLog.messages.fetch({ limit: 100 })).filter(m => m.member === interaction.guild.me &&
+			m.embeds[0] &&
+			m.embeds[0].type == 'rich' &&
+			m.embeds[0].footer &&
+			m.embeds[0].footer.text &&
+			m.embeds[0].footer.text.startsWith('Case #'),
+			).first();
+			caseID = sentMessage.embeds[0].footer.text.substring(6);
+		}
+		else { caseID = args.get('caseid'); }
 
 		const caseInfo = this.client.db.get(`case-${interaction.guild.id}-${caseID}`);
-		caseInfo.caseInfo.reason = args.get('reason')?.value;
-		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, caseInfo);
+		const target = await this.client.users.fetch(caseInfo.caseInfo.target);
+		const moderator = await interaction.guild.members.fetch(caseInfo.caseInfo.moderator);
 
-		const embed2 = new MessageEmbed()
-			.setTitle(`${success} Updated Reason for Case #${caseID} ${mod}`)
-			.setDescription(`Updated the reason for the case to ${args.get('reason')?.value}`)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+		const embed = new SignalEmbed(interaction)
+			.setTitle(`Case #${caseID} ${mod}`)
+			.setDescription(`**Member**\n\`${target.tag}\`(${caseInfo.caseInfo.target})\n**Action:** \`${interaction.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Moderator**\n\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`)
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
-		interaction.reply({ ephemeral: true, embeds: [embed2] });
+		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
 
 	generateSlashCommand() {
@@ -92,7 +88,7 @@ module.exports = class ReasonCommand extends Command {
 			options: [{
 				name: 'caseid',
 				type: 'INTEGER',
-				description: '(Optional) CaseID to edit the reason for',
+				description: 'CaseID to edit the reason for',
 				required: false,
 			}],
 		};

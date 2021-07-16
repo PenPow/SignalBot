@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "lint": "eslint .",
-    "fix": "eslint . --fix",
+    "lint:fix": "eslint . --fix",
     "start": "yarn node .",
     "deploy": "eslint . --fix && yarn node ."
   },

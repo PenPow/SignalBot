@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -23,12 +23,9 @@ module.exports = class RollCommand extends Command {
 
 		if (!n || limit <= 0) return this.sendErrorMessage(message, 0, 'Please provide a valid number of dice sides');
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${fun} Dice Roll 🎲`)
-			.setDescription(`<@${message.author.id}>, you rolled a **${n}**!`)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setDescription(`<@${message.author.id}>, you rolled a **${n}**!`);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -40,12 +37,9 @@ module.exports = class RollCommand extends Command {
 
 		if (!n || limit <= 0) return this.sendSlashErrorMessage(interaction, 0, 'Please provide a valid number of dice sides');
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${fun} Dice Roll 🎲`)
-			.setDescription(`<@${interaction.user.id}>, you rolled a **${n}**!`)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setDescription(`<@${interaction.user.id}>, you rolled a **${n}**!`);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}

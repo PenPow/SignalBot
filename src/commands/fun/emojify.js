@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -43,12 +43,9 @@ module.exports = class EmojifyCommand extends Command {
 			msg = msg.slice(0, msg.lastIndexOf(':')) + '**...**';
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${fun} Emojify ▶️`)
-			.setDescription(msg)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setDescription(msg);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -66,12 +63,9 @@ module.exports = class EmojifyCommand extends Command {
 			msg = msg.slice(0, msg.lastIndexOf(':')) + '**...**';
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${fun} Emojify ▶️`)
-			.setDescription(msg)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setDescription(msg);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}

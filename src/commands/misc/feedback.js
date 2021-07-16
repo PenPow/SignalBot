@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { success, unread_pin } = require('../../utils/emojis');
 const { oneLine } = require('common-tags');
 
@@ -31,31 +31,25 @@ module.exports = class FeedbackCommand extends Command {
 
 		if (!feedbackChannel) return this.sendErrorMessage(message, 1, 'Unable to find feedback channel');
 
-		const feedbackEmbed = new MessageEmbed()
+		const feedbackEmbed = new SignalEmbed(message)
 			.setTitle(`${unread_pin} New Feedback`)
 			.setThumbnail(feedbackChannel.guild.iconURL({ dynamic: true }))
 			.setDescription(feedback)
 			.addField('User', `<@${message.author.id}>`, true)
-			.addField('Server', message?.guild?.name || 'Direct Messsage', true)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.addField('Server', message?.guild?.name || 'Direct Messsage', true);
 
 		feedbackChannel.send(feedbackEmbed);
 
 		if (feedback.length > 1024) feedback = feedback.slice(0, 1021) + '...';
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${success} Feedback Sent`)
 			.setThumbnail(message.client.user.displayAvatarURL())
 			.setDescription(oneLine`
           Successfully sent feedback!
         `)
 			.addField('Member', message.member, true)
-			.addField('Message', feedback)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.addField('Message', feedback);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -74,30 +68,25 @@ module.exports = class FeedbackCommand extends Command {
 
 		if (!feedbackChannel) return this.sendSlashErrorMessage(interaction, 1, 'Unable to find feedback channel');
 
-		const feedbackEmbed = new MessageEmbed()
+		const feedbackEmbed = new SignalEmbed(interaction)
 			.setTitle(`${unread_pin} New Feedback`)
 			.setThumbnail(feedbackChannel.guild.iconURL({ dynamic: true }))
 			.setDescription(feedback)
 			.addField('User', `<@${interaction.user.id}>`, true)
-			.addField('Server', interaction?.guild?.name || 'Direct Messsage', true)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.addField('Server', interaction?.guild?.name || 'Direct Messsage', true);
+
 
 		feedbackChannel.send({ embeds: [feedbackEmbed] });
 
 		if (feedback.length > 1024) feedback = feedback.slice(0, 1021) + '...';
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${success} Feedback Sent`)
 			.setThumbnail(interaction.client.user.displayAvatarURL())
 			.setDescription(oneLine`
           Successfully sent feedback!
         `)
-			.addField('Message', feedback)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.addField('Message', feedback);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
