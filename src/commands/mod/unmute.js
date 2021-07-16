@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { success, mod } = require('../../utils/emojis');
 const { promisify } = require('util');
 
@@ -50,15 +50,13 @@ module.exports = class UnmuteCommand extends Command {
 		const caseID = this.client.utils.getCaseNumber(this.client, message.guild);
 		const oldCaseInfo = this.client.db.get(`lastcase-mute-${member.id}`);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${success} Unmuted Member ${mod}`)
 			.setDescription(`${member} has now been unmuted`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
 		const redisClient = this.client.redis;
 		if(oldCaseInfo) {
@@ -135,15 +133,13 @@ module.exports = class UnmuteCommand extends Command {
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 		const oldCaseInfo = this.client.db.get(`lastcase-mute-${member.id}`);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${success} Unmuted Member ${mod}`)
 			.setDescription(`${member} has now been unmuted`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
 			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
 		const redisClient = this.client.redis;
 

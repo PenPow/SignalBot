@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const permissions = require('../../utils/permissions.json');
 
 module.exports = class PermissionsCommand extends Command {
@@ -26,13 +26,11 @@ module.exports = class PermissionsCommand extends Command {
 			else finalPermissions.push(`- ${permissions[permission]}`);
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${member.displayName}'s Permissions`)
 			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-			.setDescription(`\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(member.displayHexColor);
+			.setDescription(`\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``);
+
 		message.reply({ embeds: [embed] });
 	}
 
@@ -46,13 +44,10 @@ module.exports = class PermissionsCommand extends Command {
 			else finalPermissions.push(`- ${permissions[permission]}`);
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${member.displayName}'s Permissions`)
 			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-			.setDescription(`\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(member.displayHexColor);
+			.setDescription(`\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}

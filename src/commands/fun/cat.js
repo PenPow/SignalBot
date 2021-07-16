@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -24,12 +24,9 @@ module.exports = class CatCommand extends Command {
 			const res = await fetch('https://api.thecatapi.com/v1/images/search', { headers: { 'x-api-key': apiKey } });
 			const img = (await res.json())[0].url;
 
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(message)
 				.setTitle(`${fun} Meow! 🐈`)
-				.setImage(img)
-				.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(message.guild.me.displayHexColor);
+				.setImage(img);
 
 			message.reply({ embeds: [embed] });
 		}
@@ -45,12 +42,9 @@ module.exports = class CatCommand extends Command {
 			const res = await fetch('https://api.thecatapi.com/v1/images/search', { headers: { 'x-api-key': apiKey } });
 			const img = (await res.json())[0].url;
 
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(interaction)
 				.setTitle(`${fun} Meow! 🐈`)
-				.setImage(img)
-				.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(interaction.guild.me.displayHexColor);
+				.setImage(img);
 
 			interaction.reply({ ephemeral: true, embeds: [embed] });
 		}

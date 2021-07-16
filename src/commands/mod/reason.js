@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { success, mod } = require('../../utils/emojis');
 
 module.exports = class ReasonCommand extends Command {
@@ -72,12 +72,10 @@ module.exports = class ReasonCommand extends Command {
 		caseInfo.caseInfo.reason = args.slice(1).join(' ');
 		this.client.db.set(`case-${message.guild.id}-${caseID}`, caseInfo);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${success} Updated Reason for Case #${caseID} ${mod}`)
 			.setDescription(`Updated the reason for the case to ${args[1]}`)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
 
 		message.reply({ embeds: [embed] });
 	}
@@ -106,12 +104,10 @@ module.exports = class ReasonCommand extends Command {
 		caseInfo.caseInfo.reason = args.get('reason')?.value;
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, caseInfo);
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(interaction)
 			.setTitle(`${success} Updated Reason for Case #${caseID} ${mod}`)
 			.setDescription(`Updated the reason for the case to ${args.get('reason')?.value}`)
-			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
 		interaction.reply({ ephemeral: true, embeds: [embed2] });
 	}

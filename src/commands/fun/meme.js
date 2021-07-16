@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -23,13 +23,10 @@ module.exports = class MemeCommand extends Command {
 			const res = await fetch('https://meme-api.herokuapp.com/gimme');
 			const jsonres = await res.json();
 
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(message)
 				.setTitle(`${fun} ${jsonres.title} (r/${jsonres.subreddit})`)
 				.setURL(jsonres.postLink)
-				.setImage(jsonres.url)
-				.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(message.guild.me.displayHexColor);
+				.setImage(jsonres.url);
 
 			message.reply({ embeds: [embed] });
 		}
@@ -44,13 +41,10 @@ module.exports = class MemeCommand extends Command {
 			const res = await fetch('https://meme-api.herokuapp.com/gimme');
 			const jsonres = await res.json();
 
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(interaction)
 				.setTitle(`${fun} ${jsonres.title} (r/${jsonres.subreddit})`)
 				.setURL(jsonres.postLink)
-				.setImage(jsonres.url)
-				.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(interaction.guild.me.displayHexColor);
+				.setImage(jsonres.url);
 
 			interaction.reply({ ephemeral: true, embeds: [embed] });
 		}

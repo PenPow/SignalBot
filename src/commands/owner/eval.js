@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { inspect } = require('util');
 const fetch = require('node-fetch');
 
@@ -67,7 +67,7 @@ module.exports = class EvalCommand extends Command {
 			}
 
 			const elapsed = Math.abs(Date.now() - message.createdTimestamp);
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(message)
 				.setColor(color)
 				.addField(
 					'\\📥 Input',
@@ -129,7 +129,7 @@ module.exports = class EvalCommand extends Command {
 			].join('\n');
 
 			message.channel.stopTyping();
-			return message.reply({ embeds: [new MessageEmbed()
+			return message.reply({ embeds: [new SignalEmbed(message)
 				.setColor('RED')
 				.setFooter(
 					[
