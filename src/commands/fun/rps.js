@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -11,7 +11,6 @@ module.exports = class RPSCommand extends Command {
 		super(client, {
 			name: 'rps',
 			usage: 'rps <rock | paper | scissors>',
-			// aliases: ['dice', 'r'],
 			description: 'Play a game of rock–paper–scissors against Signal!',
 			type: client.types.FUN,
 			examples: ['rps rock'],
@@ -31,14 +30,11 @@ module.exports = class RPSCommand extends Command {
 		else if(botChoice > userChoice || botChoice === 0 && userChoice === 2) result = '**Signal** wins!';
 		else result = `<@${message.author.id}> wins!`;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${fun} ${message.author.tag} vs Signal`)
 			.addField('Your Choice:', res[userChoice], true)
 			.addField('Signal\'s Choice', res[botChoice], true)
-			.addField('Result', result, true)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.addField('Result', result, true);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -53,14 +49,11 @@ module.exports = class RPSCommand extends Command {
 		else if(botChoice > userChoice || botChoice === 0 && userChoice === 2) result = '**Signal** wins!';
 		else result = `<@${interaction.user.id}> wins!`;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${fun} ${interaction.user.tag} vs Signal`)
 			.addField('Your Choice:', res[userChoice], true)
 			.addField('Signal\'s Choice', res[botChoice], true)
-			.addField('Result', result, true)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.addField('Result', result, true);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}

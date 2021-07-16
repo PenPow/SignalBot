@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -24,13 +24,9 @@ module.exports = class CoinFlipCommand extends Command {
 		if(n === 1) result = 'Heads';
 		else result = 'Tails';
 
-
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${fun} Coinflip 🪙`)
-			.setDescription(`I flipped a coin for you <@${message.author.id}>. It was **${result}**`)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.setDescription(`I flipped a coin for you <@${message.author.id}>. It was **${result}**`);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -43,13 +39,9 @@ module.exports = class CoinFlipCommand extends Command {
 		if(n === 1) result = 'Heads';
 		else result = 'Tails';
 
-
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${fun} Coinflip 🪙`)
-			.setDescription(`I flipped a coin for you <@${interaction.user.id}>. It was **${result}**`)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.setDescription(`I flipped a coin for you <@${interaction.user.id}>. It was **${result}**`);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}

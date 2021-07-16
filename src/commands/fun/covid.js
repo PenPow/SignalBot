@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const fetch = require('node-fetch');
 
 module.exports = class CovidCommand extends Command {
@@ -24,14 +24,11 @@ module.exports = class CovidCommand extends Command {
 					const confirmed = data.confirmed.value.toLocaleString();
 					const recovered = data.recovered.value.toLocaleString();
 					const deaths = data.deaths.value.toLocaleString();
-					const embed = new MessageEmbed()
+					const embed = new SignalEmbed(message)
 						.setTitle(':mask: Worldwide COVID-19 Stats 🌎')
 						.addField('Confirmed Cases', confirmed)
 						.addField('Recovered', recovered)
-						.addField('Deaths', deaths)
-						.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-						.setTimestamp()
-						.setColor(message.guild.me.displayHexColor);
+						.addField('Deaths', deaths);
 
 					message.reply({ embeds: [embed] });
 				});
@@ -43,14 +40,11 @@ module.exports = class CovidCommand extends Command {
 					const confirmed = data.confirmed.value.toLocaleString();
 					const recovered = data.recovered.value.toLocaleString();
 					const deaths = data.deaths.value.toLocaleString();
-					const embed = new MessageEmbed()
+					const embed = new SignalEmbed(message)
 						.setTitle(`:mask: COVID-19 Stats for **${countries}**`)
 						.addField('Confirmed Cases', confirmed)
 						.addField('Recovered', recovered)
-						.addField('Deaths', deaths)
-						.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-						.setTimestamp()
-						.setColor(message.guild.me.displayHexColor);
+						.addField('Deaths', deaths);
 
 					message.reply({ embeds: [embed] });
 				}).catch(() => {
@@ -69,14 +63,11 @@ module.exports = class CovidCommand extends Command {
 					const confirmed = data.confirmed.value.toLocaleString();
 					const recovered = data.recovered.value.toLocaleString();
 					const deaths = data.deaths.value.toLocaleString();
-					const embed = new MessageEmbed()
+					const embed = new SignalEmbed(interaction)
 						.setTitle(':mask: Worldwide COVID-19 Stats 🌎')
 						.addField('Confirmed Cases', confirmed)
 						.addField('Recovered', recovered)
-						.addField('Deaths', deaths)
-						.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-						.setTimestamp()
-						.setColor(interaction.guild.me.displayHexColor);
+						.addField('Deaths', deaths);
 
 					interaction.reply({ ephemeral: true, embeds: [embed] });
 				});
@@ -88,14 +79,11 @@ module.exports = class CovidCommand extends Command {
 					const confirmed = data.confirmed.value.toLocaleString();
 					const recovered = data.recovered.value.toLocaleString();
 					const deaths = data.deaths.value.toLocaleString();
-					const embed = new MessageEmbed()
+					const embed = new SignalEmbed(interaction)
 						.setTitle(`:mask: COVID-19 Stats for **${countries}**`)
 						.addField('Confirmed Cases', confirmed)
 						.addField('Recovered', recovered)
-						.addField('Deaths', deaths)
-						.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-						.setTimestamp()
-						.setColor(interaction.guild.me.displayHexColor);
+						.addField('Deaths', deaths);
 
 					interaction.reply({ ephemeral: true, embeds: [embed] });
 				}).catch(() => {

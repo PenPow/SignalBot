@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -23,12 +23,9 @@ module.exports = class DogFactCommand extends Command {
 			const res = await fetch('https://dog-api.kinduff.com/api/facts');
 			const fact = (await res.json()).facts[0];
 
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(message)
 				.setTitle(`${fun} Dog Fact 🐕`)
-				.setDescription(fact)
-				.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(message.guild.me.displayHexColor);
+				.setDescription(fact);
 
 			message.reply({ embeds: [embed] });
 		}
@@ -43,12 +40,9 @@ module.exports = class DogFactCommand extends Command {
 			const res = await fetch('https://dog-api.kinduff.com/api/facts');
 			const fact = (await res.json()).facts[0];
 
-			const embed = new MessageEmbed()
+			const embed = new SignalEmbed(interaction)
 				.setTitle(`${fun} Dog Fact 🐕`)
-				.setDescription(fact)
-				.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-				.setTimestamp()
-				.setColor(interaction.guild.me.displayHexColor);
+				.setDescription(fact);
 
 			interaction.reply({ ephemeral: true, embeds: [embed] });
 		}

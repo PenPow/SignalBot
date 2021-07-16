@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
+
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -44,13 +45,10 @@ module.exports = class EightBallCommand extends Command {
 
 		if (!question) return this.sendErrorMessage(message, 0, 'Please provide a question to ask');
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${fun} Magic 8-Ball 🎱`)
 			.addField('Question', question)
-			.addField('Answer', answers[Math.floor(Math.random() * answers.length)])
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.dispayHexColor);
+			.addField('Answer', answers[Math.floor(Math.random() * answers.length)]);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -58,13 +56,10 @@ module.exports = class EightBallCommand extends Command {
 	slashRun(interaction, args) {
 		const question = args.first()?.value;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${fun} Magic 8-Ball 🎱`)
 			.addField('Question', question)
-			.addField('Answer', answers[Math.floor(Math.random() * answers.length)])
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.dispayHexColor);
+			.addField('Answer', answers[Math.floor(Math.random() * answers.length)]);
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
