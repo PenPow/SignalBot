@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 
 module.exports = class AvatarCommand extends Command {
 	constructor(client) {
@@ -18,24 +18,19 @@ module.exports = class AvatarCommand extends Command {
 	async run(message, args) {
 		const member = (await this.getUserFromMention(message, args[0])) || message.guild.members.cache.get(args[0]) || message.author;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed()
 			.setTitle(`${member.username}'s Avatar`)
-			.setImage(member.displayAvatarURL({ dynamic: true, size: 512 }))
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(member.displayHexColor);
+			.setImage(member.displayAvatarURL({ dynamic: true, size: 512 }));
+
 		message.reply({ embeds: [embed] });
 	}
 
 	slashRun(interaction, args) {
 		const member = args?.first()?.member || interaction.member;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed()
 			.setTitle(`${member.displayName}'s Avatar`)
-			.setImage(member.user.displayAvatarURL({ dynamic: true, size: 512 }))
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(member.displayHexColor);
+			.setImage(member.user.displayAvatarURL({ dynamic: true, size: 512 }));
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
 	}

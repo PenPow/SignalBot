@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { owner, voice } = require('../../utils/emojis.js');
 const { stripIndent } = require('common-tags');
 const moment = require('moment');
@@ -65,7 +65,7 @@ module.exports = class ServerInfoCommand extends Command {
     		  Roles    :: [ ${roleCount} ]
     		`;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${message.guild.name}'s Information`)
 			.setThumbnail(message.guild.iconURL({ dynamic: true }))
 			.addField('ID', `\`${message.guild.id}\``, true)
@@ -79,10 +79,7 @@ module.exports = class ServerInfoCommand extends Command {
 			.addField('Partnered', `\`${message.guild.partnered}\``, true)
 			.addField('Verified', `\`${message.guild.verified}\``, true)
 			.addField('Created On', `\`${moment(message.guild.createdAt).format('MMM DD YYYY')}\``, true)
-			.addField('Server Stats', `\`\`\`asciidoc\n${serverStats}\`\`\``)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(message.guild.me.displayHexColor);
+			.addField('Server Stats', `\`\`\`asciidoc\n${serverStats}\`\`\``);
 
 		if (message.guild.description) embed.setDescription(message.guild.description);
 		if (message.guild.bannerURL) embed.setImage(message.guild.bannerURL({ dynamic: true }));
@@ -124,7 +121,7 @@ module.exports = class ServerInfoCommand extends Command {
     		  Roles    :: [ ${roleCount} ]
     		`;
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${interaction.guild.name}'s Information`)
 			.setThumbnail(interaction.guild.iconURL({ dynamic: true }))
 			.addField('ID', `\`${interaction.guild.id}\``, true)
@@ -138,10 +135,7 @@ module.exports = class ServerInfoCommand extends Command {
 			.addField('Partnered', `\`${interaction.guild.partnered}\``, true)
 			.addField('Verified', `\`${interaction.guild.verified}\``, true)
 			.addField('Created On', `\`${moment(interaction.guild.createdAt).format('MMM DD YYYY')}\``, true)
-			.addField('Server Stats', `\`\`\`asciidoc\n${serverStats}\`\`\``)
-			.setFooter(interaction.member.displayName, interaction.user.displayAvatarURL({ dynamic: true }))
-			.setTimestamp()
-			.setColor(interaction.guild.me.displayHexColor);
+			.addField('Server Stats', `\`\`\`asciidoc\n${serverStats}\`\`\``);
 
 		if (interaction.guild.description) embed.setDescription(interaction.guild.description);
 		if (interaction.guild.bannerURL) embed.setImage(interaction.guild.bannerURL({ dynamic: true }));
