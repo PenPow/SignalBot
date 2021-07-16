@@ -38,6 +38,7 @@ class MusicSubscription {
 		this.queueLock = false;
 
 		this.voiceConnection.on('stateChange', async (_, newState) => {
+			if(newState.status === VoiceConnectionStatus.Idle && this.queue.length === 0) this.voiceConnection.destroy();
 			if (newState.status === VoiceConnectionStatus.Disconnected) {
 				if (newState.reason === VoiceConnectionDisconnectReason.WebSocketClose && newState.closeCode === 4014) {
 					/*
