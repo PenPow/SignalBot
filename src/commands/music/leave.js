@@ -5,6 +5,7 @@ module.exports = class LeaveCommand extends Command {
 		super(client, {
 			name: 'leave',
 			usage: 'leave',
+			aliases: ['stop', 'quit', 'end'],
 			description: 'Leaves the Voice Channel (Requires Administrator or for you to be alone with the bot)',
 			type: client.types.MUSIC,
 			examples: ['leave'],
