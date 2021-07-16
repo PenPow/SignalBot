@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
 const { success, mod } = require('../../utils/emojis');
 
 module.exports = class SoftBanCommand extends Command {
@@ -43,7 +43,7 @@ module.exports = class SoftBanCommand extends Command {
 
 		const caseID = this.client.utils.getCaseNumber(this.client, message.guild);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(message)
 			.setTitle(`${success} Banned Member ${mod}`)
 			.setDescription(`${member} has now been softbanned.`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
@@ -53,7 +53,7 @@ module.exports = class SoftBanCommand extends Command {
 			.setTimestamp()
 			.setColor(message.guild.me.displayHexColor);
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(message)
 			.setTitle(`${mod} You were Banned from ${message.guild.name}`)
 			.addField('Moderator', `<@${message.author.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
@@ -111,7 +111,7 @@ module.exports = class SoftBanCommand extends Command {
 
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 
-		const embed = new MessageEmbed()
+		const embed = new SignalEmbed(interaction)
 			.setTitle(`${success} Banned Member ${mod}`)
 			.setDescription(`${member} has now been softbanned.`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
@@ -121,7 +121,7 @@ module.exports = class SoftBanCommand extends Command {
 			.setTimestamp()
 			.setColor(interaction.guild.me.displayHexColor);
 
-		const embed2 = new MessageEmbed()
+		const embed2 = new SignalEmbed(interaction)
 			.setTitle(`${mod} You were Banned from ${interaction.guild.name}`)
 			.addField('Moderator', `<@${interaction.user.id}>`, true)
 			.addField('Member', `<@${member.id}>`, true)
