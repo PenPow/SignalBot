@@ -8,7 +8,7 @@ module.exports = class LeaveCommand extends Command {
 			aliases: ['stop', 'quit', 'end'],
 			description: 'Leaves the Voice Channel (Requires Administrator or for you to be alone with the bot)',
 			type: client.types.MUSIC,
-			examples: ['leave'],
+			examples: ['leave', 'stop', 'quit', 'end'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
 			guildOnly: true,
