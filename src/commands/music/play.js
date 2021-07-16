@@ -21,10 +21,10 @@ module.exports = class PlayCommand extends Command {
 			examples: ['play despacito'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
+			guildOnly: true,
 		});
 	}
 	async run(message, args) {
-		message.reply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
 		let subscription = this.client.subscriptions.get(message.guild.id);
 		if(!subscription) {
 			if(message.member instanceof GuildMember && message.member.voice.channel) {
@@ -39,10 +39,13 @@ module.exports = class PlayCommand extends Command {
 				this.client.subscriptions.set(message.guild.id, subscription);
 			}
 		}
+		else if(message.member.voice.channel.id !== subscription.voiceConnection.joinConfig.channelId) { return message.reply({ content: 'Please join the voice channel with the bot.' }); }
 
 		if (!subscription) {
 			return await message.reply({ content: 'Please join a voice channel' });
 		}
+
+		message.reply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
 
 		try {
 			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 20e3);
@@ -75,7 +78,6 @@ module.exports = class PlayCommand extends Command {
 
 	async slashRun(interaction, args) {
 		await interaction.defer({ ephemeral: true });
-		await interaction.editReply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
 		let subscription = this.client.subscriptions.get(interaction.guild.id);
 		if(!subscription) {
 			if(interaction.member instanceof GuildMember && interaction.member.voice.channel) {
@@ -90,10 +92,13 @@ module.exports = class PlayCommand extends Command {
 				this.client.subscriptions.set(interaction.guild.id, subscription);
 			}
 		}
+		else if(interaction.member.voice.channel.id !== subscription.voiceConnection.joinConfig.channelId) { return interaction.editReply({ content: 'Please join the voice channel with the bot.', ephemeral: true }); }
 
 		if (!subscription) {
 			return await interaction.followUp({ content: 'Please join a voice channel', ephemeral: true });
 		}
+
+		await interaction.editReply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
 
 		try {
 			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 20e3);
