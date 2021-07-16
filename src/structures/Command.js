@@ -298,7 +298,7 @@ class Command {
      * @param {string} errorMessage
      * @param {boolean} fatal
      */
-	async sendErrorMessage(message, errorType, reason, errorMessage, fatal = false) {
+	sendErrorMessage(message, errorType, reason, errorMessage, fatal = false) {
 		errorType = this.errorTypes[errorType];
 
 		const prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
@@ -335,7 +335,7 @@ class Command {
      * @param {string} errorMessage
      * @param {boolean} fatal
      */
-	async sendSlashErrorMessage(interaction, errorType, reason, errorMessage, fatal = false) {
+	sendSlashErrorMessage(interaction, errorType, reason, errorMessage, fatal = false) {
 		errorType = this.errorTypes[errorType];
 
 		const embed = new MessageEmbed()

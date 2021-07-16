@@ -49,12 +49,12 @@ module.exports = class PlayCommand extends Command {
 		}
 		catch (e) {
 			this.client.logger.error(e.stack);
-			return await message.reply({ content: 'I am experiencing some heavy load right now, please try again later.' });
+			return this.sendErrorMessage(message, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', e.message);
 		}
 
 		try {
 			const url = ytdl.validateURL(args[0]) ? args[0] : (await ytSearch(args.join(' ')))?.all[0]?.url;
-			if(!url) return await message.reply({ content: 'I was unable to find a video to play, please try again later.' });
+			if(!url) return this.sendErrorMessage(message, 0, 'I was unable to find a song to play ');
 
 			const track = await Track.from(url, {
 				onStart() {},
@@ -69,7 +69,7 @@ module.exports = class PlayCommand extends Command {
 		}
 		catch(e) {
 			this.client.logger.error(e.stack);
-			return await message.reply({ content: 'I am experiencing some heavy load right now, please try again later.' });
+			return this.sendErrorMessage(message, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', e.message);
 		}
 	}
 
