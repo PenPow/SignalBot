@@ -76,7 +76,7 @@ class Track {
 			};
 
 			process.once('spawn', () => {
-				demuxProbe(stream).then((probe) => resolve(createAudioResource(probe.stream, { metadata: this, inputType: probe.type })));
+				demuxProbe(stream).then((probe) => resolve(createAudioResource(probe.stream, { metadata: this, inputType: probe.type, inlineVolume: true })));
 			}).catch(onError);
 		});
 	}
