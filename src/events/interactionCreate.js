@@ -17,7 +17,7 @@ class interactionCreate {
 		if(command.guildOnly && !interaction.guild) return await interaction.reply('This command can only be used in a guild channel.', { ephemeral: true });
 
 		if(!command.checkSlashUserPermissions(interaction)) return;
-		command.slashRun(interaction, interaction.options);
+		command.slashRun(interaction, interaction.options, this.client.subscriptions.get(interaction.guild.id));
 	}
 }
 

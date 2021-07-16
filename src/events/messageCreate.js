@@ -67,7 +67,7 @@ class messageCreate {
 
 				if(permissions) {
 					message.command = true;
-					return command.run(message, cmdArgs);
+					return command.run(message, cmdArgs, this.client.subscriptions.get(message.guild.id));
 				}
 
 			}

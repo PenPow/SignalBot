@@ -4,24 +4,6 @@ class Ready {
 	}
 
 	async run() {
-
-		// this.client.logger.info('Loading Slash Commands...');
-
-		// const commandArray = [];
-
-		// this.client.commands.each(async command => {
-		// 	if(command.disabled) return table.addRow(command.name, this.client.utils.capitalize(command.type), 'Fail');
-		// 	if(command.ownerOnly || command.type === this.client.types.OWNER) return table.addRow(command.name, this.client.utils.capitalize(command.type), 'Fail');
-
-		// 	commandArray.push(command.generateSlashCommand());
-
-		// 	table.addRow(command.name, this.client.utils.capitalize(command.type), 'Pass');
-		// });
-
-		// const test_guild = await this.client.guilds.fetch('789215359878168586');
-		// test_guild.commands.set(commandArray);
-
-
 		this.client.logger.warn('Checking For Expired Punishments');
 		this.client.db.ensure('global_mutes', []);
 		this.client.db.ensure('global_bans', []);

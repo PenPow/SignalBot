@@ -24,7 +24,7 @@ module.exports = class HelpCommand extends Command {
 		const embed = new MessageEmbed();
 		const prefix = message.client.db.get(`${message.guild.id}_prefix`);
 
-		const { INFO, FUN, MISC, MOD, ADMIN, OWNER } = message.client.types;
+		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, MUSIC } = message.client.types;
 		const { capitalize } = message.client.utils;
 
 		const command = message.client.commands.get(args[0].toLowerCase()) || message.client.aliases.get(args[0].toLowerCase());
@@ -55,6 +55,7 @@ module.exports = class HelpCommand extends Command {
 			const emojiMap = {
 				[INFO]: `${info} ${capitalize(INFO)}`,
 				[FUN]: `${fun} ${capitalize(FUN)}`,
+				[MUSIC]: `:musical_note: ${capitalize(MUSIC)}`,
 				[MISC]: `${misc} ${capitalize(MISC)}`,
 				[MOD]: `${mod} ${capitalize(MOD)}`,
 				[ADMIN]: `${admin} ${capitalize(ADMIN)}`,

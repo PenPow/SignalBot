@@ -4,5 +4,6 @@
     "**/.pnp.*": true
   },
   "eslint.nodePath": ".yarn/sdks",
+  "files.eol": "\n",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js"
 }

@@ -48,6 +48,7 @@ class Client extends Discord.Client {
 			MOD: 'mod',
 			ADMIN: 'admin',
 			OWNER: 'owner',
+			MUSIC: 'music',
 		};
 
 		/**
@@ -61,6 +62,12 @@ class Client extends Discord.Client {
          * @type {Collection<string, Command>}
          */
 		this.aliases = new Discord.Collection();
+
+		/**
+         * Music Subscriptions
+         * @type {Collection<Snowflake, MusicSubscription>}
+         */
+		this.subscriptions = new Discord.Collection();
 
 		/**
          * Discord Token
