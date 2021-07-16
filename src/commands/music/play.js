@@ -16,10 +16,10 @@ module.exports = class PlayCommand extends Command {
 		super(client, {
 			name: 'play',
 			usage: 'play <song>',
-			aliases: ['enqueue'],
+			aliases: ['enqueue', 'p'],
 			description: 'Plays a song in the channel that you are currently in!',
 			type: client.types.MUSIC,
-			examples: ['play despacito'],
+			examples: ['play despacito', 'enqueue 7 Rings', 'p Despacito'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
 			guildOnly: true,

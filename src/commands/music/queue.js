@@ -11,7 +11,7 @@ module.exports = class QueueCommand extends Command {
 			aliases: ['q'],
 			description: 'Shows the queue for the server',
 			type: client.types.MUSIC,
-			examples: ['queue'],
+			examples: ['queue', 'q'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
 			guildOnly: true,
