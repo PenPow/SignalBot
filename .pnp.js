@@ -43,6 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["chalk", "npm:4.1.1"],
             ["common-tags", "npm:1.8.0"],
             ["consola", "npm:2.15.3"],
+            ["crypto-js", "npm:4.0.0"],
             ["discord.js", "npm:13.0.0-dev.d433fe8.1625961832"],
             ["enmap", "npm:5.8.5"],
             ["erlpack", "https://github.com/discord/erlpack.git#commit=e27db8f82892bdb9b28a0547cc394d68b5d2242d"],
@@ -1276,6 +1277,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["path-key", "npm:3.1.1"],
             ["shebang-command", "npm:2.0.0"],
             ["which", "npm:2.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["crypto-js", [
+        ["npm:4.0.0", {
+          "packageLocation": "./.yarn/cache/crypto-js-npm-4.0.0-cc8d8715a9-fdd1415b9e.zip/node_modules/crypto-js/",
+          "packageDependencies": [
+            ["crypto-js", "npm:4.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -4867,6 +4877,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["chalk", "npm:4.1.1"],
             ["common-tags", "npm:1.8.0"],
             ["consola", "npm:2.15.3"],
+            ["crypto-js", "npm:4.0.0"],
             ["discord.js", "npm:13.0.0-dev.d433fe8.1625961832"],
             ["enmap", "npm:5.8.5"],
             ["erlpack", "https://github.com/discord/erlpack.git#commit=e27db8f82892bdb9b28a0547cc394d68b5d2242d"],
