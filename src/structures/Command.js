@@ -292,7 +292,7 @@ class Command {
      * @param {string} errorMessage
      * @param {boolean} fatal
      */
-	sendErrorMessage(message, errorType, reason, errorMessage, fatal = false) {
+	sendErrorMessage(message, errorType, reason, errorMessage = null, fatal = false) {
 		errorType = this.errorTypes[errorType];
 
 		const prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
