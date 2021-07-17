@@ -59,9 +59,11 @@ module.exports = class TagCommand extends Command {
 
 
 					let found = false;
+					let tag;
 					for(let i = 0; i < tags.length; i++) {
 						if(tags[i].name === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 							found = true;
+							tag = tags[i];
 							break;
 						}
 					}
@@ -72,6 +74,8 @@ module.exports = class TagCommand extends Command {
 
 						return message.reply({ embeds: [embed] });
 					}
+
+					if(!message.member.permissions.has('ADMINISTRATOR') || message.author.id !== tag.user.id) return this.sendErrorMessage(message, 2, 'You do not have permission to edit this tag.');
 
 					embed.setTitle(`${store} Editing a Tag (2/3)`)
 						.setDescription('What do you want the tag\'s content to be updated to?');
@@ -125,6 +129,7 @@ module.exports = class TagCommand extends Command {
 
 				for(let i = 0; i < tags.length; i++) {
 					if(tags[i].name.toLowerCase() === args[1].replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()) {
+						if(!message.member.permissions.has('ADMINISTRATOR') || message.author.id !== tags[i].user.id) return this.sendErrorMessage(message, 2, 'You do not have permission to delete this tag.');
 						tags.splice(i, 1);
 						this.client.db.set(`guild_tags_${message.guild.id}`, tags);
 
@@ -161,6 +166,7 @@ module.exports = class TagCommand extends Command {
 
 						for(let i = 0; i < tags.length; i++) {
 							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
+								if(!message.member.permissions.has('ADMINISTRATOR') || message.author.id !== tags[i].user.id) return this.sendErrorMessage(message, 2, 'You do not have permission to delete this tag.');
 								tags.splice(i, 1);
 								this.client.db.set(`guild_tags_${message.guild.id}`, tags);
 
@@ -264,6 +270,7 @@ module.exports = class TagCommand extends Command {
 			break;
 		}
 		case 'create': {
+			if(!message.member.permissions.has('ADMINISTRATOR')) return this.sendErrorMessage(message, 2, 'You do not have permission to create a tag.');
 			const embed = new SignalEmbed(message)
 				.setTitle(`${store} Creating a New Tag (1/3)`)
 				.setDescription('Alright! Lets create a new tag together, I am going to be walking you through the process of making a new tag, firstly, please enter the name of the tag used to access it! This prompt will expire in two minutes. Due to discord restrictions, your tag cannot have spaces in the name, Signal will replace all spaces with hyphens.');
@@ -353,12 +360,16 @@ module.exports = class TagCommand extends Command {
 			const tags = this.client.db.get(`guild_tags_${interaction.guild.id}`) || [];
 
 			let found = false;
+			let tag;
 			for(let i = 0; i < tags.length; i++) {
 				if(tags[i].name === args.get('edit').options.get('name')?.value.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 					found = true;
+					tag = tags[i];
 					break;
 				}
 			}
+
+			if(!interaction.member.permissions.has('ADMINISTRATOR') || interaction.user.id !== tag.user.id) return this.sendSlashErrorMessage(interaction, 2, 'You do not have permission to edit this tag.');
 
 			if(!found) {
 				embed.setTitle(`${store} No Tag Found`)
@@ -397,6 +408,7 @@ module.exports = class TagCommand extends Command {
 
 			for(let i = 0; i < tags.length; i++) {
 				if(tags[i].name.toLowerCase() === args.get('delete').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()) {
+					if(!interaction.member.permissions.has('ADMINISTRATOR') || interaction.user.id !== tags[i].user.id) return this.sendSlashErrorMessage(interaction, 2, 'You do not have permission to delete this tag.');
 					tags.splice(i, 1);
 					this.client.db.set(`guild_tags_${interaction.guild.id}`, tags);
 
@@ -452,6 +464,7 @@ module.exports = class TagCommand extends Command {
 			break;
 		}
 		case 'create': {
+			if(!interaction.member.permissions.has('ADMINISTRATOR')) return this.sendSlasErrorMessage(interaction, 2, 'You do not have permission to create a tag.');
 			await this.client.db.ensure(`guild_tags_${interaction.guild.id}`, []);
 
 			if(!this.client.db.includes('guild_tags', interaction.guild.id)) this.client.db.push('guild_tags', interaction.guild.id);
