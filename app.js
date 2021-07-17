@@ -24,6 +24,7 @@ intents.add(
 	'DIRECT_MESSAGES',
 	'GUILD_BANS',
 	'GUILD_MEMBERS',
+	'GUILD_VOICE_STATES',
 );
 
 /**
