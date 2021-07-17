@@ -1,4 +1,6 @@
 const Command = require('../../structures/Command');
+const SignalEmbed = require('../../structures/SignalEmbed');
+const { undeafened } = require('../../utils/emojis.js');
 const {
 	AudioPlayerStatus,
 } = require('@discordjs/voice');
@@ -19,7 +21,7 @@ module.exports = class QueueCommand extends Command {
 	}
 	async run(message) {
 		const subscription = this.client.subscriptions.get(message.guild.id);
-		if(!subscription) return message.reply({ content: 'I am not playing anything in this server.' });
+		if(!subscription) return this.sendErrorMessage(message, 2, 'I am not playing anything in the server');
 
 		const current =
 				subscription.audioPlayer.state.status === AudioPlayerStatus.Idle
@@ -31,12 +33,17 @@ module.exports = class QueueCommand extends Command {
 			.map((track, index) => `${index + 1}) ${track.title}`)
 			.join('\n');
 
-		await message.reply({ content: `${current}\n\n${queue}` });
+		const embed = new SignalEmbed(message)
+			.setTitle(`${undeafened} Queue`)
+			.addField('Currently Playing', current)
+			.addField('Queue', queue || 'Nothing In Queue');
+
+		await message.reply({ embeds: [embed] });
 	}
 
 	async slashRun(interaction) {
 		const subscription = this.client.subscriptions.get(interaction.guild.id);
-		if(!subscription) return interaction.reply({ content: 'I am not playing anything in this server.', ephemeral: true });
+		if(!subscription) return this.sendSlashErrorMessage(interaction, 2, 'I am not playing anything in the server');
 
 		const current =
 				subscription.audioPlayer.state.status === AudioPlayerStatus.Idle
@@ -48,7 +55,12 @@ module.exports = class QueueCommand extends Command {
 			.map((track, index) => `${index + 1}) ${track.title}`)
 			.join('\n');
 
-		return interaction.reply({ content: `${current}\n\n${queue}`, ephemeral: true });
+		const embed = new SignalEmbed(interaction)
+			.setTitle(`${undeafened} Queue`)
+			.addField('Currently Playing', current)
+			.addField('Queue', queue || 'Nothing In Queue');
+
+		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
 
 	generateSlashCommand() {

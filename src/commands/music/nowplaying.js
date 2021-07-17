@@ -1,4 +1,6 @@
 const Command = require('../../structures/Command');
+const SignalEmbed = require('../../structures/SignalEmbed');
+const { undeafened } = require('../../utils/emojis.js');
 const {
 	AudioPlayerStatus,
 } = require('@discordjs/voice');
@@ -19,26 +21,34 @@ module.exports = class NowPlayingCommand extends Command {
 	}
 	async run(message) {
 		const subscription = this.client.subscriptions.get(message.guild.id);
-		if(!subscription) return message.reply({ content: 'I am not playing anything in this server.' });
+		if(!subscription) return this.sendErrorMessage(message, 2, 'I am not playing anything in the server');
 
 		const current =
 				subscription.audioPlayer.state.status === AudioPlayerStatus.Idle
 					? 'Nothing is currently playing!'
 					: `Playing **${(subscription.audioPlayer.state.resource).metadata.title}**`;
 
-		await message.reply({ content: `${current}` });
+		const embed = new SignalEmbed(message)
+			.setTitle(`${undeafened} Now Playing`)
+			.setDescription(current);
+
+		await message.reply({ embeds: [embed] });
 	}
 
 	async slashRun(interaction) {
 		const subscription = this.client.subscriptions.get(interaction.guild.id);
-		if(!subscription) return interaction.reply({ content: 'I am not playing anything in this server.', ephemeral: true });
+		if(!subscription) return this.sendSlashErrorMessage(interaction, 2, 'I am not playing anything in the server');
 
 		const current =
 				subscription.audioPlayer.state.status === AudioPlayerStatus.Idle
 					? 'Nothing is currently playing!'
 					: `Playing **${(subscription.audioPlayer.state.resource).metadata.title}**`;
 
-		return interaction.reply({ content: `${current}`, ephemeral: true });
+
+		const embed = new SignalEmbed(interaction)
+			.setTitle(`${undeafened} Now Playing`)
+			.setDescription(current);
+		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
 
 	generateSlashCommand() {

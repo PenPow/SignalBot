@@ -5,6 +5,8 @@ const ytSearch = require('yt-search');
 const MusicSubscription = require('../../structures/Subscription');
 const Track = require('../../structures/Track');
 const { GuildMember } = require('discord.js');
+const SignalEmbed = require('../../structures/SignalEmbed');
+const { undeafened } = require('../../utils/emojis.js');
 const {
 	entersState,
 	joinVoiceChannel,
@@ -40,13 +42,17 @@ module.exports = class PlayCommand extends Command {
 				this.client.subscriptions.set(message.guild.id, subscription);
 			}
 		}
-		else if(message.member.voice.channel.id !== subscription.voiceConnection.joinConfig.channelId) { return message.reply({ content: 'Please join the voice channel with the bot.' }); }
+		else if(message.member.voice.channel.id !== subscription.voiceConnection.joinConfig.channelId) { return this.sendErrorMessage(message, 2, 'You need to be in the same voice channel as the bot'); }
 
 		if (!subscription) {
-			return await message.reply({ content: 'Please join a voice channel' });
+			return this.sendErrorMessage(message, 2, 'Please join a voice channel');
 		}
 
-		message.reply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
+		const embed = new SignalEmbed(message)
+			.setTitle('🔎 Searching!')
+			.setDescription('Please note that this make take up to 5 seconds while we connect to the voice gateway.');
+
+		message.reply({ embeds: [embed] });
 
 		try {
 			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 5e3);
@@ -96,7 +102,10 @@ module.exports = class PlayCommand extends Command {
 			});
 
 			subscription.enqueue(track);
-			return await message.reply({ content: `Added \`${track.title}\` to the queue` });
+
+			embed.setTitle(`${undeafened} Found ${track.title}`)
+				.setDescription(`Added \`${track.title}\` to the queue`);
+			return await message.reply({ embeds: [embed] });
 		}
 		catch(e) {
 			this.client.logger.error(e.stack);
@@ -120,13 +129,17 @@ module.exports = class PlayCommand extends Command {
 				this.client.subscriptions.set(interaction.guild.id, subscription);
 			}
 		}
-		else if(interaction.member.voice.channel.id !== subscription.voiceConnection.joinConfig.channelId) { return interaction.editReply({ content: 'Please join the voice channel with the bot.', ephemeral: true }); }
+		else if(interaction.member.voice.channel.id !== subscription.voiceConnection.joinConfig.channelId) { return this.sendSlashErrorMessage(interaction, 2, 'Please join the voice channel with the bot.'); }
 
 		if (!subscription) {
-			return await interaction.followUp({ content: 'Please join a voice channel', ephemeral: true });
+			return await this.sendSlashErrorMessage(interaction, 2, 'Please join a voice channel');
 		}
 
-		await interaction.editReply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
+		const embed = new SignalEmbed(interaction)
+			.setTitle('🔎 Searching!')
+			.setDescription('Please note that this make take up to 5 seconds while we connect to the voice gateway.');
+
+		interaction.editReply({ embeds: [embed], ephemeral: true });
 
 		try {
 			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 5e3);
@@ -174,7 +187,9 @@ module.exports = class PlayCommand extends Command {
 			});
 
 			subscription.enqueue(track);
-			return await interaction.followUp({ content: `Added \`${track.title}\` to the queue`, ephemeral: true });
+			embed.setTitle(`${undeafened} Found ${track.title}`)
+				.setDescription(`Added \`${track.title}\` to the queue`);
+			return await interaction.followUp({ embeds: [embed], ephemeral: true });
 		}
 		catch(e) {
 			this.client.logger.error(e.stack);
