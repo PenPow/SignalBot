@@ -129,7 +129,7 @@ class MusicSubscription {
 			}
 		});
 
-		this.audioPlayer.on('error', (error) => (error.resource).metadata.onError(error));
+		this.audioPlayer.on('error', (error) => this.client.logger.error(error.stack));
 
 		voiceConnection.subscribe(this.audioPlayer);
 	}
@@ -158,6 +158,18 @@ class MusicSubscription {
 	async processQueue() {
 		if (this.queueLock || this.audioPlayer.state.status !== AudioPlayerStatus.Idle) return;
 
+		if(this.queue.length === 0) {
+			try {
+				this.audioPlayer.stop(true);
+				this.voiceConnection.destroy();
+				return await this.client.subscriptions.delete(this.voiceConnection.joinConfig.guildId);
+			}
+			// eslint-disable-next-line no-empty
+			catch(e) {
+
+			}
+		}
+
 		this.queueLock = true;
 
 		const nextTrack = this.queue.shift();
@@ -167,9 +179,7 @@ class MusicSubscription {
 			this.queueLock = false;
 		}
 		catch (error) {
-			nextTrack.onError(error);
 			this.queueLock = false;
-			return this.processQueue();
 		}
 	}
 }
