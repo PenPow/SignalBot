@@ -10,7 +10,7 @@ module.exports = class TagCommand extends Command {
 			aliases: ['tags'],
 			description: 'Creates/Lists/Shows/Edits/Deletes a tag (run s!tags guide for more information)',
 			type: client.types.TAG,
-			examples: ['tag create', 'tag show', 'tage delete', 'tag edit', 'tag guide'],
+			examples: ['tag create', 'tag show', 'tag list', 'tag delete', 'tag edit', 'tag guide'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
 			guildOnly: true,
@@ -29,6 +29,20 @@ module.exports = class TagCommand extends Command {
 			message.reply({ embeds: [embed] });
 			break;
 		}
+		case 'list': {
+			const tags = this.client.tags.get(message.guild.id) || [];
+			const embed = new SignalEmbed(message).setTitle(`${store} Tags in ${message.guild.name}`);
+			let description;
+			for(let i = 0; i < tags.length; i++) {
+				description = tags.map((tag) => {
+					return '`' + tag.name + '`';
+				}).join(', ');
+			}
+
+			embed.setDescription(description || 'No Tags Found');
+			message.reply({ embeds: [embed] });
+			break;
+		}
 		case 'edit': {
 			const embed = new SignalEmbed(message)
 				.setTitle(`${store} Editing a Tag (1/3)`)
@@ -44,7 +58,7 @@ module.exports = class TagCommand extends Command {
 
 					let found = false;
 					for(let i = 0; i < tags.length; i++) {
-						if(tags[i].name === collected.first().content.replace(/ /g, '-').toLowerCase()) {
+						if(tags[i].name === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 							found = true;
 							break;
 						}
@@ -64,7 +78,7 @@ module.exports = class TagCommand extends Command {
 					message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 						.then(async (collected2) => {
 							for(let i = 0; i < tags.length; i++) {
-								if(tags[i].name === collected.first().content.replace(/ /g, '-').toLowerCase()) {
+								if(tags[i].name === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 									tags[i].content = collected2.first().content;
 								}
 							}
@@ -72,7 +86,7 @@ module.exports = class TagCommand extends Command {
 							this.client.db.set(`guild_tags_${message.guild.id}`, tags);
 							this.client.tags.set(message.guild.id, tags);
 							embed.setTitle(`${store} Editing a Tag (3/3)`)
-								.setDescription(`Tag Successfully Edited, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').toLowerCase()}\``);
+								.setDescription(`Tag Successfully Edited, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()}\``);
 
 							await message.reply({ embeds: [embed] });
 						})
@@ -107,7 +121,7 @@ module.exports = class TagCommand extends Command {
 				}
 
 				for(let i = 0; i < tags.length; i++) {
-					if(tags[i].name.toLowerCase() === args[1].replace(/ /g, '-').toLowerCase()) {
+					if(tags[i].name.toLowerCase() === args[1].replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()) {
 						this.client.db.remove(`guild_tags_${message.guild.id}`, tags[i]);
 						tags.splice(i, 1);
 						this.client.tags.set(message.guild.id, tags);
@@ -144,7 +158,7 @@ module.exports = class TagCommand extends Command {
 						}
 
 						for(let i = 0; i < tags.length; i++) {
-							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').toLowerCase()) {
+							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 								tags.splice(i, 1);
 								this.client.db.set(`guild_tags_${message.guild.id}`, tags);
 								this.client.tags.set(message.guild.id, tags);
@@ -157,7 +171,7 @@ module.exports = class TagCommand extends Command {
 						}
 
 						embed.setTitle(`${store} No Tag Found`)
-							.setDescription(`There are no tags in this server named \`${collected.first().content.replace(/ /g, '-').toLowerCase()}\``);
+							.setDescription(`There are no tags in this server named \`${collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()}\``);
 						return message.reply({ embeds: [embed] });
 					});
 			}
@@ -176,7 +190,7 @@ module.exports = class TagCommand extends Command {
 				}
 
 				for(let i = 0; i < tags.length; i++) {
-					if(tags[i].name.toLowerCase() === args[1].replace(/ /g, '-').toLowerCase()) {
+					if(tags[i].name.toLowerCase() === args[1].replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 						return message.reply({ content: tags[i].content });
 					}
 				}
@@ -206,13 +220,13 @@ module.exports = class TagCommand extends Command {
 						}
 
 						for(let i = 0; i < tags.length; i++) {
-							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').toLowerCase()) {
+							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 								return message.reply({ content: tags[i].content });
 							}
 						}
 
 						embed.setTitle(`${store} No Tag Found`)
-							.setDescription(`There are no tags in this server named \`${collected.first().content.replace(/ /g, '-').toLowerCase()}\``);
+							.setDescription(`There are no tags in this server named \`${collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()}\``);
 						return message.reply({ embeds: [embed] });
 					});
 			}
@@ -229,7 +243,7 @@ module.exports = class TagCommand extends Command {
 			message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 				.then(async (collected) => {
 					embed.setTitle(`${store} Creating a New Tag (2/3)`)
-						.setDescription(`Great, your tag will be accessible through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').toLowerCase()}\`\n\nNow, we need to specify the content for the tag, write out the content of the tag. This prompt will expire in two minutes.`);
+						.setDescription(`Great, your tag will be accessible through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()}\`\n\nNow, we need to specify the content for the tag, write out the content of the tag. This prompt will expire in two minutes.`);
 
 					await message.reply({ embeds: [embed] });
 					message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
@@ -240,7 +254,7 @@ module.exports = class TagCommand extends Command {
 							const tags = this.client.tags.get(message.guild.id) || [];
 
 							for(let i = 0; i < tags.length; i++) {
-								if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').toLowerCase()) {
+								if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 									embed.setTitle(`${store} Tag Already Exists`)
 										.setDescription('A tag with this name already exists, consider modifying it');
 
@@ -250,12 +264,12 @@ module.exports = class TagCommand extends Command {
 								}
 							}
 
-							this.client.db.push(`guild_tags_${message.guild.id}`, { name: collected.first().content.replace(/ /g, '-').toLowerCase(), content: collected2.first().content });
+							this.client.db.push(`guild_tags_${message.guild.id}`, { name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content });
 
-							tags.push({ name: collected.first().content.replace(/ /g, '-').toLowerCase(), content: collected2.first().content });
+							tags.push({ name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content });
 							this.client.tags.set(message.guild.id, tags);
 							embed.setTitle(`${store} Creating a New Tag (3/3)`)
-								.setDescription(`Tag Successfully Created, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').toLowerCase()}\``);
+								.setDescription(`Tag Successfully Created, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()}\``);
 
 							await message.reply({ embeds: [embed] });
 						})
