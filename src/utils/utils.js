@@ -144,7 +144,7 @@ function sleep(ms) {
  * @param {string} content
  * @returns {Promise}
  */
-async function confirmation(message, content, authorID) {
+async function confirmation(message, content) {
 	const row = new MessageActionRow()
 		.addComponents(
 			new MessageButton()
@@ -166,10 +166,11 @@ async function confirmation(message, content, authorID) {
 
 	const msg = await message.reply({ embeds: [embed], components: [row] });
 
-	const collector = msg.channel.createMessageComponentCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === authorID, { time: 10000 });
+	const collector = msg.channel.createMessageComponentCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === message.author.id, { time: 10000 });
 
 	return new Promise((resolve) => {
 		collector.on('collect', async (i) => {
+			i.defer();
 			switch (i.customId) {
 			case 'yes':
 				i.update({ embeds: [embed], components: [] });

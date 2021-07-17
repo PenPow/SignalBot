@@ -104,7 +104,7 @@ module.exports = class HelpCommand extends Command {
 		const embed = new SignalEmbed(interaction);
 		const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`);
 
-		const { INFO, FUN, MISC, MOD, ADMIN, OWNER } = interaction.client.types;
+		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, MUSIC } = interaction.client.types;
 		const { capitalize } = interaction.client.utils;
 
 		const command = interaction.client.commands.get(args?.first()?.value.toLowerCase()) || interaction.client.aliases.get(args?.first()?.value.toLowerCase());
@@ -132,6 +132,7 @@ module.exports = class HelpCommand extends Command {
 			const emojiMap = {
 				[INFO]: `${info} ${capitalize(INFO)}`,
 				[FUN]: `${fun} ${capitalize(FUN)}`,
+				[MUSIC]: `:musical_note: ${capitalize(MUSIC)}`,
 				[MISC]: `${misc} ${capitalize(MISC)}`,
 				[MOD]: `${mod} ${capitalize(MOD)}`,
 				[ADMIN]: `${admin} ${capitalize(ADMIN)}`,
