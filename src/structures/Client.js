@@ -45,10 +45,10 @@ class Client extends Discord.Client {
 			INFO: 'info',
 			FUN: 'fun',
 			MISC: 'misc',
+			MUSIC: 'music',
 			MOD: 'mod',
 			ADMIN: 'admin',
 			OWNER: 'owner',
-			MUSIC: 'music',
 		};
 
 		/**
@@ -68,6 +68,12 @@ class Client extends Discord.Client {
          * @type {Collection<Snowflake, MusicSubscription>}
          */
 		this.subscriptions = new Discord.Collection();
+
+		/**
+		 * Current Tags
+		 * @type {Collection<Snowflake, string>}
+		 */
+		this.tags = new Discord.Collection();
 
 		/**
          * Discord Token
@@ -123,6 +129,7 @@ class Client extends Discord.Client {
 		try {
 			this.actionManager.initCommands(this);
 			this.actionManager.initEvents(this);
+			this.actionManager.loadTags(this);
 			this.redis = this.actionManager.initRedis(this);
 			await this.login(this.token);
 		}

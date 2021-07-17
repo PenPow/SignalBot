@@ -71,6 +71,15 @@ class messageCreate {
 				}
 
 			}
+
+			else {
+				const tags = this.client.tags.get(message.guild.id);
+				for(let i = 0; i < tags.length; i++) {
+					if(tags[i].name.toLowerCase() === cmd) {
+						return message.reply({ content: tags[i].content });
+					}
+				}
+			}
 		}
 		else if (
 			(message.content === `<@${this.client.user.id}>` || message.content === `<@!${this.client.user.id}>`) &&
@@ -91,7 +100,7 @@ class messageCreate {
 				.addField('Prefix', `My Prefix for ${message.guild.name} is \`${prefix}\``)
 				.setFooter('DM PenPow#7067 to speak directly with the developer!')
 				.setColor(message.guild.me.displayHexColor);
-			message.reply(embed);
+			message.reply({ embeds: [embed] });
 		}
 	}
 }
