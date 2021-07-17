@@ -55,7 +55,7 @@ module.exports = class PlayCommand extends Command {
 		message.reply({ embeds: [embed] });
 
 		try {
-			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 5e3);
+			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 10e3);
 		}
 		catch (e) {
 			if(!message.member.voice.channel.members.has(message.guild.me)) {

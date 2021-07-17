@@ -29,11 +29,75 @@ module.exports = class TagCommand extends Command {
 			message.reply({ embeds: [embed] });
 			break;
 		}
+		case 'edit': {
+			const embed = new SignalEmbed(message)
+				.setTitle(`${store} Editing a Tag (1/3)`)
+				.setDescription('Alright! Which tag do you want to edit?');
+
+			await message.reply({ embeds: [embed] });
+
+			const filter = (response) => response.author.id === message.author.id;
+			message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
+				.then(async (collected) => {
+					const tags = this.client.tags.get(message.guild.id) || [];
+
+
+					let found = false;
+					for(let i = 0; i < tags.length; i++) {
+						if(tags[i].name === collected.first().content.replace(/ /g, '-').toLowerCase()) {
+							found = true;
+							break;
+						}
+					}
+
+					if(!found) {
+						embed.setTitle(`${store} No Tag Found`)
+							.setDescription('No tag with that name was found');
+
+						return message.reply({ embeds: [embed] });
+					}
+
+					embed.setTitle(`${store} Editing a Tag (2/3)`)
+						.setDescription('What do you want the tag\'s content to be updated to?');
+
+					await message.reply({ embeds: [embed] });
+					message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
+						.then(async (collected2) => {
+							for(let i = 0; i < tags.length; i++) {
+								if(tags[i].name === collected.first().content.replace(/ /g, '-').toLowerCase()) {
+									tags[i].content = collected2.first().content;
+								}
+							}
+
+							this.client.db.set(`guild_tags_${message.guild.id}`, tags);
+							this.client.tags.set(message.guild.id, tags);
+							embed.setTitle(`${store} Editing a Tag (3/3)`)
+								.setDescription(`Tag Successfully Edited, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').toLowerCase()}\``);
+
+							await message.reply({ embeds: [embed] });
+						})
+						.catch(async () => {
+							embed.setTitle(`${store} Expired`)
+								.setDescription('Prompt Expired');
+
+							await message.reply({ embeds: [embed] });
+
+						});
+				})
+				.catch(async () => {
+					embed.setTitle(`${store} Expired`)
+						.setDescription('Prompt Expired');
+
+					await message.reply({ embeds: [embed] });
+				});
+
+			break;
+		}
 		case 'delete': {
 			if(args[1]) {
 				await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
 				const tags = this.client.tags.get(message.guild.id);
-				const embed = new SignalEmbed(message)
+				const embed = new SignalEmbed(message);
 
 				if(!tags) {
 					embed
@@ -43,7 +107,7 @@ module.exports = class TagCommand extends Command {
 				}
 
 				for(let i = 0; i < tags.length; i++) {
-					if(tags[i].name.toLowerCase() === args[1].toLowerCase()) {
+					if(tags[i].name.toLowerCase() === args[1].replace(/ /g, '-').toLowerCase()) {
 						this.client.db.remove(`guild_tags_${message.guild.id}`, tags[i]);
 						tags.splice(i, 1);
 						this.client.tags.set(message.guild.id, tags);
@@ -80,7 +144,7 @@ module.exports = class TagCommand extends Command {
 						}
 
 						for(let i = 0; i < tags.length; i++) {
-							if(tags[i].name.toLowerCase() === collected.first().content.toLowerCase()) {
+							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').toLowerCase()) {
 								tags.splice(i, 1);
 								this.client.db.set(`guild_tags_${message.guild.id}`, tags);
 								this.client.tags.set(message.guild.id, tags);
@@ -93,7 +157,7 @@ module.exports = class TagCommand extends Command {
 						}
 
 						embed.setTitle(`${store} No Tag Found`)
-							.setDescription(`There are no tags in this server named \`${collected.first().content}\``);
+							.setDescription(`There are no tags in this server named \`${collected.first().content.replace(/ /g, '-').toLowerCase()}\``);
 						return message.reply({ embeds: [embed] });
 					});
 			}
@@ -112,7 +176,7 @@ module.exports = class TagCommand extends Command {
 				}
 
 				for(let i = 0; i < tags.length; i++) {
-					if(tags[i].name.toLowerCase() === args[1].toLowerCase()) {
+					if(tags[i].name.toLowerCase() === args[1].replace(/ /g, '-').toLowerCase()) {
 						return message.reply({ content: tags[i].content });
 					}
 				}
@@ -142,13 +206,13 @@ module.exports = class TagCommand extends Command {
 						}
 
 						for(let i = 0; i < tags.length; i++) {
-							if(tags[i].name.toLowerCase() === collected.first().content.toLowerCase()) {
+							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').toLowerCase()) {
 								return message.reply({ content: tags[i].content });
 							}
 						}
 
 						embed.setTitle(`${store} No Tag Found`)
-							.setDescription(`There are no tags in this server named \`${collected.first().content}\``);
+							.setDescription(`There are no tags in this server named \`${collected.first().content.replace(/ /g, '-').toLowerCase()}\``);
 						return message.reply({ embeds: [embed] });
 					});
 			}
