@@ -38,7 +38,7 @@ module.exports = class PlayCommand extends Command {
 						adapterCreator: message.guild.voiceAdapterCreator,
 					}),
 				);
-				subscription.voiceConnection.on('error', console.warn);
+				subscription.voiceConnection.on('error', this.client.logger.error);
 				this.client.subscriptions.set(message.guild.id, subscription);
 			}
 		}
@@ -75,7 +75,7 @@ module.exports = class PlayCommand extends Command {
 					this.client.subscriptions.set(message.guild.id, subscription);
 
 					try {
-						await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 5e3);
+						await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 10e3);
 					}
 					catch (err) {
 						this.client.logger.error(err.stack);
