@@ -1,7 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 
-
 const { fun } = require('../../utils/emojis.js');
 
 const answers = [

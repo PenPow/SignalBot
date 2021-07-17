@@ -19,12 +19,12 @@ if (nodeMajorVersion < 14) {
  */
 const intents = new Intents();
 intents.add(
-	'GUILDS',
-	'GUILD_MESSAGES',
-	'DIRECT_MESSAGES',
-	'GUILD_BANS',
-	'GUILD_MEMBERS',
-	'GUILD_VOICE_STATES',
+	Intents.FLAGS.GUILDS,
+	Intents.FLAGS.GUILD_MESSAGES,
+	Intents.FLAGS.DIRECT_MESSAGES,
+	Intents.FLAGS.GUILD_BANS,
+	Intents.FLAGS.GUILD_MEMBERS,
+	Intents.FLAGS.GUILD_VOICE_STATES,
 );
 
 /**
