@@ -91,12 +91,12 @@ module.exports = class KickCommand extends Command {
 			// eslint disable-line
 		}
 
-		if (!member) return this.sendSlashErrorMessage(interaction, 0, 'Please provide a user');
-		if (member === interaction.member) return this.sendSlashErrorMessage(interaction, 0, 'You cannot kick yourself');
-		if (member === interaction.guild.me) return this.sendSlashErrorMessage(interaction, 0, 'You cannot kick me');
-		if (!member.kickable) return this.sendSlashErrorMessage(interaction, 0, 'Provided member is not kickable');
-		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendSlashErrorMessage(interaction, 0, 'You cannot kick someone with an equal or higher role');
-		if (member.user.bot) return this.sendSlashErrorMessage(interaction, 0, 'I cannot punish a bot.');
+		if (!member) return this.sendErrorMessage(interaction, 0, 'Please provide a user');
+		if (member === interaction.member) return this.sendErrorMessage(interaction, 0, 'You cannot kick yourself');
+		if (member === interaction.guild.me) return this.sendErrorMessage(interaction, 0, 'You cannot kick me');
+		if (!member.kickable) return this.sendErrorMessage(interaction, 0, 'Provided member is not kickable');
+		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(interaction, 0, 'You cannot kick someone with an equal or higher role');
+		if (member.user.bot) return this.sendErrorMessage(interaction, 0, 'I cannot punish a bot.');
 
 		let reason = args.get('reason')?.value;
 		if (!reason) reason = '`No Reason Provided`';
@@ -132,7 +132,7 @@ module.exports = class KickCommand extends Command {
 				target: member.id,
 				moderator: interaction.user.id,
 				reason: reason,
-				auditId: await this.sendSlashModLogMessage(interaction, reason, member.id, 'kick'),
+				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'kick'),
 			},
 		};
 

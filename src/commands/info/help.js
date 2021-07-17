@@ -120,7 +120,7 @@ module.exports = class HelpCommand extends Command {
 			if (command.examples) embed.addField('Examples', command.examples.map(c => `\`${prefix}${c}\``).join('\n'));
 		}
 		else if(args?.first()?.value && all) {
-			return this.sendSlashErrorMessage(interaction, 0, 'Unable to find command, please check provided command');
+			return this.sendErrorMessage(interaction, 0, 'Unable to find command, please check provided command');
 		}
 		else {
 			const commands = {};

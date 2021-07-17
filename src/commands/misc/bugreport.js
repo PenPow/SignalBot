@@ -66,7 +66,7 @@ module.exports = class BugReportCommand extends Command {
 			this.client.logger.error(`An Error Occured in Fetching Channel ->\n${e}`);
 		}
 
-		if (!feedbackChannel) return this.sendSlashErrorMessage(interaction, 1, 'Unable to find bug report channel');
+		if (!feedbackChannel) return this.sendErrorMessage(interaction, 1, 'Unable to find bug report channel');
 
 		const feedbackEmbed = new SignalEmbed(interaction)
 			.setTitle(`${info2} Bug Report`)

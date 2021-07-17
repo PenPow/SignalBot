@@ -112,13 +112,13 @@ module.exports = class UnbanCommand extends Command {
 			// eslint disable-line
 		}
 
-		if (!member) return this.sendSlashErrorMessage(interaction, 0, 'Please mention a user, provide a valid user ID, or provide a valid case ID');
+		if (!member) return this.sendErrorMessage(interaction, 0, 'Please mention a user, provide a valid user ID, or provide a valid case ID');
 
 		let reason = args.get('reason')?.value;
 		if (!reason) reason = '`No Reason Provided`';
 		if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
 
-		if (member.bot) return this.sendSlashErrorMessage(interaction, 0, 'I cannot edit a bot.');
+		if (member.bot) return this.sendErrorMessage(interaction, 0, 'I cannot edit a bot.');
 
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 		const oldCaseInfo = this.client.db.get(`lastcase-ban-${member.id}`);
@@ -143,7 +143,7 @@ module.exports = class UnbanCommand extends Command {
 				moderator: interaction.user.id,
 				reason: reason,
 				expiry: null,
-				auditId: await this.sendSlashModLogMessage(interaction, reason, member.id, 'unban'),
+				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'unban'),
 			},
 		};
 

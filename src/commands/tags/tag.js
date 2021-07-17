@@ -367,7 +367,7 @@ module.exports = class TagCommand extends Command {
 				}
 			}
 
-			if(!interaction.member.permissions.has('ADMINISTRATOR') || interaction.user.id !== tag.user.id) return this.sendSlashErrorMessage(interaction, 2, 'You do not have permission to edit this tag.');
+			if(!interaction.member.permissions.has('ADMINISTRATOR') || interaction.user.id !== tag.user.id) return this.sendErrorMessage(interaction, 2, 'You do not have permission to edit this tag.');
 
 			if(!found) {
 				embed.setTitle(`${store} No Tag Found`)
@@ -406,7 +406,7 @@ module.exports = class TagCommand extends Command {
 
 			for(let i = 0; i < tags.length; i++) {
 				if(tags[i].name.toLowerCase() === args.get('delete').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()) {
-					if(!interaction.member.permissions.has('ADMINISTRATOR') || interaction.user.id !== tags[i].user.id) return this.sendSlashErrorMessage(interaction, 2, 'You do not have permission to delete this tag.');
+					if(!interaction.member.permissions.has('ADMINISTRATOR') || interaction.user.id !== tags[i].user.id) return this.sendErrorMessage(interaction, 2, 'You do not have permission to delete this tag.');
 					tags.splice(i, 1);
 					this.client.db.set(`guild_tags_${interaction.guild.id}`, tags);
 

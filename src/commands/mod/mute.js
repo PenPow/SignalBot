@@ -119,34 +119,34 @@ module.exports = class MuteCommand extends Command {
 	async slashRun(interaction, args) {
 		const muteRole = this.client.db.get(`muterole-${interaction.guild.id}`) || interaction.guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 
-		if(!muteRole) return this.sendSlashErrorMessage(interaction, 1, 'There is currently no mute role set on this server');
+		if(!muteRole) return this.sendErrorMessage(interaction, 1, 'There is currently no mute role set on this server');
 
 		const member = args.first()?.member;
 
 
-		if (!member) return this.sendSlashErrorMessage(interaction, 0, 'Please mention a user or provide a valid user ID');
-		if (member === interaction.member) return this.sendSlashErrorMessage(interaction, 0, 'You cannot mute yourself');
-		if (member === interaction.guild.me) return this.sendSlashErrorMessage(interaction, 0, 'You cannot mute me');
-		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendSlashErrorMessage(interaction, 0, 'You cannot mute someone with an equal or higher role');
-		if (!args.get('time').value) return this.sendSlashErrorMessage(interaction, 0, 'Please enter a length of time (1s/m/h/d/w/y)');
-		if (member.user.bot) return this.sendSlashErrorMessage(interaction, 0, 'I cannot punish a bot.');
+		if (!member) return this.sendErrorMessage(interaction, 0, 'Please mention a user or provide a valid user ID');
+		if (member === interaction.member) return this.sendErrorMessage(interaction, 0, 'You cannot mute yourself');
+		if (member === interaction.guild.me) return this.sendErrorMessage(interaction, 0, 'You cannot mute me');
+		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(interaction, 0, 'You cannot mute someone with an equal or higher role');
+		if (!args.get('time').value) return this.sendErrorMessage(interaction, 0, 'Please enter a length of time (1s/m/h/d/w/y)');
+		if (member.user.bot) return this.sendErrorMessage(interaction, 0, 'I cannot punish a bot.');
 
 		let time = ms(args.get('time').value);
 
 		if(Math.sign(time) < 0) parseInt(time *= -1);
 
-		if (typeof time !== 'number') return this.sendSlashErrorMessage(interaction, 0, 'Please enter a valid length of time (1s/m/h/d/w/y)');
+		if (typeof time !== 'number') return this.sendErrorMessage(interaction, 0, 'Please enter a valid length of time (1s/m/h/d/w/y)');
 		let reason = args.get('reason')?.value;
 		if (!reason) reason = '`No Reason Provided`';
 		if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
 
-		if (member.roles.cache.has(muteRole.id)) return this.sendSlashErrorMessage(interaction, 0, 'Provided member is already muted');
+		if (member.roles.cache.has(muteRole.id)) return this.sendErrorMessage(interaction, 0, 'Provided member is already muted');
 
 		try {
 			await member.roles.add(muteRole.id);
 		}
 		catch(e) {
-			return this.sendSlashErrorMessage(interaction, 1, 'Please check the role hierarchy', e.message);
+			return this.sendErrorMessage(interaction, 1, 'Please check the role hierarchy', e.message);
 		}
 
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
@@ -185,7 +185,7 @@ module.exports = class MuteCommand extends Command {
 				moderator: interaction.user.id,
 				reason: reason,
 				expiry: new Date(expireDate + time).getTime(),
-				auditId: await this.sendSlashModLogMessage(interaction, reason, member.id, 'mute'),
+				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'mute'),
 			},
 		};
 

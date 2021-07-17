@@ -45,8 +45,8 @@ module.exports = class NicknameCommand extends Command {
 	async slashRun(interaction, args) {
 		const nickname = args.first()?.value;
 
-		if (nickname.length > 32) {return this.sendSlashErrorMessage(interaction, 0, 'Please ensure the nickname is no larger than 32 characters');}
-		else if(interaction.user.id === interaction.guild.ownerID) {return this.sendSlashErrorMessage(interaction, 1, 'Unable to change the nickname of server owner');}
+		if (nickname.length > 32) {return this.sendErrorMessage(interaction, 0, 'Please ensure the nickname is no larger than 32 characters');}
+		else if(interaction.user.id === interaction.guild.ownerID) {return this.sendErrorMessage(interaction, 1, 'Unable to change the nickname of server owner');}
 		else {
 			try {
 				const oldNickname = interaction.member.nickname || '`None`';
@@ -60,7 +60,7 @@ module.exports = class NicknameCommand extends Command {
 				interaction.reply({ ephemeral: true, embeds: [embed] });
 			}
 			catch (err) {
-				this.sendSlashErrorMessage(interaction, 1, 'Please check the role hierarchy', err.message);
+				this.sendErrorMessage(interaction, 1, 'Please check the role hierarchy', err.message);
 			}
 		}
 	}

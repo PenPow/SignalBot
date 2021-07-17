@@ -102,7 +102,7 @@ module.exports = class ChannelInfoCommand extends Command {
 			if (members.length > 0) {embed.addField('Members Joined', interaction.client.utils.trimArray(channel.members.array()).join(' '));}
 		}
 		else {
-			return this.sendSlashErrorMessage(interaction, 0, stripIndent`
+			return this.sendErrorMessage(interaction, 0, stripIndent`
       Please enter mention a valid text or announcement channel` +
       ' or provide a valid text, announcement, or voice channel ID',
 			);

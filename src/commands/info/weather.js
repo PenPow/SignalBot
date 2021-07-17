@@ -46,7 +46,7 @@ module.exports = class WeatherCommand extends Command {
 		try {
 			weather.find({ search: args.first().value, degreeType: 'C' }, (err, result) => {
 				if(err) interaction.channel.send(err.message);
-				if(result.length === 0) return this.sendSlashErrorMessage(interaction, 1, 'Please Enter a valid location!');
+				if(result.length === 0) return this.sendErrorMessage(interaction, 1, 'Please Enter a valid location!');
 				const current = result[0].current;
 				const location = result[0].location;
 
@@ -65,7 +65,7 @@ module.exports = class WeatherCommand extends Command {
 			});
 		}
 		catch (err) {
-			this.sendSlashErrorMessage(interaction, 1, 'City not Found');
+			this.sendErrorMessage(interaction, 1, 'City not Found');
 		}
 	}
 

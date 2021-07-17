@@ -129,10 +129,10 @@ module.exports = class PlayCommand extends Command {
 				this.client.subscriptions.set(interaction.guild.id, subscription);
 			}
 		}
-		else if(interaction.member.voice.channel.id !== subscription.voiceConnection.joinConfig.channelId) { return this.sendSlashErrorMessage(interaction, 2, 'Please join the voice channel with the bot.'); }
+		else if(interaction.member.voice.channel.id !== subscription.voiceConnection.joinConfig.channelId) { return this.sendErrorMessage(interaction, 2, 'Please join the voice channel with the bot.'); }
 
 		if (!subscription) {
-			return await this.sendSlashErrorMessage(interaction, 2, 'Please join a voice channel');
+			return await this.sendErrorMessage(interaction, 2, 'Please join a voice channel');
 		}
 
 		const embed = new SignalEmbed(interaction)
@@ -166,17 +166,17 @@ module.exports = class PlayCommand extends Command {
 					}
 					catch (err) {
 						this.client.logger.error(err.stack);
-						return this.sendSlashErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', err.message);
+						return this.sendErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', err.message);
 					}
 				}
 				catch(err) {
-					return this.sendSlashErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', err.message);
+					return this.sendErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', err.message);
 				}
 			}
 		}
 		try {
 			const url = ytdl.validateURL(args.get('song')) ? args.get('song')?.value : (await ytSearch(args.get('song')?.value))?.all[0]?.url;
-			if(!url) return this.sendSlashErrorMessage(interaction, 0, 'I was unable to find a song to play ');
+			if(!url) return this.sendErrorMessage(interaction, 0, 'I was unable to find a song to play ');
 
 			const track = await Track.from(url, {
 				onStart() {},
@@ -193,7 +193,7 @@ module.exports = class PlayCommand extends Command {
 		}
 		catch(e) {
 			this.client.logger.error(e.stack);
-			return this.sendSlashErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', e.message);
+			return this.sendErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', e.message);
 		}
 	}
 

@@ -121,12 +121,12 @@ module.exports = class BanCommand extends Command {
 			// eslint disable-line
 		}
 
-		if (!member) return this.sendSlashErrorMessage(interaction, 0, 'Please mention a user or provide a valid user ID');
-		if (member === interaction.member) return this.sendSlashErrorMessage(interaction, 0, 'You cannot ban yourself');
-		if (member === interaction.guild.me) return this.sendSlashErrorMessage(interaction, 0, 'You cannot ban me');
-		if (!member.bannable) return this.sendSlashErrorMessage(interaction, 0, 'Provided member is not bannable');
-		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendSlashErrorMessage(interaction, 0, 'You cannot ban someone with an equal or higher role');
-		if (member.user.bot) return this.sendSlashErrorMessage(interaction, 0, 'I cannot punish a bot.');
+		if (!member) return this.sendErrorMessage(interaction, 0, 'Please mention a user or provide a valid user ID');
+		if (member === interaction.member) return this.sendErrorMessage(interaction, 0, 'You cannot ban yourself');
+		if (member === interaction.guild.me) return this.sendErrorMessage(interaction, 0, 'You cannot ban me');
+		if (!member.bannable) return this.sendErrorMessage(interaction, 0, 'Provided member is not bannable');
+		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(interaction, 0, 'You cannot ban someone with an equal or higher role');
+		if (member.user.bot) return this.sendErrorMessage(interaction, 0, 'I cannot punish a bot.');
 		let time = ms(args.get('time')?.value);
 
 		if(!isNaN(time) && Math.sign(time) < 0) parseInt(time *= -1);

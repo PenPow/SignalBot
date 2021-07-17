@@ -87,7 +87,7 @@ module.exports = class ReasonCommand extends Command {
 
 		const sentMessage = await modLog.messages.fetch(caseInformation.caseInfo.auditId);
 
-		if(!sentMessage?.embeds[0]) return this.sendSlashErrorMessage(interaction, 1, 'Failed to find a message to update.');
+		if(!sentMessage?.embeds[0]) return this.sendErrorMessage(interaction, 1, 'Failed to find a message to update.');
 		const caseID = sentMessage.embeds[0].footer.text.substring(6);
 
 		const descriptionArray = sentMessage.embeds[0].description.split('\n');

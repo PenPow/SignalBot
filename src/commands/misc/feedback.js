@@ -66,7 +66,7 @@ module.exports = class FeedbackCommand extends Command {
 			this.client.logger.error(`An Error Occured in Fetching Channel ->\n${e}`);
 		}
 
-		if (!feedbackChannel) return this.sendSlashErrorMessage(interaction, 1, 'Unable to find feedback channel');
+		if (!feedbackChannel) return this.sendErrorMessage(interaction, 1, 'Unable to find feedback channel');
 
 		const feedbackEmbed = new SignalEmbed(interaction)
 			.setTitle(`${unread_pin} New Feedback`)

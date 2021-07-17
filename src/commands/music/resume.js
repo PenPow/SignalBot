@@ -32,10 +32,10 @@ module.exports = class ResumeCommand extends Command {
 
 	async slashRun(interaction) {
 		const subscription = this.client.subscriptions.get(interaction.guild.id);
-		if(!subscription) return this.sendSlashErrorMessage(interaction, 2, 'I am not playing anything in this server');
-		if(!interaction.member.voice.channel) return this.sendSlashErrorMessage(interaction, 2, 'You are not in a voice channel');
-		if(interaction.member.voice.channel.id !== subscription?.voiceConnection.joinConfig.channelId) return this.sendSlashErrorMessage(interaction, 2, 'You are not in the same voice channel as the bot');
-		if(!interaction.member.permissions.has('ADMINISTRATOR') && interaction.member.voice.channel.members.size > 2) return this.sendSlashErrorMessage(interaction, 2, 'Too many people in channel. You require \'Administrator\' or be alone with the bot');
+		if(!subscription) return this.sendErrorMessage(interaction, 2, 'I am not playing anything in this server');
+		if(!interaction.member.voice.channel) return this.sendErrorMessage(interaction, 2, 'You are not in a voice channel');
+		if(interaction.member.voice.channel.id !== subscription?.voiceConnection.joinConfig.channelId) return this.sendErrorMessage(interaction, 2, 'You are not in the same voice channel as the bot');
+		if(!interaction.member.permissions.has('ADMINISTRATOR') && interaction.member.voice.channel.members.size > 2) return this.sendErrorMessage(interaction, 2, 'Too many people in channel. You require \'Administrator\' or be alone with the bot');
 
 		subscription.audioPlayer.unpause();
 

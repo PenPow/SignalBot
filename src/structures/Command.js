@@ -216,49 +216,20 @@ class Command {
      */
 	checkUserPermissions(message, ownerOverride = true) {
 		if(!this.ownerOnly && !this.userPermissions) return true;
-		if(ownerOverride && this.client.isOwner(message.author)) return true;
+		if(ownerOverride && this.client.isOwner(message.member)) return true;
 
-		if(this.ownerOnly && !this.client.isOwner(message.author)) return false;
+		if(this.ownerOnly && !this.client.isOwner(message.member)) return false;
 
-		if(message.guild.members.cache.get(message.author.id).permissions.has('ADMINISTRATOR')) return true;
+		if(message.guild.members.cache.get(message.member.id).permissions.has('ADMINISTRATOR')) return true;
 		if(this.userPermissions !== null) {
-			const missingPermissions = message.channel.permissionsFor(message.author).missing(this.userPermissions).map(p => permissions[p]);
+			const missingPermissions = message.channel.permissionsFor(message.author || message.user).missing(this.userPermissions).map(p => permissions[p]);
 			if(missingPermissions.length !== 0) {
 				const embed = new SignalEmbed(message)
-					.setAuthor(`${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
+					.setAuthor(`${message?.author?.tag || message?.user?.tag}`, message?.author?.displayAvatarURL({ dynamic: true }) || message?.user?.displayAvatarURL({ dynamic: true }))
 					.setTitle(`${fail} Missing User Permissions`)
 					.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
 
-				message.reply({ embeds: [embed] });
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
-     * Checks the user permissions (Slash Commands)
-     * Code modified from: https://github.com/discordjs/Commando/blob/master/src/commands/base.js
-     * @param {Message} message
-     * @param {boolean} ownerOverride
-     */
-	checkSlashUserPermissions(message, ownerOverride = true) {
-		if(!this.ownerOnly && !this.userPermissions) return true;
-		if(ownerOverride && this.client.isOwner(message.user)) return true;
-
-		if(this.ownerOnly && !this.client.isOwner(message.author)) return false;
-
-		if(message.guild.members.cache.get(message.user.id).permissions.has('ADMINISTRATOR')) return true;
-		if(this.userPermissions !== null) {
-			const missingPermissions = message.channel.permissionsFor(message.user).missing(this.userPermissions).map(p => permissions[p]);
-			if(missingPermissions.length !== 0) {
-				const embed = new SignalEmbed(message)
-					.setAuthor(`${message.user.tag}`, message.user.displayAvatarURL({ dynamic: true }))
-					.setTitle(`${fail} Missing User Permissions`)
-					.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
-
-				message.reply({ ephemeral: true, embeds: [embed] });
+				message.reply({ embeds: [embed], ephemeral: true });
 				return false;
 			}
 		}
@@ -278,7 +249,7 @@ class Command {
 				.setTitle(`${fail} Missing Bot Permissions`)
 				.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
 
-			message.reply({ embeds: [embed] });
+			message.reply({ embeds: [embed], ephemeral: true });
 			return false;
 		}
 		else {return true;}
@@ -295,7 +266,9 @@ class Command {
 	sendErrorMessage(message, errorType, reason, errorMessage = null, fatal = false) {
 		errorType = this.errorTypes[errorType];
 
-		const prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
+		let prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
+
+		if(!message?.author) prefix = '/';
 
 		const embed = new SignalEmbed(message)
 			.setDescription(`\`\`\`diff\n- ${errorType}\n+ ${reason}\`\`\``);
@@ -314,39 +287,15 @@ class Command {
 
 		if(errorMessage) embed.addField('Error Message', `\`\`\`${errorMessage}\`\`\``);
 
-		return message.reply({ embeds: [embed] });
-
-	}
-
-	/**
-     * Creates and sends command failure embed (Slash Command)
-     * @param {Message} message
-     * @param {int} errorType
-     * @param {string} reason
-     * @param {string} errorMessage
-     * @param {boolean} fatal
-     */
-	sendSlashErrorMessage(interaction, errorType, reason, errorMessage, fatal = false) {
-		errorType = this.errorTypes[errorType];
-
-		const embed = new SignalEmbed(interaction)
-			.setDescription(`\`\`\`diff\n- ${errorType}\n+ ${reason}\`\`\``);
-
-		if(fatal) {
-			embed.setTitle(`${fail} Fatal Error`)
-				.addField('Fatal Error', 'This is an error with Signal, please report it on the support discord');
+		try {
+			message.reply({ embeds: [embed], ephemeral: true });
+		}
+		catch(e) {
+			message.followUp({ ephemeral: true, embeds: [embed] });
 		}
 
-		else {
-			embed.setTitle(`${fail} Error`)
-				.addField('Usage', `\`/${this.usage}\``);
+		return;
 
-			if(this.examples) embed.addField('Examples', this.examples.map(e => `\`/${e}\``).join('\n'));
-		}
-
-		if(errorMessage) embed.addField('Error Message', `\`\`\`${errorMessage}\`\`\``);
-
-		return interaction.replied ? interaction.followUp({ ephemeral: true, embeds: [embed] }) : interaction.reply({ ephemeral: true, embeds: [embed] });
 	}
 
 	/**
@@ -368,12 +317,12 @@ class Command {
 			const embed = new SignalEmbed(message)
 				.setFooter(`Case #${caseNumber}`)
 				.setThumbnail(user.displayAvatarURL({ dynamic: true }))
-				.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL({ dynamic: true }));
+				.setAuthor(`${message?.author?.tag || message?.user?.tag} (${message?.author?.id || message?.user?.id})`, message?.author?.displayAvatarURL({ dynamic: true }) || message?.user?.displayAvatarURL({ dynamic: true }));
 
 			switch(action) {
 
 			case 'mute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Context:** [Link](${message.url})\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Context:** ${message?.url ? `[Link](${message?.url})` : 'No Context Found'}\n**Reason:** ${reason}`);
 				embed.setColor('#ffcc00');
 				break;
 
@@ -413,73 +362,6 @@ class Command {
 			}
 
 			const sentMessage = await modLog.send({ embeds: [embed] }).catch(err => message.client.logger.error(err.stack));
-
-			return sentMessage.id;
-		}
-	}
-
-	/**
-     * Creates and Sends Mod Log Embed (Slash Command)
-     * @param {CommandInteraction} interaction
-     * @param {string} reason
-	 * @param {User} target
-     * @param {Object} fields
-     */
-	async sendSlashModLogMessage(interaction, reason, target, action, fields = {}) {
-		await interaction.guild.channels.fetch();
-		const user = await interaction.client.users.fetch(target);
-		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
-		if(modLog && modLog.viewable && modLog.permissionsFor(interaction.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
-			const caseNumber = parseInt(interaction.client.utils.getCaseNumber(interaction.client, interaction.guild, modLog));
-			const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`) || interaction.client.prefix;
-			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
-			const embed = new SignalEmbed(interaction)
-				.setFooter(`Case #${caseNumber}`)
-				.setThumbnail(user.displayAvatarURL({ dynamic: true }))
-				.setAuthor(`${interaction.user.tag} (${interaction.user.id})`, interaction.user.displayAvatarURL({ dynamic: true }));
-			switch(action) {
-
-			case 'mute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Context:** *Not Avaliable due to Slash Command Usage*\n**Reason:** ${reason}`);
-				embed.setColor('#ffcc00');
-				break;
-
-			case 'unmute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#7ef31f');
-				break;
-
-			case 'unban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#7ef31f');
-				break;
-
-			case 'ban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#ff1a00');
-				break;
-
-			case 'kick':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#f98406');
-				break;
-
-			case 'softban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#f98406');
-				break;
-
-			case 'default':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#ff1a00');
-				break;
-
-			}
-
-			for(const field in fields) {
-				embed.addField(field, fields[field], true);
-			}
-			const sentMessage = await modLog.send({ embeds: [embed] }).catch(err => interaction.client.logger.error(err.stack));
 
 			return sentMessage.id;
 		}

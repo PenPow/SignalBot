@@ -43,7 +43,7 @@ module.exports = class QueueCommand extends Command {
 
 	async slashRun(interaction) {
 		const subscription = this.client.subscriptions.get(interaction.guild.id);
-		if(!subscription) return this.sendSlashErrorMessage(interaction, 2, 'I am not playing anything in the server');
+		if(!subscription) return this.sendErrorMessage(interaction, 2, 'I am not playing anything in the server');
 
 		const current =
 				subscription.audioPlayer.state.status === AudioPlayerStatus.Idle

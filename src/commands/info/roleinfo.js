@@ -48,7 +48,7 @@ module.exports = class RoleInfoCommand extends Command {
 
 	async slashRun(interaction, args) {
 		const role = args.first().role;
-		if (!role) return this.sendSlashErrorMessage(interaction, 0, 'Please mention a role or provide a valid role ID');
+		if (!role) return this.sendErrorMessage(interaction, 0, 'Please mention a role or provide a valid role ID');
 
 		const rolePermissions = role.permissions.toArray();
 		const finalPermissions = [];

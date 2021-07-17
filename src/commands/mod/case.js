@@ -71,7 +71,7 @@ module.exports = class ReasonCommand extends Command {
 		else { caseID = args.get('caseid'); }
 
 		const caseInfo = this.client.db.get(`case-${interaction.guild.id}-${caseID}`);
-		if(!caseInfo) return this.sendSlashErrorMessage(interaction, 2, 'No Cases Found');
+		if(!caseInfo) return this.sendErrorMessage(interaction, 2, 'No Cases Found');
 		const target = await this.client.users.fetch(caseInfo.caseInfo.target);
 		const moderator = await interaction.guild.members.fetch(caseInfo.caseInfo.moderator);
 

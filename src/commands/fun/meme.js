@@ -50,7 +50,7 @@ module.exports = class MemeCommand extends Command {
 		}
 		catch(err) {
 			interaction.client.logger.error(err.stack);
-			this.sendSlashErrorMessage(interaction, 1, 'Please try again in a few seconds', err.message);
+			this.sendErrorMessage(interaction, 1, 'Please try again in a few seconds', err.message);
 		}
 	}
 

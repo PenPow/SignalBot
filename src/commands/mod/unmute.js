@@ -106,7 +106,7 @@ module.exports = class UnmuteCommand extends Command {
 	async slashRun(interaction, args) {
 		const muteRole = this.client.db.get(`muterole-${interaction.guild.id}`) || interaction.guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 
-		if(!muteRole) return this.sendSlashErrorMessage(interaction, 1, 'There is currently no mute role set on this server');
+		if(!muteRole) return this.sendErrorMessage(interaction, 1, 'There is currently no mute role set on this server');
 
 		let member;
 
@@ -119,16 +119,16 @@ module.exports = class UnmuteCommand extends Command {
 
 		if(!member) member = (await interaction.guild.members.fetch());
 
-		if (!member) return this.sendSlashErrorMessage(interaction, 0, 'Please mention a user, or provide a valid case ID');
-		if (member.roles.highest.position >= interaction.member.roles.highest.position) return this.sendSlashErrorMessage(interaction, 0, 'You cannot umute someone with an equal or higher role');
+		if (!member) return this.sendErrorMessage(interaction, 0, 'Please mention a user, or provide a valid case ID');
+		if (member.roles.highest.position >= interaction.member.roles.highest.position) return this.sendErrorMessage(interaction, 0, 'You cannot umute someone with an equal or higher role');
 
 		let reason = args.get('reason')?.value;
 		if (!reason) reason = '`No Reason Provided`';
 		if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
 
-		if (member.user.bot) return this.sendSlashErrorMessage(interaction, 0, 'I cannot edit a bot.');
+		if (member.user.bot) return this.sendErrorMessage(interaction, 0, 'I cannot edit a bot.');
 
-		if (!member.roles.cache.has(muteRole.id)) return this.sendSlashErrorMessage(interaction, 0, 'Provided member is not muted');
+		if (!member.roles.cache.has(muteRole.id)) return this.sendErrorMessage(interaction, 0, 'Provided member is not muted');
 
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 		const oldCaseInfo = this.client.db.get(`lastcase-mute-${member.id}`);
@@ -176,7 +176,7 @@ module.exports = class UnmuteCommand extends Command {
 				moderator: interaction.user.id,
 				reason: reason,
 				expiry: null,
-				auditId: await this.sendSlashModLogMessage(interaction, reason, member.id, 'unmute'),
+				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'unmute'),
 			},
 		};
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, muteObject);

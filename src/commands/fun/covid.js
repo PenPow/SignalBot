@@ -87,7 +87,7 @@ module.exports = class CovidCommand extends Command {
 
 					interaction.reply({ ephemeral: true, embeds: [embed] });
 				}).catch(() => {
-					this.sendSlashErrorMessage(interaction, 1, 'Invalid country provided');
+					this.sendErrorMessage(interaction, 1, 'Invalid country provided');
 				});
 		}
 	}

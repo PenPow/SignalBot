@@ -35,7 +35,7 @@ module.exports = class RollCommand extends Command {
 
 		const n = Math.floor(Math.random() * limit + 1);
 
-		if (!n || limit <= 0) return this.sendSlashErrorMessage(interaction, 0, 'Please provide a valid number of dice sides');
+		if (!n || limit <= 0) return this.sendErrorMessage(interaction, 0, 'Please provide a valid number of dice sides');
 
 		const embed = new SignalEmbed(interaction)
 			.setTitle(`${fun} Dice Roll 🎲`)
