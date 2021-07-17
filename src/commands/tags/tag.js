@@ -85,7 +85,7 @@ module.exports = class TagCommand extends Command {
 						.then(async (collected2) => {
 							for(let i = 0; i < tags.length; i++) {
 								if(tags[i].name === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
-									tags[i].content = collected2.first().content;
+									tags[i].content = collected2.first().content.slice(0, 1997) + '...';
 									tags[i].modifiedAt = `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`;
 									tags[i].modified.user = { tag: message.author.tag, id: message.author.id };
 								}
@@ -301,9 +301,7 @@ module.exports = class TagCommand extends Command {
 									return;
 								}
 							}
-
-							await tags.push({ uses: 0, name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content, user: { tag: message.author.tag, id: message.author.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: message.author.tag, id: message.author.id } } });
-							this.client.db.push(`guild_tags_${message.guild.id}`, { uses: 0, name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content, user: { tag: message.author.tag, id: message.author.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: message.author.tag, id: message.author.id } } });
+							this.client.db.push(`guild_tags_${message.guild.id}`, { uses: 0, name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content.slice(0, 1997) + '...', user: { tag: message.author.tag, id: message.author.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: message.author.tag, id: message.author.id } } });
 							embed.setTitle(`${store} Creating a New Tag (3/3)`)
 								.setDescription(`Tag Successfully Created, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()}\``);
 
@@ -380,7 +378,7 @@ module.exports = class TagCommand extends Command {
 
 			for(let i = 0; i < tags.length; i++) {
 				if(tags[i].name === args.get('edit').options.get('name')?.value.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
-					tags[i].content = args.get('edit').options.get('content')?.value;
+					tags[i].content = args.get('edit').options.get('content')?.value.slice(0, 1997) + '...';
 					tags[i].modifiedAt = `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`;
 					tags[i].modified.user = { tag: interaction.user.tag, id: interaction.user.id };
 				}
@@ -480,7 +478,7 @@ module.exports = class TagCommand extends Command {
 					return;
 				}
 			}
-			this.client.db.push(`guild_tags_${interaction.guild.id}`, { uses: 0, name: args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase(), content: args.get('create').options.get('content')?.value, user: { tag: interaction.user.tag, id: interaction.user.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: interaction.user.tag, id: interaction.user.id } } });
+			this.client.db.push(`guild_tags_${interaction.guild.id}`, { uses: 0, name: args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase(), content: args.get('create').options.get('content')?.value.slice(0, 1997) + '...', user: { tag: interaction.user.tag, id: interaction.user.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: interaction.user.tag, id: interaction.user.id } } });
 			const embed = new SignalEmbed(interaction).setTitle(`${store} Creating a New Tag (3/3)`)
 				.setDescription(`Tag Successfully Created, access it through \`${this.client.db.get(`${interaction.guild.id}_prefix`)}${args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()}\``);
 
