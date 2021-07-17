@@ -10,7 +10,7 @@ module.exports = class TagCommand extends Command {
 			aliases: ['tags'],
 			description: 'Creates/Lists/Shows/Edits/Deletes a tag (run s!tags guide for more information)',
 			type: client.types.TAG,
-			examples: ['tag create', 'tag show cheeze', 'tage delete cheeze', 'tag edit cheeze', 'tag guide'],
+			examples: ['tag create', 'tag show', 'tage delete', 'tag edit', 'tag guide'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
 			guildOnly: true,
@@ -27,6 +27,76 @@ module.exports = class TagCommand extends Command {
 				.setDescription('To see how to use the tag system, view the guide [here](https://github.com/PenPow/SignalBot/wiki/Tag-System)');
 
 			message.reply({ embeds: [embed] });
+			break;
+		}
+		case 'delete': {
+			if(args[1]) {
+				await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
+				const tags = this.client.tags.get(message.guild.id);
+				const embed = new SignalEmbed(message)
+
+				if(!tags) {
+					embed
+						.setTitle(`${store} No Tags Found`)
+						.setDescription('There are no tags in this server');
+					return message.reply({ embeds: [embed] });
+				}
+
+				for(let i = 0; i < tags.length; i++) {
+					if(tags[i].name.toLowerCase() === args[1].toLowerCase()) {
+						this.client.db.remove(`guild_tags_${message.guild.id}`, tags[i]);
+						tags.splice(i, 1);
+						this.client.tags.set(message.guild.id, tags);
+
+						embed.setTitle(`${store} Tag Removed`)
+							.setDescription('Successfully removed the tag!');
+
+						return message.reply({ embeds: [embed] });
+					}
+				}
+
+				embed
+					.setTitle(`${store} No Tag Found`)
+					.setDescription(`There are no tags in this server named \`${args[1]}\``);
+				return message.reply({ embeds: [embed] });
+			}
+			else {
+				const embed = new SignalEmbed(message)
+					.setTitle(`${store} Which Tag?`)
+					.setDescription('Alright! What tag do you want me to delete?');
+
+				await message.reply({ embeds: [embed] });
+
+				const filter = (response) => response.author.id === message.author.id;
+				message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
+					.then(async (collected) => {
+						await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
+						const tags = this.client.tags.get(message.guild.id);
+
+						if(!tags) {
+							embed.setTitle(`${store} No Tags Found`)
+								.setDescription('There are no tags in this server');
+							return message.reply({ embeds: [embed] });
+						}
+
+						for(let i = 0; i < tags.length; i++) {
+							if(tags[i].name.toLowerCase() === collected.first().content.toLowerCase()) {
+								tags.splice(i, 1);
+								this.client.db.set(`guild_tags_${message.guild.id}`, tags);
+								this.client.tags.set(message.guild.id, tags);
+
+								embed.setTitle(`${store} Tag Removed`)
+									.setDescription('Successfully removed the tag!');
+
+								return message.reply({ embeds: [embed] });
+							}
+						}
+
+						embed.setTitle(`${store} No Tag Found`)
+							.setDescription(`There are no tags in this server named \`${collected.first().content}\``);
+						return message.reply({ embeds: [embed] });
+					});
+			}
 			break;
 		}
 		case 'show': {
@@ -63,7 +133,7 @@ module.exports = class TagCommand extends Command {
 				message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 					.then(async (collected) => {
 						await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
-						const tags = this.client.tags.get(message.guild.id);
+						const tags = this.client.tags.get(message.guild.id) || [];
 
 						if(!tags) {
 							embed.setTitle(`${store} No Tags Found`)
@@ -103,7 +173,7 @@ module.exports = class TagCommand extends Command {
 							if(!this.client.db.includes('guild_tags', message.guild.id)) this.client.db.push('guild_tags', message.guild.id);
 
 							await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
-							const tags = this.client.db.get(`guild_tags_${message.guild.id}`);
+							const tags = this.client.tags.get(message.guild.id) || [];
 
 							for(let i = 0; i < tags.length; i++) {
 								if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').toLowerCase()) {
@@ -130,6 +200,7 @@ module.exports = class TagCommand extends Command {
 								.setDescription('Prompt Expired');
 
 							await message.reply({ embeds: [embed] });
+
 						});
 				})
 				.catch(async () => {
