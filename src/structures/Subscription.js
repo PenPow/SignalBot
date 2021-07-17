@@ -15,12 +15,18 @@ function wait(time) {
  * and it also attaches logic to the audio player and voice connection for error handling and reconnection logic.
  */
 class MusicSubscription {
-	constructor(voiceConnection) {
+	constructor(client, voiceConnection) {
 		/**
          * The Voice Connection to the Discord Gateway
          * @type {VoiceConnection}
          */
 		this.voiceConnection = voiceConnection;
+
+		/**
+		 * The Discord Client
+		 * @type {SignalClient}
+		 */
+		this.client = client;
 
 		/**
          * The actual player that is created to play the music through the voice connection
@@ -52,8 +58,15 @@ class MusicSubscription {
 						// Probably moved voice channel
 					}
 					catch {
-						this.voiceConnection.destroy();
+						try {
+							this.voiceConnection.destroy();
+							await this.client.subscriptions.delete(this.voiceConnection.joinConfig.guildId);
 						// Probably removed from voice channel
+						}
+						// eslint-disable-next-line no-empty
+						catch(e) {
+
+						}
 					}
 				}
 				else if (this.voiceConnection.rejoinAttempts < 5) {
@@ -68,6 +81,7 @@ class MusicSubscription {
 						The disconnect in this case may be recoverable, but we have no more remaining attempts - destroy.
 					*/
 					this.voiceConnection.destroy();
+					await this.client.subscriptions.delete(this.voiceConnection.joinConfig.guildId);
 				}
 			}
 			else if (newState.status === VoiceConnectionStatus.Destroyed) {
@@ -75,6 +89,7 @@ class MusicSubscription {
 					Once destroyed, stop the subscription
 				*/
 				this.stop();
+				await this.client.subscriptions.delete(this.voiceConnection.joinConfig.guildId);
 			}
 			else if (
 				!this.readyLock &&
@@ -90,7 +105,10 @@ class MusicSubscription {
 					await entersState(this.voiceConnection, VoiceConnectionStatus.Ready, 20_000);
 				}
 				catch {
-					if (this.voiceConnection.state.status !== VoiceConnectionStatus.Destroyed) this.voiceConnection.destroy();
+					if (this.voiceConnection.state.status !== VoiceConnectionStatus.Destroyed) {
+						this.voiceConnection.destroy();
+						await this.client.subscriptions.delete(this.voiceConnection.joinConfig.guildId);
+					}
 				}
 				finally {
 					this.readyLock = false;
@@ -103,8 +121,7 @@ class MusicSubscription {
 				// If the Idle state is entered from a non-Idle state, it means that an audio resource has finished playing.
 				// The queue is then processed to start playing the next track, if one is available.
 				(oldState.resource)?.metadata?.onFinish();
-				if(this.queue.length === 0) this.voiceConnection.destroy();
-				void this.processQueue();
+				this.processQueue();
 			}
 			else if (newState.status === AudioPlayerStatus.Playing) {
 				// If the Playing state has been entered, then a new track has started playback.

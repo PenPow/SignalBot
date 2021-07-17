@@ -29,7 +29,7 @@ module.exports = class PlayCommand extends Command {
 		let subscription = this.client.subscriptions.get(message.guild.id);
 		if(!subscription) {
 			if(message.member instanceof GuildMember && message.member.voice.channel) {
-				subscription = new MusicSubscription(
+				subscription = new MusicSubscription(this.client,
 					joinVoiceChannel({
 						channelId: message.member.voice.channel.id,
 						guildId: message.guild.id,
@@ -49,12 +49,39 @@ module.exports = class PlayCommand extends Command {
 		message.reply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
 
 		try {
-			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 20e3);
+			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 5e3);
 		}
 		catch (e) {
-			this.client.logger.error(e.stack);
-			return this.sendErrorMessage(message, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', e.message);
+			if(!message.member.voice.channel.members.has(message.guild.me)) {
+				try {
+					await subscription.voiceConnection.destroy();
+					await subscription.stop();
+					await this.client.subscriptions.delete(message.guild.id);
+
+					subscription = new MusicSubscription(this.client,
+						joinVoiceChannel({
+							channelId: message.member.voice.channel.id,
+							guildId: message.guild.id,
+							adapterCreator: message.guild.voiceAdapterCreator,
+						}),
+					);
+					subscription.voiceConnection.on('error', console.warn);
+					this.client.subscriptions.set(message.guild.id, subscription);
+
+					try {
+						await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 5e3);
+					}
+					catch (err) {
+						this.client.logger.error(err.stack);
+						return this.sendErrorMessage(message, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', err.message);
+					}
+				}
+				catch(err) {
+					return this.sendErrorMessage(message, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', err.message);
+				}
+			}
 		}
+
 
 		try {
 			const url = ytdl.validateURL(args[0]) ? args[0] : (await ytSearch(args.join(' ')))?.all[0]?.url;
@@ -82,7 +109,7 @@ module.exports = class PlayCommand extends Command {
 		let subscription = this.client.subscriptions.get(interaction.guild.id);
 		if(!subscription) {
 			if(interaction.member instanceof GuildMember && interaction.member.voice.channel) {
-				subscription = new MusicSubscription(
+				subscription = new MusicSubscription(this.client,
 					joinVoiceChannel({
 						channelId: interaction.member.voice.channel.id,
 						guildId: interaction.guild.id,
@@ -102,13 +129,38 @@ module.exports = class PlayCommand extends Command {
 		await interaction.editReply({ content: '🔎 Searching! Please note that this make take up to 20 seconds while we connect to the voice gateway.' });
 
 		try {
-			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 20e3);
+			await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 5e3);
 		}
 		catch (e) {
-			this.client.logger.error(e.stack);
-			return this.sendSlashErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', e.message);
-		}
+			if(!interaction.member.voice.channel.members.has(interaction.guild.me)) {
+				try {
+					await subscription.voiceConnection.destroy();
+					await subscription.stop();
+					await this.client.subscriptions.delete(interaction.guild.id);
 
+					subscription = new MusicSubscription(this.client,
+						joinVoiceChannel({
+							channelId: interaction.member.voice.channel.id,
+							guildId: interaction.guild.id,
+							adapterCreator: interaction.guild.voiceAdapterCreator,
+						}),
+					);
+					subscription.voiceConnection.on('error', console.warn);
+					this.client.subscriptions.set(interaction.guild.id, subscription);
+
+					try {
+						await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 5e3);
+					}
+					catch (err) {
+						this.client.logger.error(err.stack);
+						return this.sendSlashErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', err.message);
+					}
+				}
+				catch(err) {
+					return this.sendSlashErrorMessage(interaction, 1, 'Signal is experiencing some heavy load right now, and was unable to connect to the voice gateway. This could be an error with the Discord API, so please try again later.', err.message);
+				}
+			}
+		}
 		try {
 			const url = ytdl.validateURL(args.get('song')) ? args.get('song')?.value : (await ytSearch(args.get('song')?.value))?.all[0]?.url;
 			if(!url) return this.sendSlashErrorMessage(interaction, 0, 'I was unable to find a song to play ');

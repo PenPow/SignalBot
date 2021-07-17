@@ -74,6 +74,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["os-utils", "npm:0.0.14"],
             ["perfect-logger", "npm:2.0.1"],
             ["prettier", "npm:2.3.1"],
+            ["prism-media", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:1.3.1"],
             ["redis", "npm:3.1.2"],
             ["system-sleep", "npm:1.3.7"],
             ["topgg-autoposter", "npm:1.1.10"],
@@ -4970,6 +4971,31 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
+        ["virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:1.3.1", {
+          "packageLocation": "./.yarn/$$virtual/prism-media-virtual-d78385aa92/0/cache/prism-media-npm-1.3.1-67bb6ad0fd-5d20527179.zip/node_modules/prism-media/",
+          "packageDependencies": [
+            ["prism-media", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:1.3.1"],
+            ["@discordjs/opus", "npm:0.5.3"],
+            ["@types/discordjs__opus", null],
+            ["@types/ffmpeg-static", null],
+            ["@types/node-opus", null],
+            ["@types/opusscript", null],
+            ["ffmpeg-static", "npm:4.4.0"],
+            ["node-opus", null],
+            ["opusscript", null]
+          ],
+          "packagePeers": [
+            "@discordjs/opus",
+            "@types/discordjs__opus",
+            "@types/ffmpeg-static",
+            "@types/node-opus",
+            "@types/opusscript",
+            "ffmpeg-static",
+            "node-opus",
+            "opusscript"
+          ],
+          "linkType": "HARD",
+        }],
         ["virtual:c97a8d96de976a4d5d6ead9f060baf694034caf6a90daf04ce4f4ba11f2481e76b7e3516e0a84af3a996305ff874dfe8410a2a0e6743ae2c8dfa20b6cfd8f016#npm:1.3.1", {
           "packageLocation": "./.yarn/$$virtual/prism-media-virtual-344de5f036/0/cache/prism-media-npm-1.3.1-67bb6ad0fd-5d20527179.zip/node_modules/prism-media/",
           "packageDependencies": [
@@ -5556,6 +5582,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["os-utils", "npm:0.0.14"],
             ["perfect-logger", "npm:2.0.1"],
             ["prettier", "npm:2.3.1"],
+            ["prism-media", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:1.3.1"],
             ["redis", "npm:3.1.2"],
             ["system-sleep", "npm:1.3.7"],
             ["topgg-autoposter", "npm:1.1.10"],
