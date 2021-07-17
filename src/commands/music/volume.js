@@ -7,7 +7,7 @@ module.exports = class VolumeCommand extends Command {
 		super(client, {
 			name: 'volume',
 			usage: 'volume',
-			description: 'Adjusts the volume for the currently playing resource, from 0 to 100% volume (Requires Administrator or for you to be alone with the bot)',
+			description: 'Adjusts the volume, from 0 to 100% (Requires Administrator or for you to be alone with the bot)',
 			type: client.types.MUSIC,
 			examples: ['volume'],
 			clientPermissions: ['EMBED_LINKS'],
