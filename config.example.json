@@ -10,7 +10,7 @@
             "token": ""
         },
         "redis": {
-            "password": ""
+            "url": ""
         }
     },
     
