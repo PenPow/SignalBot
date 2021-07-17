@@ -70,12 +70,6 @@ class Client extends Discord.Client {
 		this.subscriptions = new Discord.Collection();
 
 		/**
-		 * Current Tags
-		 * @type {Collection<Snowflake, string>}
-		 */
-		this.tags = new Discord.Collection();
-
-		/**
          * Discord Token
          * @type {string}
          */
@@ -129,7 +123,6 @@ class Client extends Discord.Client {
 		try {
 			this.actionManager.initCommands(this);
 			this.actionManager.initEvents(this);
-			this.actionManager.loadTags(this);
 			this.redis = this.actionManager.initRedis(this);
 			await this.login(this.token);
 		}

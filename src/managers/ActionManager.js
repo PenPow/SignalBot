@@ -73,22 +73,6 @@ class ActionManager {
 			enable_offline_queue: true,
 		});
 	}
-
-	/**
-	 * Loads Tags from the Database
-	 * @param {SignalClient} client
-	 */
-	async loadTags(client) {
-		await client.db.ensure('guild_tags', []);
-		const guilds = client.db.get('guild_tags');
-
-		for(const guild of guilds) {
-			await client.db.ensure(`guild_tags_${guild}`, []);
-			const tags = client.db.get(`guild_tags_${guild}`);
-
-			client.tags.set(guild, tags);
-		}
-	}
 }
 
 module.exports = ActionManager;

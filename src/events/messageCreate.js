@@ -1,9 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { oneLine } = require('common-tags');
 
-// const Filter = require('bad-words');
-// const filter = new Filter();
-
 class messageCreate {
 	constructor(client) {
 		this.client = client;
@@ -73,9 +70,11 @@ class messageCreate {
 			}
 
 			else {
-				const tags = this.client.tags.get(message.guild.id);
+				const tags = this.client.db.get(`guild_tags_${message.guild.id}`);
 				for(let i = 0; i < tags.length; i++) {
 					if(tags[i].name.toLowerCase() === cmd) {
+						tags[i].uses = tags[i].uses + 1;
+						this.client.db.set(`guild_tags_${message.guild.id}`, tags);
 						return message.reply({ content: tags[i].content });
 					}
 				}

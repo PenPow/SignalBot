@@ -17,6 +17,8 @@ module.exports = class TagCommand extends Command {
 		});
 	}
 	async run(message, args) {
+		await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
+		await this.client.db.ensure('guild_tags', []);
 		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please specify a sub command (create, show, delete, edit or guide)');
 		if(!['create', 'edit', 'show', 'delete', 'guide', 'list'].includes(args[0].toLowerCase())) return this.sendErrorMessage(message, 0, 'Please specify a valid sub command (create, show, delete, edit or guide)');
 
@@ -30,7 +32,7 @@ module.exports = class TagCommand extends Command {
 			break;
 		}
 		case 'list': {
-			const tags = this.client.tags.get(message.guild.id) || [];
+			const tags = this.client.db.get(`guild_tags_${message.guild.id}`) || [];
 			const embed = new SignalEmbed(message).setTitle(`${store} Tags in ${message.guild.name}`);
 			let description;
 			for(let i = 0; i < tags.length; i++) {
@@ -53,7 +55,7 @@ module.exports = class TagCommand extends Command {
 			const filter = (response) => response.author.id === message.author.id;
 			message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 				.then(async (collected) => {
-					const tags = this.client.tags.get(message.guild.id) || [];
+					const tags = this.client.db.get(`guild_tags_${message.guild.id}`) || [];
 
 
 					let found = false;
@@ -80,11 +82,12 @@ module.exports = class TagCommand extends Command {
 							for(let i = 0; i < tags.length; i++) {
 								if(tags[i].name === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 									tags[i].content = collected2.first().content;
+									tags[i].modifiedAt = `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`;
+									tags[i].modified.user = { tag: message.author.tag, id: message.author.id };
 								}
 							}
 
 							this.client.db.set(`guild_tags_${message.guild.id}`, tags);
-							this.client.tags.set(message.guild.id, tags);
 							embed.setTitle(`${store} Editing a Tag (3/3)`)
 								.setDescription(`Tag Successfully Edited, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()}\``);
 
@@ -110,7 +113,7 @@ module.exports = class TagCommand extends Command {
 		case 'delete': {
 			if(args[1]) {
 				await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
-				const tags = this.client.tags.get(message.guild.id);
+				const tags = this.client.db.get(`guild_tags_${message.guild.id}`);
 				const embed = new SignalEmbed(message);
 
 				if(!tags) {
@@ -122,9 +125,8 @@ module.exports = class TagCommand extends Command {
 
 				for(let i = 0; i < tags.length; i++) {
 					if(tags[i].name.toLowerCase() === args[1].replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()) {
-						this.client.db.remove(`guild_tags_${message.guild.id}`, tags[i]);
 						tags.splice(i, 1);
-						this.client.tags.set(message.guild.id, tags);
+						this.client.db.set(`guild_tags_${message.guild.id}`, tags);
 
 						embed.setTitle(`${store} Tag Removed`)
 							.setDescription('Successfully removed the tag!');
@@ -149,7 +151,7 @@ module.exports = class TagCommand extends Command {
 				message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 					.then(async (collected) => {
 						await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
-						const tags = this.client.tags.get(message.guild.id);
+						const tags = this.client.db.get(`guild_tags_${message.guild.id}`);
 
 						if(!tags) {
 							embed.setTitle(`${store} No Tags Found`)
@@ -161,7 +163,6 @@ module.exports = class TagCommand extends Command {
 							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
 								tags.splice(i, 1);
 								this.client.db.set(`guild_tags_${message.guild.id}`, tags);
-								this.client.tags.set(message.guild.id, tags);
 
 								embed.setTitle(`${store} Tag Removed`)
 									.setDescription('Successfully removed the tag!');
@@ -180,7 +181,7 @@ module.exports = class TagCommand extends Command {
 		case 'show': {
 			if(args[1]) {
 				await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
-				const tags = this.client.tags.get(message.guild.id);
+				const tags = this.client.db.get(`guild_tags_${message.guild.id}`);
 
 				if(!tags) {
 					const embed = new SignalEmbed(message)
@@ -191,7 +192,22 @@ module.exports = class TagCommand extends Command {
 
 				for(let i = 0; i < tags.length; i++) {
 					if(tags[i].name.toLowerCase() === args[1].replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
-						return message.reply({ content: tags[i].content });
+						const embed = new SignalEmbed(message)
+							.setDescription(`❯ **Name**
+								\`${tags[i].name}\`
+								❯ **User**
+								\`${tags[i].user.tag}\` (${tags[i].user.id})
+								❯ **Uses**
+								\`${tags[i].uses}\`
+								❯ **Created**
+								${tags[i].createdAt}
+								❯ **Modified**
+								${tags[i].modifiedAt}
+								❯ **Last Modified By**
+								\`${tags[i].modified.user.tag}\` (${tags[i].modified.user.id})
+								`);
+
+						return message.reply({ embeds: [embed] });
 					}
 				}
 
@@ -211,7 +227,7 @@ module.exports = class TagCommand extends Command {
 				message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 					.then(async (collected) => {
 						await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
-						const tags = this.client.tags.get(message.guild.id) || [];
+						const tags = this.client.db.get(`guild_tags_${message.guild.id}`) || [];
 
 						if(!tags) {
 							embed.setTitle(`${store} No Tags Found`)
@@ -221,7 +237,22 @@ module.exports = class TagCommand extends Command {
 
 						for(let i = 0; i < tags.length; i++) {
 							if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
-								return message.reply({ content: tags[i].content });
+								embed
+									.setDescription(`❯ **Name**
+								\`${tags[i].name}\`
+								❯ **User**
+								\`${tags[i].user.tag}\` (${tags[i].user.id})
+								❯ **Uses**
+								\`${tags[i].uses}\`
+								❯ **Created**
+								${tags[i].createdAt}
+								❯ **Modified**
+								${tags[i].modifiedAt}
+								❯ **Last Modified By**
+								\`${tags[i].modified.user.tag}\` (${tags[i].modified.user.id})
+								`);
+
+								return message.reply({ embeds: [embed] });
 							}
 						}
 
@@ -248,10 +279,10 @@ module.exports = class TagCommand extends Command {
 					await message.reply({ embeds: [embed] });
 					message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 						.then(async (collected2) => {
-							if(!this.client.db.includes('guild_tags', message.guild.id)) this.client.db.push('guild_tags', message.guild.id);
-
 							await this.client.db.ensure(`guild_tags_${message.guild.id}`, []);
-							const tags = this.client.tags.get(message.guild.id) || [];
+
+							if(!this.client.db.includes('guild_tags', message.guild.id)) this.client.db.push('guild_tags', message.guild.id);
+							const tags = this.client.db.get(`guild_tags_${message.guild.id}`) || [];
 
 							for(let i = 0; i < tags.length; i++) {
 								if(tags[i].name.toLowerCase() === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
@@ -264,10 +295,8 @@ module.exports = class TagCommand extends Command {
 								}
 							}
 
-							this.client.db.push(`guild_tags_${message.guild.id}`, { name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content });
-
-							tags.push({ name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content });
-							this.client.tags.set(message.guild.id, tags);
+							await tags.push({ uses: 0, name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content, user: { tag: message.author.tag, id: message.author.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: message.author.tag, id: message.author.id } } });
+							this.client.db.push(`guild_tags_${message.guild.id}`, { uses: 0, name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content, user: { tag: message.author.tag, id: message.author.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: message.author.tag, id: message.author.id } } });
 							embed.setTitle(`${store} Creating a New Tag (3/3)`)
 								.setDescription(`Tag Successfully Created, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()}\``);
 
@@ -293,7 +322,7 @@ module.exports = class TagCommand extends Command {
 		}
 	}
 
-	async slashRun(interaction) {
+	async slashRun(interaction, args) {
 
 	}
 
