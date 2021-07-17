@@ -45,10 +45,10 @@ class Client extends Discord.Client {
 			INFO: 'info',
 			FUN: 'fun',
 			MISC: 'misc',
+			MUSIC: 'music',
 			MOD: 'mod',
 			ADMIN: 'admin',
 			OWNER: 'owner',
-			MUSIC: 'music',
 		};
 
 		/**
