@@ -478,7 +478,7 @@ module.exports = class TagCommand extends Command {
 					return;
 				}
 			}
-			this.client.db.push(`guild_tags_${interaction.guild.id}`, { uses: 0, name: args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase(), content: args.get('create').options.get('content')?.value.length > 2000 ? args.get('create').options.get('content')?.value : args.get('create').options.get('content')?.value.slice(0, 1997) + '...';, user: { tag: interaction.user.tag, id: interaction.user.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: interaction.user.tag, id: interaction.user.id } } });
+			this.client.db.push(`guild_tags_${interaction.guild.id}`, { uses: 0, name: args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase(), content: args.get('create').options.get('content')?.value.length > 2000 ? args.get('create').options.get('content')?.value : args.get('create').options.get('content')?.value.slice(0, 1997) + '...', user: { tag: interaction.user.tag, id: interaction.user.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: interaction.user.tag, id: interaction.user.id } } });
 			const embed = new SignalEmbed(interaction).setTitle(`${store} Creating a New Tag (3/3)`)
 				.setDescription(`Tag Successfully Created, access it through \`${this.client.db.get(`${interaction.guild.id}_prefix`)}${args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()}\``);
 
