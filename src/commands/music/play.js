@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-function */
 const Command = require('../../structures/Command');
 const ytdl = require('ytdl-core');
-const ytSearch = require('yt-search');
+const ytSearch = require('youtube-sr').default;
 const MusicSubscription = require('../../structures/Subscription');
 const Track = require('../../structures/Track');
 const { GuildMember } = require('discord.js');
@@ -90,7 +90,7 @@ module.exports = class PlayCommand extends Command {
 
 
 		try {
-			const url = ytdl.validateURL(args[0]) ? args[0] : (await ytSearch(args.join(' ')))?.all[0]?.url;
+			const url = ytdl.validateURL(args[0]) ? args[0] : (await ytSearch.searchOne(args.join(' ')))?.url;
 			if(!url) return this.sendErrorMessage(message, 0, 'I was unable to find a song to play ');
 
 			const track = await Track.from(url, {
