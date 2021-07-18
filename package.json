@@ -28,6 +28,7 @@
     "ffmpeg-static": "^4.3.0",
     "figlet": "^1.5.0",
     "fs": "^0.0.1-security",
+    "gamedig": "^3.0.7",
     "he": "^1.2.0",
     "libsodium-wrappers": "^0.7.9",
     "moment": "^2.29.1",

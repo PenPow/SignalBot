@@ -468,6 +468,12 @@ module.exports = class TagCommand extends Command {
 			break;
 		}
 		case 'create': {
+			if(this.client.commands.some((command) => command.name === args.get('create').options.get('name')?.value.toLowerCase()) || this.client.commands.some((command) => command.aliases.includes(args.get('create').options.get('name')?.value.toLowerCase()))) {
+				embed.setTitle(`${store} Command Exists`)
+					.setDescription('A command/command alias already exists with that name, to avoid issues, we are cancelling the creation. Try again with another name');
+
+				return interaction.reply({ embeds: [embed] });
+			}
 			if(!interaction.member.permissions.has('ADMINISTRATOR')) return this.sendSlasErrorMessage(interaction, 2, 'You do not have permission to create a tag.');
 			await this.client.db.ensure(`guild_tags_${interaction.guild.id}`, []);
 
