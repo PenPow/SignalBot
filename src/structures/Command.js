@@ -322,8 +322,13 @@ class Command {
 			switch(action) {
 
 			case 'mute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Context:** ${message?.url ? `[Link](${message?.url})` : 'No Context Found'}\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Context:** ${message?.url ? `[Link](${message?.url})` : 'Slash Command'}\n**Reason:** ${reason}`);
 				embed.setColor('#ffcc00');
+				break;
+
+			case 'warn':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Context:** ${message?.url ? `[Link](${message?.url})` : 'Slash Command'}\n**Reason:** ${reason}`);
+				embed.setColor('#f9f906');
 				break;
 
 			case 'unmute':

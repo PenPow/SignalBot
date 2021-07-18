@@ -39,7 +39,7 @@ module.exports = class SanctionsCommand extends Command {
 				embed.setDescription(`We are only able to show the 9 most recent cases here, out of a total of ${history.length}`);
 				break;
 			}
-			embed.addField(`${this.client.utils.capitalize(history[i].caseInfo.type)} | Case #${history[i].caseInfo.caseID}`, `***Reason***\n${history[i].caseInfo.reason}\n***Date***\n<t:${(history[i].caseInfo.date / 1000).toFixed(0)}:F>\n***Moderator***\n<@${history[i].caseInfo.moderator}>`, true);
+			embed.addField(`${this.client.utils.capitalize(history[i].caseInfo.type)} | Case #${history[i].caseInfo.caseID}`, `***Reason***\n\`${history[i].caseInfo.reason.replace(/`/g, '')}\`\n***Date***\n<t:${(history[i].caseInfo.date / 1000).toFixed(0)}:F>\n***Moderator***\n<@${history[i].caseInfo.moderator}>`, true);
 		}
 
 		message.reply({ embeds: [embed] });
@@ -58,7 +58,7 @@ module.exports = class SanctionsCommand extends Command {
 				embed.setDescription(`We are only able to show the 9 most recent cases here, out of a total of ${history.length}`);
 				break;
 			}
-			embed.addField(`${this.client.utils.capitalize(history[i].caseInfo.type)} | Case #${history[i].caseInfo.caseID}`, `***Reason***\n${history[i].caseInfo.reason}\n***Date***\n<t:${(history[i].caseInfo.date / 1000).toFixed(0)}:F>\n***Moderator***\n<@${history[i].caseInfo.moderator}>`, true);
+			embed.addField(`${this.client.utils.capitalize(history[i].caseInfo.type)} | Case #${history[i].caseInfo.caseID}`, `***Reason***\n\`${history[i].caseInfo.reason.replace(/`/g, '')}\`\n***Date***\n<t:${(history[i].caseInfo.date / 1000).toFixed(0)}:F>\n***Moderator***\n<@${history[i].caseInfo.moderator}>`, true);
 		}
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });
