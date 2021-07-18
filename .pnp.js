@@ -53,6 +53,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-import", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:2.23.4"],
             ["eslint-plugin-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:3.4.0"],
             ["ffmpeg-static", "npm:4.4.0"],
+            ["figlet", "npm:1.5.0"],
             ["fs", "npm:0.0.1-security"],
             ["he", "npm:1.2.0"],
             ["libsodium-wrappers", "npm:0.7.9"],
@@ -2237,6 +2238,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["env-paths", "npm:2.2.1"],
             ["https-proxy-agent", "npm:5.0.0"],
             ["progress", "npm:2.0.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["figlet", [
+        ["npm:1.5.0", {
+          "packageLocation": "./.yarn/cache/figlet-npm-1.5.0-8014ee3b57-49839d8179.zip/node_modules/figlet/",
+          "packageDependencies": [
+            ["figlet", "npm:1.5.0"]
           ],
           "linkType": "HARD",
         }]
@@ -4897,6 +4907,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-import", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:2.23.4"],
             ["eslint-plugin-prettier", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:3.4.0"],
             ["ffmpeg-static", "npm:4.4.0"],
+            ["figlet", "npm:1.5.0"],
             ["fs", "npm:0.0.1-security"],
             ["he", "npm:1.2.0"],
             ["libsodium-wrappers", "npm:0.7.9"],

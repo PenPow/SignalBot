@@ -1861,6 +1861,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"figlet@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "figlet@npm:1.5.0"
+  checksum: 49839d8179dc0a7b6f105f13348e233df79cc2959088316560c1a85af0e99466b3e85d417de2a1f87d4dd4f42c7a734b01b8290aaf1c04c80f6fcffdf7c86bde
+  languageName: node
+  linkType: hard
+
 "file-entry-cache@npm:^6.0.1":
   version: 6.0.1
   resolution: "file-entry-cache@npm:6.0.1"
@@ -4167,6 +4174,7 @@ __metadata:
     eslint-plugin-import: ^2.23.4
     eslint-plugin-prettier: ^3.4.0
     ffmpeg-static: ^4.3.0
+    figlet: ^1.5.0
     fs: ^0.0.1-security
     he: ^1.2.0
     libsodium-wrappers: ^0.7.9
