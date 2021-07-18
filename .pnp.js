@@ -63,6 +63,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["node-fetch", "npm:2.6.1"],
             ["node-gyp", "npm:8.1.0"],
             ["node-os-utils", "npm:1.3.5"],
+            ["pirate-speak", "npm:1.0.1"],
             ["prettier", "npm:2.3.1"],
             ["prism-media", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:1.3.1"],
             ["redis", "npm:3.1.2"],
@@ -3810,6 +3811,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["pirate-speak", [
+        ["npm:1.0.1", {
+          "packageLocation": "./.yarn/cache/pirate-speak-npm-1.0.1-56a7f50632-c898220f76.zip/node_modules/pirate-speak/",
+          "packageDependencies": [
+            ["pirate-speak", "npm:1.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["pkg-dir", [
         ["npm:2.0.0", {
           "packageLocation": "./.yarn/cache/pkg-dir-npm-2.0.0-2b4bf4abd1-f8ae3a1517.zip/node_modules/pkg-dir/",
@@ -4445,6 +4455,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["node-fetch", "npm:2.6.1"],
             ["node-gyp", "npm:8.1.0"],
             ["node-os-utils", "npm:1.3.5"],
+            ["pirate-speak", "npm:1.0.1"],
             ["prettier", "npm:2.3.1"],
             ["prism-media", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:1.3.1"],
             ["redis", "npm:3.1.2"],
