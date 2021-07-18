@@ -158,6 +158,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iamtraction/google-translate@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@iamtraction/google-translate@npm:1.1.2"
+  dependencies:
+    got: ^11.8.1
+  checksum: 7d9229fd53be5aa16e40b1c69bffbea27a9b8aa44230fe623087d3fbd02302818e82884fcaee0620e3ae7a0300c0014eb32225535c5a8f58038e9f97ec0e7308
+  languageName: node
+  linkType: hard
+
 "@npmcli/move-file@npm:^1.0.1":
   version: 1.1.2
   resolution: "@npmcli/move-file@npm:1.1.2"
@@ -2092,7 +2101,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"got@npm:~11.8.2":
+"got@npm:^11.8.1, got@npm:~11.8.2":
   version: 11.8.2
   resolution: "got@npm:11.8.2"
   dependencies:
@@ -4160,6 +4169,7 @@ __metadata:
   dependencies:
     "@discordjs/opus": ^0.5.0
     "@discordjs/voice": ^0.5.4
+    "@iamtraction/google-translate": ^1.1.2
     bufferutil: ^4.0.3
     chalk: ^4.1.1
     common-tags: ^1.8.0

@@ -15,6 +15,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
     "@discordjs/voice": "^0.5.4",
+    "@iamtraction/google-translate": "^1.1.2",
     "bufferutil": "^4.0.3",
     "chalk": "^4.1.1",
     "common-tags": "^1.8.0",

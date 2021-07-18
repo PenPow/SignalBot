@@ -39,6 +39,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@discordjs/opus", "npm:0.5.3"],
             ["@discordjs/voice", "npm:0.5.4"],
+            ["@iamtraction/google-translate", "npm:1.1.2"],
             ["bufferutil", "npm:4.0.3"],
             ["chalk", "npm:4.1.1"],
             ["common-tags", "npm:1.8.0"],
@@ -241,6 +242,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@humanwhocodes-object-schema-npm-1.2.0-6bc0ff9fda-ef533ee0d2.zip/node_modules/@humanwhocodes/object-schema/",
           "packageDependencies": [
             ["@humanwhocodes/object-schema", "npm:1.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@iamtraction/google-translate", [
+        ["npm:1.1.2", {
+          "packageLocation": "./.yarn/cache/@iamtraction-google-translate-npm-1.1.2-9df20bb58f-7d9229fd53.zip/node_modules/@iamtraction/google-translate/",
+          "packageDependencies": [
+            ["@iamtraction/google-translate", "npm:1.1.2"],
+            ["got", "npm:11.8.2"]
           ],
           "linkType": "HARD",
         }]
@@ -4894,6 +4905,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["signal", "workspace:."],
             ["@discordjs/opus", "npm:0.5.3"],
             ["@discordjs/voice", "npm:0.5.4"],
+            ["@iamtraction/google-translate", "npm:1.1.2"],
             ["bufferutil", "npm:4.0.3"],
             ["chalk", "npm:4.1.1"],
             ["common-tags", "npm:1.8.0"],
