@@ -68,6 +68,7 @@ module.exports = class KickCommand extends Command {
 			caseInfo: {
 				caseID: caseID,
 				type: 'kick',
+				date: new Date(Date.now()).getTime(),
 				target: member.id,
 				moderator: message.author.id,
 				reason: reason,
@@ -77,6 +78,8 @@ module.exports = class KickCommand extends Command {
 
 		this.client.db.set(`case-${message.guild.id}`, caseID);
 		this.client.db.set(`case-${message.guild.id}-${caseID}`, kickObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, kickObject);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -132,12 +135,15 @@ module.exports = class KickCommand extends Command {
 				target: member.id,
 				moderator: interaction.user.id,
 				reason: reason,
+				date: new Date(Date.now()).getTime(),
 				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'kick'),
 			},
 		};
 
 		this.client.db.set(`case-${interaction.guild.id}`, caseID);
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, kickObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, kickObject);
 
 		interaction.reply({ ephemeral: false, embeds: [embed] });
 	}

@@ -95,6 +95,7 @@ module.exports = class MuteCommand extends Command {
 				target: member.id,
 				moderator: message.author.id,
 				reason: reason,
+				date: new Date(Date.now()).getTime(),
 				expiry: new Date(expireDate + time).getTime(),
 				auditId: await this.sendModLogMessage(message, reason, member.id, 'mute'),
 			},
@@ -112,6 +113,8 @@ module.exports = class MuteCommand extends Command {
 		this.client.db.set(`case-${message.guild.id}`, caseID);
 		this.client.db.set(`case-${message.guild.id}-${caseID}`, muteObject);
 		this.client.db.set(`lastcase-mute-${member.id}`, muteObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, muteObject);
 
 		message.reply({ embeds: [embed] });
 	}
@@ -184,6 +187,7 @@ module.exports = class MuteCommand extends Command {
 				target: member.id,
 				moderator: interaction.user.id,
 				reason: reason,
+				date: new Date(Date.now()).getTime(),
 				expiry: new Date(expireDate + time).getTime(),
 				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'mute'),
 			},
@@ -201,6 +205,8 @@ module.exports = class MuteCommand extends Command {
 		this.client.db.set(`case-${interaction.guild.id}`, caseID);
 		this.client.db.set(`lastcase-mute-${member.id}`, muteObject);
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, muteObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, muteObject);
 
 		interaction.reply({ ephemeral: false, embeds: [embed] });
 	}

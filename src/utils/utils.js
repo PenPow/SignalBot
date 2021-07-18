@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 /**
 * Capitalize First Letter of String
@@ -140,53 +140,10 @@ function sleep(ms) {
 
 /**
  * Creates a confirmation box
- * @param {Message} message
- * @param {string} content
  * @returns {Promise}
  */
-async function confirmation(message, content) {
-	const row = new MessageActionRow()
-		.addComponents(
-			new MessageButton()
-				.setCustomId('yes')
-				.setLabel('Yes')
-				.setStyle('SUCCESS'),
-			new MessageButton()
-				.setCustomId('no')
-				.setLabel('No')
-				.setStyle('DANGER'),
-		);
-
-	const embed = new MessageEmbed()
-		.setTitle(':exclamation: Confirmation')
-		.setFooter(`This will expire in 10 Seconds • ${message.member.displayName}`, message.author?.displayAvatarURL({ dynamic: true }) || message.user?.displayAvatarURL({ dynamic: true }))
-		.setTimestamp()
-		.setDescription(content)
-		.setColor(message.guild.me.displayHexColor);
-
-	const msg = await message.reply({ embeds: [embed], components: [row] });
-
-	const collector = msg.channel.createMessageComponentCollector((i) => (i.customID === 'yes' || i.customID === 'no') && i.user.id === message.author.id, { time: 10000 });
-
-	return new Promise((resolve) => {
-		collector.on('collect', async (i) => {
-			i.defer();
-			switch (i.customId) {
-			case 'yes':
-				i.update({ embeds: [embed], components: [] });
-				resolve(true);
-				break;
-			case 'no':
-				i.update({ embeds: [embed], components: [] });
-				resolve(false);
-				break;
-			}
-		});
-
-		collector.on('end', collected => {
-			if(collected.size < 1) resolve(false);
-		});
-	});
+async function confirmation() {
+	return Promise.resolve(true);
 }
 
 /**

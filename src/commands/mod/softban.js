@@ -77,12 +77,15 @@ module.exports = class SoftBanCommand extends Command {
 				target: member.id,
 				moderator: message.author.id,
 				reason: reason,
+				date: new Date(Date.now()).getTime(),
 				auditId: await this.sendModLogMessage(message, reason, member.id, 'softban'),
 			},
 		};
 
 		this.client.db.set(`case-${message.guild.id}`, caseID);
 		this.client.db.set(`case-${message.guild.id}-${caseID}`, banObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, banObject);
 
 		message.reply({ embeds: [embed] });
 
@@ -145,6 +148,7 @@ module.exports = class SoftBanCommand extends Command {
 				target: member.id,
 				moderator: interaction.user.id,
 				reason: reason,
+				date: new Date(Date.now()).getTime(),
 				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'softban'),
 			},
 		};
@@ -153,6 +157,8 @@ module.exports = class SoftBanCommand extends Command {
 		this.client.db.set(`case-${interaction.guild.id}`, caseID);
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, banObject);
 		this.client.db.set(`lastcase-ban-${member.id}`, banObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, banObject);
 
 		interaction.reply({ ephemeral: false, embeds: [embed] });
 	}

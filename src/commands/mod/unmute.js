@@ -95,12 +95,15 @@ module.exports = class UnmuteCommand extends Command {
 				moderator: message.author.id,
 				reason: reason,
 				expiry: null,
+				date: new Date(Date.now()).getTime(),
 				auditId: await this.sendModLogMessage(message, reason, member.id, 'unmute'),
 			},
 		};
 
 		message.reply({ embeds: [embed] });
 		this.client.db.set(`case-${message.guild.id}-${caseID}`, muteObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, muteObject);
 	}
 
 	async slashRun(interaction, args) {
@@ -176,10 +179,13 @@ module.exports = class UnmuteCommand extends Command {
 				moderator: interaction.user.id,
 				reason: reason,
 				expiry: null,
+				date: new Date(Date.now()).getTime(),
 				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'unmute'),
 			},
 		};
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, muteObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, muteObject);
 	}
 
 	generateSlashCommand() {

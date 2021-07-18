@@ -64,12 +64,15 @@ module.exports = class UnbanCommand extends Command {
 				moderator: message.author.id,
 				reason: reason,
 				expiry: null,
+				date: new Date(Date.now()).getTime(),
 				auditId: await this.sendModLogMessage(message, reason, member.id, 'unban'),
 			},
 		};
 
 		this.client.db.set(`case-${message.guild.id}`, caseID);
 		this.client.db.set(`case-${message.guild.id}-${caseID}`, muteObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, muteObject);
 
 		if(oldCaseInfo) {
 			const redisKey = `ban-${message.guild.id}-${oldCaseInfo?.caseInfo?.caseID}`;
@@ -143,12 +146,15 @@ module.exports = class UnbanCommand extends Command {
 				moderator: interaction.user.id,
 				reason: reason,
 				expiry: null,
+				date: new Date(Date.now()).getTime(),
 				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'unban'),
 			},
 		};
 
 		this.client.db.set(`case-${interaction.guild.id}`, caseID);
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, muteObject);
+		this.client.db.ensure(`sanctions-${member.id}`, []);
+		this.client.db.push(`sanctions-${member.id}`, muteObject);
 
 		if(oldCaseInfo) {
 			const redisKey = `ban-${interaction.guild.id}-${oldCaseInfo?.caseInfo?.caseID}`;

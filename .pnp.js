@@ -45,6 +45,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["consola", "npm:2.15.3"],
             ["crypto-js", "npm:4.0.0"],
             ["discord.js", "npm:13.0.0-dev.d433fe8.1625961832"],
+            ["dotenv", "npm:10.0.0"],
             ["enmap", "npm:5.8.5"],
             ["erlpack", "https://github.com/discord/erlpack.git#commit=e27db8f82892bdb9b28a0547cc394d68b5d2242d"],
             ["eslint", "npm:7.30.0"],
@@ -1622,6 +1623,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dom-serializer", "npm:1.3.2"],
             ["domelementtype", "npm:2.2.0"],
             ["domhandler", "npm:4.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["dotenv", [
+        ["npm:10.0.0", {
+          "packageLocation": "./.yarn/cache/dotenv-npm-10.0.0-36b272df25-9c45712e21.zip/node_modules/dotenv/",
+          "packageDependencies": [
+            ["dotenv", "npm:10.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -4879,6 +4889,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["consola", "npm:2.15.3"],
             ["crypto-js", "npm:4.0.0"],
             ["discord.js", "npm:13.0.0-dev.d433fe8.1625961832"],
+            ["dotenv", "npm:10.0.0"],
             ["enmap", "npm:5.8.5"],
             ["erlpack", "https://github.com/discord/erlpack.git#commit=e27db8f82892bdb9b28a0547cc394d68b5d2242d"],
             ["eslint", "npm:7.30.0"],

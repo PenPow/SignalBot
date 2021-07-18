@@ -41,7 +41,9 @@ class Ready {
 				this.client.db.set('global_mutes', mutes);
 			}
 
-			const guild = await this.client.guilds.fetch(mutes[i].guild);
+			const guild = await this.client.guilds.fetch(mutes[i]?.guild);
+
+			if(!guild) return;
 			const muteRole = this.client.db.get(`muterole-${guild.id}`) || guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 
 			if(!muteRole) return;
