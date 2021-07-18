@@ -280,6 +280,12 @@ module.exports = class TagCommand extends Command {
 			const filter = (response) => response.author.id === message.author.id;
 			message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 				.then(async (collected) => {
+					if(this.client.commands.some((command) => command.name === collected.first().content.toLowerCase()) || this.client.commands.some((command) => command.aliases.includes(collected.first().content.toLowerCase()))) {
+						embed.setTitle(`${store} Command Exists`)
+							.setDescription('A command/command alias already exists with that name, to avoid issues, we are cancelling the creation. Try again with another name');
+
+						return message.reply({ embeds: [embed] });
+					}
 					embed.setTitle(`${store} Creating a New Tag (2/3)`)
 						.setDescription(`Great, your tag will be accessible through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()}\`\n\nNow, we need to specify the content for the tag, write out the content of the tag. This prompt will expire in two minutes.`);
 
