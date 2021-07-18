@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js');
+
 class Ready {
 	constructor(client) {
 		this.client = client;
@@ -7,31 +9,58 @@ class Ready {
 		this.client.logger.warn('Checking For Expired Punishments');
 		this.client.db.ensure('global_mutes', []);
 		this.client.db.ensure('global_bans', []);
+		this.client.db.ensure('global_reminders', []);
 
 		const mutes = this.client.db.get('global_mutes');
 		const bans = this.client.db.get('global_bans');
+		const reminders = this.client.db.get('global_reminders');
 
-		this.client.expire((message) => {
+		this.client.expire(async (message) => {
 			const messageArray = message.split('-');
-			const caseInfo = this.client.db.get(`case-${messageArray[1]}-${messageArray[2]}`);
 
-			if(caseInfo.caseInfo.type === 'mute') {
-				for(let i = 0; i < mutes.length; i++) {
-					if(mutes[i].caseInfo.caseID.toString() === caseInfo.caseInfo.caseID.toString()) mutes.splice(i, 1);
-					this.client.db.set('global_mutes', mutes);
+			if(messageArray[0] === 'reminder') {
+				const info = this.client.db.get(`reminder_${messageArray[1]}`);
+
+				const author = await this.client.users.fetch(info.user);
+
+				if(!author) return;
+
+				const embed = new MessageEmbed()
+					.setTitle('Reminder!')
+					.setDescription(`Created at <t:${info.createdAt}:F> \n\n\`${info.message}\``)
+					.setColor('#5864ef')
+					.setFooter(`${author.tag}`, author.displayAvatarURL({ dynamic: true }));
+
+				author.send({ embeds: [embed] }).catch();
+
+				for(let i = 0; i < reminders.length; i++) {
+					if(info === reminders[i]) reminders.splice(i, 1);
+					this.client.db.set('global_reminders', reminders);
 				}
 
-				this.client.utils.unmute(this.client, caseInfo);
 			}
-			else if(caseInfo.caseInfo.type === 'ban') {
-				for(let i = 0; i < bans.length; i++) {
-					if(bans[i].caseInfo.caseID.toString() === caseInfo.caseInfo.caseID.toString()) bans.splice(i, 1);
-					this.client.db.set('global_bans', bans);
+			else {
+				const caseInfo = this.client.db.get(`case-${messageArray[1]}-${messageArray[2]}`);
+
+				if(caseInfo.caseInfo.type === 'mute') {
+					for(let i = 0; i < mutes.length; i++) {
+						if(mutes[i].caseInfo.caseID.toString() === caseInfo.caseInfo.caseID.toString()) mutes.splice(i, 1);
+						this.client.db.set('global_mutes', mutes);
+					}
+
+					this.client.utils.unmute(this.client, caseInfo);
 				}
+				else if(caseInfo.caseInfo.type === 'ban') {
+					for(let i = 0; i < bans.length; i++) {
+						if(bans[i].caseInfo.caseID.toString() === caseInfo.caseInfo.caseID.toString()) bans.splice(i, 1);
+						this.client.db.set('global_bans', bans);
+					}
 
 
-				this.client.utils.unban(this.client, caseInfo);
+					this.client.utils.unban(this.client, caseInfo);
+				}
 			}
+
 		});
 
 		for(let i = 0; i < mutes.length; i++) {
@@ -59,6 +88,26 @@ class Ready {
 				this.client.utils.unban(this.client, bans[i]);
 				bans.splice(i, 1);
 				this.client.db.set('global_bans', bans);
+			}
+		}
+
+		for(let i = 0; i < reminders.length; i++) {
+			if(reminders[i].expireAt < (new Date(Date.now()).getTime() / 1000).toFixed(0)) {
+				const info = reminders[i];
+				reminders.splice(i, 1);
+				this.client.db.set('global_reminders', reminders);
+
+				const author = await this.client.users.fetch(info.user);
+
+				if(!author) return;
+
+				const embed = new MessageEmbed()
+					.setTitle('Reminder!')
+					.setDescription(`Created at <t:${info.createdAt}:F> \n\n\`${info.message}\``)
+					.setColor('#5864ef')
+					.setFooter(`${author.tag}`, author.displayAvatarURL({ dynamic: true }));
+
+				author.send({ embeds: [embed] }).catch();
 			}
 		}
 
