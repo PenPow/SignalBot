@@ -287,11 +287,12 @@ class Command {
 
 		if(errorMessage) embed.addField('Error Message', `\`\`\`${errorMessage}\`\`\``);
 
-		try {
-			message.reply({ embeds: [embed], ephemeral: true });
+		if(!message.author) {
+			if(message.deferred || message.replied) {message.followUp({ ephemeral: true, embeds: [embed] });}
+			else { message.reply({ embeds: [embed], ephemeral: true }); }
 		}
-		catch(e) {
-			message.followUp({ ephemeral: true, embeds: [embed] });
+		else {
+			message.reply({ embeds: [embed] });
 		}
 
 		return;
