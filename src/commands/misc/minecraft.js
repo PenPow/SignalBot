@@ -12,7 +12,7 @@ module.exports = class MinecraftCommand extends Command {
 			usage: 'minecraft <ip>',
 			aliases: ['mc', 'mclookup'],
 			description: 'Fetches information about a given minecraft server! (Java and Bedrock Supported)',
-			type: client.types.FUN,
+			type: client.types.MISC,
 			examples: ['minecraft play.hypixel.net', 'mc play.hypixel.net', 'mclookup play.hypixel.net'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],

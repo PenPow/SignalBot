@@ -12,7 +12,7 @@ module.exports = class GModCommand extends Command {
 			usage: 'gmod <ip>',
 			aliases: ['gmodlookup'],
 			description: 'Fetches information about a given Garry\'s Mod server!',
-			type: client.types.FUN,
+			type: client.types.MISC,
 			examples: ['gmod <IP>', 'gmodlookup <IP>'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],

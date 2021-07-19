@@ -13,8 +13,8 @@ module.exports = class mdnCommand extends Command {
 		super(client, {
 			name: 'mdn',
 			usage: 'mdn <search>',
-			description: 'Shortens a URL down to a smaller one!',
-			type: client.types.FUN,
+			description: 'Allows you to search up something from MDN',
+			type: client.types.MISC,
 			examples: ['mdn string.prototype.replace'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],

@@ -12,7 +12,7 @@ module.exports = class ShortURLCommand extends Command {
 			usage: 'shorturl <URL>',
 			aliases: ['short', 'url'],
 			description: 'Shortens a URL down to a smaller one!',
-			type: client.types.FUN,
+			type: client.types.MISC,
 			examples: ['shorturl www.google.com', 'short www.google.com', 'url www.google.com'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],

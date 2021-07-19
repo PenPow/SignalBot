@@ -14,7 +14,7 @@ module.exports = class TranslateCommand extends Command {
 			usage: 'translate <language> <text>',
 			aliases: ['translation', 'trad' ],
 			description: 'Translates text into another language',
-			type: client.types.FUN,
+			type: client.types.MISC,
 			examples: ['translate french Hi!', 'translation spanish How are you?', 'trad german Salut!'],
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
