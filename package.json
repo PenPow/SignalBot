@@ -21,6 +21,7 @@
     "common-tags": "^1.8.0",
     "consola": "^2.15.3",
     "crypto-js": "^4.0.0",
+    "dice-expression-evaluator": "^0.1.2",
     "discord.js": "dev",
     "dotenv": "^10.0.0",
     "enmap": "^5.8.5",

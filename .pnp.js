@@ -45,6 +45,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["common-tags", "npm:1.8.0"],
             ["consola", "npm:2.15.3"],
             ["crypto-js", "npm:4.0.0"],
+            ["dice-expression-evaluator", "npm:0.1.2"],
             ["discord.js", "npm:13.0.0-dev.d433fe8.1625961832"],
             ["dotenv", "npm:10.0.0"],
             ["enmap", "npm:5.8.5"],
@@ -1437,6 +1438,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/detect-libc-npm-1.0.3-c30ac344d4-6cec442139.zip/node_modules/detect-libc/",
           "packageDependencies": [
             ["detect-libc", "npm:1.0.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["dice-expression-evaluator", [
+        ["npm:0.1.2", {
+          "packageLocation": "./.yarn/cache/dice-expression-evaluator-npm-0.1.2-e3a145790d-811357ea41.zip/node_modules/dice-expression-evaluator/",
+          "packageDependencies": [
+            ["dice-expression-evaluator", "npm:0.1.2"],
+            ["random-js", "npm:1.0.8"]
           ],
           "linkType": "HARD",
         }]
@@ -4325,6 +4336,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["random-js", [
+        ["npm:1.0.8", {
+          "packageLocation": "./.yarn/cache/random-js-npm-1.0.8-1687946dd7-f80f79eefb.zip/node_modules/random-js/",
+          "packageDependencies": [
+            ["random-js", "npm:1.0.8"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["randombytes", [
         ["npm:2.1.0", {
           "packageLocation": "./.yarn/cache/randombytes-npm-2.1.0-e3da76bccf-ede2693af0.zip/node_modules/randombytes/",
@@ -4721,6 +4741,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["common-tags", "npm:1.8.0"],
             ["consola", "npm:2.15.3"],
             ["crypto-js", "npm:4.0.0"],
+            ["dice-expression-evaluator", "npm:0.1.2"],
             ["discord.js", "npm:13.0.0-dev.d433fe8.1625961832"],
             ["dotenv", "npm:10.0.0"],
             ["enmap", "npm:5.8.5"],
