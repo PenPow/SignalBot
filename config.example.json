@@ -11,6 +11,9 @@
         },
         "redis": {
             "url": ""
+        },
+        "amethyste": {
+            "token": ""
         }
     },
     

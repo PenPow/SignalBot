@@ -40,7 +40,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@discordjs/opus", "npm:0.5.3"],
             ["@discordjs/voice", "npm:0.5.4"],
             ["@iamtraction/google-translate", "npm:1.1.2"],
+            ["amethyste-api", "npm:1.1.5"],
             ["bufferutil", "npm:4.0.3"],
+            ["canvas", "npm:2.8.0"],
             ["chalk", "npm:4.1.1"],
             ["common-tags", "npm:1.8.0"],
             ["consola", "npm:2.15.3"],
@@ -255,6 +257,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@iamtraction/google-translate", "npm:1.1.2"],
             ["got", "npm:11.8.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@mapbox/node-pre-gyp", [
+        ["npm:1.0.5", {
+          "packageLocation": "./.yarn/cache/@mapbox-node-pre-gyp-npm-1.0.5-4e17430ec9-82d337a6df.zip/node_modules/@mapbox/node-pre-gyp/",
+          "packageDependencies": [
+            ["@mapbox/node-pre-gyp", "npm:1.0.5"],
+            ["detect-libc", "npm:1.0.3"],
+            ["https-proxy-agent", "npm:5.0.0"],
+            ["make-dir", "npm:3.1.0"],
+            ["node-fetch", "npm:2.6.1"],
+            ["nopt", "npm:5.0.0"],
+            ["npmlog", "npm:4.1.2"],
+            ["rimraf", "npm:3.0.2"],
+            ["semver", "npm:7.3.5"],
+            ["tar", "npm:6.1.0"]
           ],
           "linkType": "HARD",
         }]
@@ -522,6 +542,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/amdefine-npm-1.0.1-40b219807a-8b163d7cd3.zip/node_modules/amdefine/",
           "packageDependencies": [
             ["amdefine", "npm:1.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["amethyste-api", [
+        ["npm:1.1.5", {
+          "packageLocation": "./.yarn/cache/amethyste-api-npm-1.1.5-e45bc0a5cc-c41ba45b08.zip/node_modules/amethyste-api/",
+          "packageDependencies": [
+            ["amethyste-api", "npm:1.1.5"],
+            ["axios", "npm:0.21.1"]
           ],
           "linkType": "HARD",
         }]
@@ -969,6 +999,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["camelcase", "npm:5.3.1"],
             ["map-obj", "npm:4.2.1"],
             ["quick-lru", "npm:4.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["canvas", [
+        ["npm:2.8.0", {
+          "packageLocation": "./.yarn/unplugged/canvas-npm-2.8.0-b8a304d4de/node_modules/canvas/",
+          "packageDependencies": [
+            ["canvas", "npm:2.8.0"],
+            ["@mapbox/node-pre-gyp", "npm:1.0.5"],
+            ["nan", "npm:2.14.2"],
+            ["node-gyp", "npm:8.1.0"],
+            ["simple-get", "npm:3.1.0"]
           ],
           "linkType": "HARD",
         }]
@@ -4736,7 +4779,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@discordjs/opus", "npm:0.5.3"],
             ["@discordjs/voice", "npm:0.5.4"],
             ["@iamtraction/google-translate", "npm:1.1.2"],
+            ["amethyste-api", "npm:1.1.5"],
             ["bufferutil", "npm:4.0.3"],
+            ["canvas", "npm:2.8.0"],
             ["chalk", "npm:4.1.1"],
             ["common-tags", "npm:1.8.0"],
             ["consola", "npm:2.15.3"],

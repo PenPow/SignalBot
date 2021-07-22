@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const Enmap = require('enmap');
 const redis = require('redis');
+const api = require('amethyste-api');
 const ActionManager = require('../managers/ActionManager');
 
 /**
@@ -101,7 +102,7 @@ class Client extends Discord.Client {
 
 		/**
 		 * Redis Database
-		 * @type {*}
+		 * @type {redis.RedisClient | null}
 		 */
 		this.redis = null;
 
@@ -111,6 +112,12 @@ class Client extends Discord.Client {
 		 * @type {ActionManager}
 		 */
 		this.actionManager = new ActionManager();
+
+		/**
+		 * Images API
+		 * @type {api}
+		 */
+		this.images = new api(this.config.apiKeys.amethyste.token);
 
 		this.logger.info('Initalizing...');
 	}

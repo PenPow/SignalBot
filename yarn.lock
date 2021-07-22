@@ -167,6 +167,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mapbox/node-pre-gyp@npm:^1.0.0":
+  version: 1.0.5
+  resolution: "@mapbox/node-pre-gyp@npm:1.0.5"
+  dependencies:
+    detect-libc: ^1.0.3
+    https-proxy-agent: ^5.0.0
+    make-dir: ^3.1.0
+    node-fetch: ^2.6.1
+    nopt: ^5.0.0
+    npmlog: ^4.1.2
+    rimraf: ^3.0.2
+    semver: ^7.3.4
+    tar: ^6.1.0
+  bin:
+    node-pre-gyp: bin/node-pre-gyp
+  checksum: 82d337a6df08539e2cc96d0707d24c97c146f2d9da03242258684b0fbf2609dbfbb68aeb5326e9fbb19caa27b67cb1dcb289693bb6f369e0ea3a74aa08654f9d
+  languageName: node
+  linkType: hard
+
 "@npmcli/move-file@npm:^1.0.1":
   version: 1.1.2
   resolution: "@npmcli/move-file@npm:1.1.2"
@@ -389,6 +408,15 @@ __metadata:
   version: 1.0.1
   resolution: "amdefine@npm:1.0.1"
   checksum: 8b163d7cd3224b8648a6f9be045f1e111847d53acb21b3f9fca3b7ef20da63de4b256c6dfc175a340d9a2bb13fcab9f633089e2d4ac230ea9721db038962d256
+  languageName: node
+  linkType: hard
+
+"amethyste-api@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "amethyste-api@npm:1.1.5"
+  dependencies:
+    axios: ^0.21.1
+  checksum: c41ba45b088aa7bdfb3e9cc61d6bbfb7a915de0ae4c58217f393c255832d8f553f2724df4e53d3f956fad86554c4cf6195217ce5b107960970e105a5e0da524f
   languageName: node
   linkType: hard
 
@@ -783,6 +811,18 @@ __metadata:
   version: 5.3.1
   resolution: "camelcase@npm:5.3.1"
   checksum: 6a3350c4ea8ab6e5109e0b443cfaf43dc40abfad7b2d79dcafbbafbe9b6b4059b4365b17ad822e24cf08e6627c1ffb65a9651d05cef9fcc6f64b6a0c2f327feb
+  languageName: node
+  linkType: hard
+
+"canvas@npm:^2.8.0":
+  version: 2.8.0
+  resolution: "canvas@npm:2.8.0"
+  dependencies:
+    "@mapbox/node-pre-gyp": ^1.0.0
+    nan: ^2.14.0
+    node-gyp: latest
+    simple-get: ^3.0.3
+  checksum: d173d6dea8541d4caa07ef1b6d984fda85aac3a89a7b8009b891176765298bc445f3ef86cc92e8ee6d4aa7f34b549ebaa720fe875ba406656f8ea593e83174fe
   languageName: node
   linkType: hard
 
@@ -4023,7 +4063,9 @@ __metadata:
     "@discordjs/opus": ^0.5.0
     "@discordjs/voice": ^0.5.4
     "@iamtraction/google-translate": ^1.1.2
+    amethyste-api: ^1.1.5
     bufferutil: ^4.0.3
+    canvas: ^2.8.0
     chalk: ^4.1.1
     common-tags: ^1.8.0
     consola: ^2.15.3
