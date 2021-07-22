@@ -308,7 +308,14 @@ class Command {
      */
 	async sendModLogMessage(message, reason, target, action, fields = {}) {
 		await message.guild.channels.fetch();
-		const user = await message.client.users.fetch(target);
+		let user;
+		try {
+			user = await message.client.users.fetch(target);
+		}
+		// eslint-disable-next-line no-empty
+		catch(e) {
+
+		}
 		const modLog = message.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
 
 		if(modLog && modLog.viewable && modLog.permissionsFor(message.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
@@ -317,7 +324,7 @@ class Command {
 			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
 			const embed = new SignalEmbed(message)
 				.setFooter(`Case #${caseNumber}`)
-				.setThumbnail(user.displayAvatarURL({ dynamic: true }))
+				.setThumbnail(user?.displayAvatarURL({ dynamic: true }))
 				.setAuthor(`${message?.author?.tag || message?.user?.tag} (${message?.author?.id || message?.user?.id})`, message?.author?.displayAvatarURL({ dynamic: true }) || message?.user?.displayAvatarURL({ dynamic: true }));
 
 			switch(action) {
@@ -355,6 +362,12 @@ class Command {
 			case 'softban':
 				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#f98406');
+				break;
+
+			case 'slowmode':
+				embed.setDescription(`**Channel:** <#${target}> (${target})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setColor('#496bdd');
+				embed.setThumbnail();
 				break;
 
 			case 'default':
