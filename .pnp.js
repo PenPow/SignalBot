@@ -40,6 +40,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@discordjs/opus", "npm:0.5.3"],
             ["@discordjs/voice", "npm:0.5.4"],
             ["@iamtraction/google-translate", "npm:1.1.2"],
+            ["@ksoft/api", "npm:3.1.9"],
             ["amethyste-api", "npm:1.1.5"],
             ["bufferutil", "npm:4.0.3"],
             ["canvas", "npm:2.8.0"],
@@ -61,6 +62,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fs", "npm:0.0.1-security"],
             ["gamedig", "npm:3.0.7"],
             ["he", "npm:1.2.0"],
+            ["intl", "npm:1.2.5"],
             ["libsodium-wrappers", "npm:0.7.9"],
             ["moment", "npm:2.29.1"],
             ["ms", "npm:2.1.3"],
@@ -83,6 +85,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["zlib-sync", "npm:0.1.7"]
           ],
           "linkType": "SOFT",
+        }]
+      ]],
+      ["@aero/centra", [
+        ["npm:1.0.6", {
+          "packageLocation": "./.yarn/cache/@aero-centra-npm-1.0.6-6003a94345-dcd9ac648b.zip/node_modules/@aero/centra/",
+          "packageDependencies": [
+            ["@aero/centra", "npm:1.0.6"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@babel/code-frame", [
@@ -257,6 +268,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@iamtraction/google-translate", "npm:1.1.2"],
             ["got", "npm:11.8.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@ksoft/api", [
+        ["npm:3.1.9", {
+          "packageLocation": "./.yarn/cache/@ksoft-api-npm-3.1.9-c3495a60b4-64b8d9445b.zip/node_modules/@ksoft/api/",
+          "packageDependencies": [
+            ["@ksoft/api", "npm:3.1.9"],
+            ["@aero/centra", "npm:1.0.6"],
+            ["flatted", "npm:2.0.2"]
           ],
           "linkType": "HARD",
         }]
@@ -2213,6 +2235,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["flatted", [
+        ["npm:2.0.2", {
+          "packageLocation": "./.yarn/cache/flatted-npm-2.0.2-ccb06e14ff-a3e5fb71ad.zip/node_modules/flatted/",
+          "packageDependencies": [
+            ["flatted", "npm:2.0.2"]
+          ],
+          "linkType": "HARD",
+        }],
         ["npm:3.1.1", {
           "packageLocation": "./.yarn/cache/flatted-npm-3.1.1-ffd80d62a2-1065cd7829.zip/node_modules/flatted/",
           "packageDependencies": [
@@ -2784,6 +2813,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/ini-npm-1.3.8-fb5040b4c0-62189ce7ea.zip/node_modules/ini/",
           "packageDependencies": [
             ["ini", "npm:1.3.8"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["intl", [
+        ["npm:1.2.5", {
+          "packageLocation": "./.yarn/cache/intl-npm-1.2.5-6db4a56df9-8fc0b27ce8.zip/node_modules/intl/",
+          "packageDependencies": [
+            ["intl", "npm:1.2.5"]
           ],
           "linkType": "HARD",
         }]
@@ -4779,6 +4817,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@discordjs/opus", "npm:0.5.3"],
             ["@discordjs/voice", "npm:0.5.4"],
             ["@iamtraction/google-translate", "npm:1.1.2"],
+            ["@ksoft/api", "npm:3.1.9"],
             ["amethyste-api", "npm:1.1.5"],
             ["bufferutil", "npm:4.0.3"],
             ["canvas", "npm:2.8.0"],
@@ -4800,6 +4839,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fs", "npm:0.0.1-security"],
             ["gamedig", "npm:3.0.7"],
             ["he", "npm:1.2.0"],
+            ["intl", "npm:1.2.5"],
             ["libsodium-wrappers", "npm:0.7.9"],
             ["moment", "npm:2.29.1"],
             ["ms", "npm:2.1.3"],

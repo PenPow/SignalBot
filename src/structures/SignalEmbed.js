@@ -9,6 +9,11 @@ class SignalEmbed extends MessageEmbed {
 			.setColor(messageInteraction.guild.me.displayHexColor)
 			.setFooter(messageInteraction.member.displayName, messageInteraction?.author?.displayAvatarURL({ dynamic: true }) || messageInteraction?.user?.displayAvatarURL({ dynamic: true }));
 	}
+
+	setDescriptionFromBlockArray(blocks) {
+		this.description = blocks.map(lines => lines.filter(l => !!l).join('\n')).filter(b => !!b.length).join('\n\n');
+		return this;
+	}
 }
 
 module.exports = SignalEmbed;

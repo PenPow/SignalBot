@@ -5,6 +5,13 @@ __metadata:
   version: 4
   cacheKey: 7
 
+"@aero/centra@npm:^1.0.0":
+  version: 1.0.6
+  resolution: "@aero/centra@npm:1.0.6"
+  checksum: dcd9ac648b45b2c725cb1670a46d8b60d3bc55d93e2e9ffedccb16eaf508a229bf71df8d5eae84e81d8b4660372628bde28370421d8f43f618afe9154973d8ca
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:7.12.11":
   version: 7.12.11
   resolution: "@babel/code-frame@npm:7.12.11"
@@ -164,6 +171,16 @@ __metadata:
   dependencies:
     got: ^11.8.1
   checksum: 7d9229fd53be5aa16e40b1c69bffbea27a9b8aa44230fe623087d3fbd02302818e82884fcaee0620e3ae7a0300c0014eb32225535c5a8f58038e9f97ec0e7308
+  languageName: node
+  linkType: hard
+
+"@ksoft/api@npm:^3.1.9":
+  version: 3.1.9
+  resolution: "@ksoft/api@npm:3.1.9"
+  dependencies:
+    "@aero/centra": ^1.0.0
+    flatted: ^2.0.1
+  checksum: 64b8d9445b7b95f77a9ae91bba5f3ec4223dbf3f7132a8f4269df55467a5b0a1556a6eb188c38f9fadff430725f77fdd25c72e08c65f6dc252196ec7531f2eae
   languageName: node
   linkType: hard
 
@@ -1836,6 +1853,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"flatted@npm:^2.0.1":
+  version: 2.0.2
+  resolution: "flatted@npm:2.0.2"
+  checksum: a3e5fb71ad3c4f0661cd3899864812bcf3f64bdf6aa5f33f967c9c2a8a5f0c7219707e864c0602115fef40e093415f76a43e77afd0a86990904e2217ddb44eb4
+  languageName: node
+  linkType: hard
+
 "flatted@npm:^3.1.0":
   version: 3.1.1
   resolution: "flatted@npm:3.1.1"
@@ -2326,6 +2350,13 @@ __metadata:
   version: 1.3.8
   resolution: "ini@npm:1.3.8"
   checksum: 62189ce7ea44c5778e757e4232c581212e838f3c39e79d931bb9152fd4b9275f09fb20b96afdd60ba9f5d7996b92486cad6cc617fcb84ff4beedd1b33b86221e
+  languageName: node
+  linkType: hard
+
+"intl@npm:^1.2.5":
+  version: 1.2.5
+  resolution: "intl@npm:1.2.5"
+  checksum: 8fc0b27ce873d865f90bf2e32428b80345e3d91fb2cef7732cfeb6b10c1a83482e4e73c68af48d1dc4eb407a49fc81f1beef34161db7e284259957d3e4fa1aae
   languageName: node
   linkType: hard
 
@@ -4063,6 +4094,7 @@ __metadata:
     "@discordjs/opus": ^0.5.0
     "@discordjs/voice": ^0.5.4
     "@iamtraction/google-translate": ^1.1.2
+    "@ksoft/api": ^3.1.9
     amethyste-api: ^1.1.5
     bufferutil: ^4.0.3
     canvas: ^2.8.0
@@ -4084,6 +4116,7 @@ __metadata:
     fs: ^0.0.1-security
     gamedig: ^3.0.7
     he: ^1.2.0
+    intl: ^1.2.5
     libsodium-wrappers: ^0.7.9
     moment: ^2.29.1
     ms: ^2.1.3
