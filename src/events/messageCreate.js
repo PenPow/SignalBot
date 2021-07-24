@@ -53,6 +53,11 @@ class messageCreate {
 			const command = this.client.commands.get(cmd) || this.client.aliases.get(cmd);
 			if(command && !command.disabled) {
 
+				this.client.db.ensure(`${message.guild.id}-disabled-commands`, []);
+				this.client.db.ensure(`${message.guild.id}-disabled-modules`, []);
+				const disabled = { modules: this.client.db.get(`${message.guild.id}-disabled-modules`), commands: this.client.db.get(`${message.guild.id}-disabled-commands`) };
+
+				if(disabled.modules.includes(command.type) || disabled.commands.includes(command.name.toLowerCase())) return command.sendErrorMessage(message, 1, 'This command is disabled in this guild');
 				if(command.ownerOnly && !this.client.isOwner(message.author)) return;
 				if((command.type === this.client.types.OWNER) && !this.client.isOwner(message.author)) return;
 				if(command.guildOnly && !message.guild) return message.reply('This command can only be used in a guild channel.');
