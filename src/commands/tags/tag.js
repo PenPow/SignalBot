@@ -345,6 +345,17 @@ module.exports = class TagCommand extends Command {
 			interaction.reply({ embeds: [embed], ephemeral: true });
 			break;
 		}
+		case 'query': {
+			const tags = this.client.db.get(`guild_tags_${interaction.guild.id}`);
+			for(let i = 0; i < tags.length; i++) {
+				if(tags[i].name.toLowerCase() === args.get('query').options.get('name')?.value.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
+					tags[i].uses = tags[i].uses + 1;
+					this.client.db.set(`guild_tags_${interaction.guild.id}`, tags);
+					return interaction.reply({ content: tags[i].content });
+				}
+			}
+			break;
+		}
 		case 'list': {
 			const tags = this.client.db.get(`guild_tags_${interaction.guild.id}`) || [];
 			const embed = new SignalEmbed(interaction).setTitle(`${store} Tags in ${interaction.guild.name}`);
@@ -530,7 +541,18 @@ module.exports = class TagCommand extends Command {
 			{
 				name: 'show',
 				type: 'SUB_COMMAND',
-				description: 'Shows an existing tag',
+				description: 'Shows information about an existing tag',
+				options: [{
+					name: 'name',
+					type: 'STRING',
+					description: 'The name of the tag',
+					required: true,
+				}],
+			},
+			{
+				name: 'query',
+				type: 'SUB_COMMAND',
+				description: 'Shows the tag for a slash command',
 				options: [{
 					name: 'name',
 					type: 'STRING',
