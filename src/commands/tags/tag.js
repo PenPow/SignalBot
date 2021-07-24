@@ -85,7 +85,7 @@ module.exports = class TagCommand extends Command {
 						.then(async (collected2) => {
 							for(let i = 0; i < tags.length; i++) {
 								if(tags[i].name === collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
-									tags[i].content = collected2.first().content.length > 2000 ? collected2.first().content : collected2.first().content.slice(0, 1997) + '...';
+									tags[i].content = collected2.first().content.length < 2000 ? collected2.first().content : collected2.first().content.slice(0, 1997) + '...';
 									tags[i].modifiedAt = `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`;
 									tags[i].modified.user = { tag: message.author.tag, id: message.author.id };
 								}
@@ -280,7 +280,7 @@ module.exports = class TagCommand extends Command {
 			const filter = (response) => response.author.id === message.author.id;
 			message.channel.awaitMessages({ filter, max: 1, time: 120000, errors: ['time'] })
 				.then(async (collected) => {
-					if(this.client.commands.some((command) => command.name === collected.first().content.toLowerCase()) || this.client.commands.some((command) => command.aliases.includes(collected.first().content.toLowerCase()))) {
+					if(this.client.commands.some((command) => command.name === collected.first().content.toLowerCase()) || this.client.aliases.some((command) => command.aliases.includes(collected.first().content.toLowerCase()))) {
 						embed.setTitle(`${store} Command Exists`)
 							.setDescription('A command/command alias already exists with that name, to avoid issues, we are cancelling the creation. Try again with another name');
 
@@ -307,7 +307,7 @@ module.exports = class TagCommand extends Command {
 									return;
 								}
 							}
-							this.client.db.push(`guild_tags_${message.guild.id}`, { uses: 0, name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content.length > 2000 ? collected2.first().content : collected2.first().content.slice(0, 1997) + '...', user: { tag: message.author.tag, id: message.author.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: message.author.tag, id: message.author.id } } });
+							this.client.db.push(`guild_tags_${message.guild.id}`, { uses: 0, name: collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase(), content: collected2.first().content.length < 2000 ? collected2.first().content : collected2.first().content.slice(0, 1997) + '...', user: { tag: message.author.tag, id: message.author.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: message.author.tag, id: message.author.id } } });
 							embed.setTitle(`${store} Creating a New Tag (3/3)`)
 								.setDescription(`Tag Successfully Created, access it through \`${this.client.db.get(`${message.guild.id}_prefix`)}${collected.first().content.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()}\``);
 
@@ -354,6 +354,8 @@ module.exports = class TagCommand extends Command {
 					return interaction.reply({ content: tags[i].content });
 				}
 			}
+
+			interaction.reply({ content: 'No Tag Found', ephemeral: true });
 			break;
 		}
 		case 'list': {
@@ -395,7 +397,7 @@ module.exports = class TagCommand extends Command {
 
 			for(let i = 0; i < tags.length; i++) {
 				if(tags[i].name === args.get('edit').options.get('name')?.value.replace(/ /g, '-').replace(/(\r\n|\n|\r)/gm, '').toLowerCase()) {
-					tags[i].content = args.get('edit').options.get('content')?.value.length > 2000 ? args.get('edit').options.get('content')?.value : args.get('edit').options.get('content')?.value.slice(0, 1997) + '...';
+					tags[i].content = args.get('edit').options.get('content')?.value.length < 2000 ? args.get('edit').options.get('content')?.value : args.get('edit').options.get('content')?.value.slice(0, 1997) + '...';
 					tags[i].modifiedAt = `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`;
 					tags[i].modified.user = { tag: interaction.user.tag, id: interaction.user.id };
 				}
@@ -479,7 +481,7 @@ module.exports = class TagCommand extends Command {
 			break;
 		}
 		case 'create': {
-			if(this.client.commands.some((command) => command.name === args.get('create').options.get('name')?.value.toLowerCase()) || this.client.commands.some((command) => command.aliases.includes(args.get('create').options.get('name')?.value.toLowerCase()))) {
+			if(this.client.commands.some((command) => command.name === args.get('create').options.get('name').value.toLowerCase()) || this.client.aliases.some((command) => command.aliases.includes(args.get('create').options.get('name')?.value.toLowerCase()))) {
 				embed.setTitle(`${store} Command Exists`)
 					.setDescription('A command/command alias already exists with that name, to avoid issues, we are cancelling the creation. Try again with another name');
 
@@ -501,7 +503,7 @@ module.exports = class TagCommand extends Command {
 					return;
 				}
 			}
-			this.client.db.push(`guild_tags_${interaction.guild.id}`, { uses: 0, name: args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase(), content: args.get('create').options.get('content')?.value.length > 2000 ? args.get('create').options.get('content')?.value : args.get('create').options.get('content')?.value.slice(0, 1997) + '...', user: { tag: interaction.user.tag, id: interaction.user.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: interaction.user.tag, id: interaction.user.id } } });
+			this.client.db.push(`guild_tags_${interaction.guild.id}`, { uses: 0, name: args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase(), content: args.get('create').options.get('content')?.value.length < 2000 ? args.get('create').options.get('content')?.value : args.get('create').options.get('content')?.value.slice(0, 1997) + '...', user: { tag: interaction.user.tag, id: interaction.user.id }, createdAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modifiedAt: `<t:${ (new Date().getTime() / 1000).toFixed(0)}:F>`, modified: { user: { tag: interaction.user.tag, id: interaction.user.id } } });
 			const embed = new SignalEmbed(interaction).setTitle(`${store} Creating a New Tag (3/3)`)
 				.setDescription(`Tag Successfully Created, access it through \`${this.client.db.get(`${interaction.guild.id}_prefix`)}${args.get('create').options.get('name')?.value.replace(/(\r\n|\n|\r)/gm, '').replace(/ /g, '-').toLowerCase()}\``);
 
