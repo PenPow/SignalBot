@@ -38,7 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["@discordjs/opus", "npm:0.5.3"],
-            ["@discordjs/voice", "npm:0.5.4"],
+            ["@discordjs/voice", "npm:0.5.5"],
             ["@iamtraction/google-translate", "npm:1.1.2"],
             ["@ksoft/api", "npm:3.1.9"],
             ["amethyste-api", "npm:1.1.5"],
@@ -210,15 +210,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@discordjs/voice", [
-        ["npm:0.5.4", {
-          "packageLocation": "./.yarn/cache/@discordjs-voice-npm-0.5.4-c97a8d96de-8ee4ea5eee.zip/node_modules/@discordjs/voice/",
+        ["npm:0.5.5", {
+          "packageLocation": "./.yarn/cache/@discordjs-voice-npm-0.5.5-d53383a51e-9b7856aa79.zip/node_modules/@discordjs/voice/",
           "packageDependencies": [
-            ["@discordjs/voice", "npm:0.5.4"],
+            ["@discordjs/voice", "npm:0.5.5"],
             ["@types/ws", "npm:7.4.5"],
-            ["discord-api-types", "npm:0.18.1"],
-            ["prism-media", "virtual:c97a8d96de976a4d5d6ead9f060baf694034caf6a90daf04ce4f4ba11f2481e76b7e3516e0a84af3a996305ff874dfe8410a2a0e6743ae2c8dfa20b6cfd8f016#npm:1.3.1"],
+            ["discord-api-types", "npm:0.19.0"],
+            ["prism-media", "virtual:d53383a51e08fb9ebe862d8c89a114bbcd4a54bd3e023e4ab180801d8c383d26dcc78086055b2b43031ec629bc2f7cce0bfde79a383952194423c3147436b476#npm:1.3.1"],
             ["tiny-typed-emitter", "npm:2.0.3"],
-            ["ws", "virtual:c97a8d96de976a4d5d6ead9f060baf694034caf6a90daf04ce4f4ba11f2481e76b7e3516e0a84af3a996305ff874dfe8410a2a0e6743ae2c8dfa20b6cfd8f016#npm:7.5.0"]
+            ["ws", "virtual:d53383a51e08fb9ebe862d8c89a114bbcd4a54bd3e023e4ab180801d8c383d26dcc78086055b2b43031ec629bc2f7cce0bfde79a383952194423c3147436b476#npm:7.5.0"]
           ],
           "linkType": "HARD",
         }]
@@ -1522,6 +1522,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/discord-api-types-npm-0.18.1-2d70d751ed-b9ae87cb2d.zip/node_modules/discord-api-types/",
           "packageDependencies": [
             ["discord-api-types", "npm:0.18.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:0.19.0", {
+          "packageLocation": "./.yarn/cache/discord-api-types-npm-0.19.0-f6b522b719-a435ab8fd9.zip/node_modules/discord-api-types/",
+          "packageDependencies": [
+            ["discord-api-types", "npm:0.19.0"]
           ],
           "linkType": "HARD",
         }],
@@ -4288,10 +4295,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["virtual:c97a8d96de976a4d5d6ead9f060baf694034caf6a90daf04ce4f4ba11f2481e76b7e3516e0a84af3a996305ff874dfe8410a2a0e6743ae2c8dfa20b6cfd8f016#npm:1.3.1", {
-          "packageLocation": "./.yarn/$$virtual/prism-media-virtual-344de5f036/0/cache/prism-media-npm-1.3.1-67bb6ad0fd-5d20527179.zip/node_modules/prism-media/",
+        ["virtual:d53383a51e08fb9ebe862d8c89a114bbcd4a54bd3e023e4ab180801d8c383d26dcc78086055b2b43031ec629bc2f7cce0bfde79a383952194423c3147436b476#npm:1.3.1", {
+          "packageLocation": "./.yarn/$$virtual/prism-media-virtual-07a21e7aae/0/cache/prism-media-npm-1.3.1-67bb6ad0fd-5d20527179.zip/node_modules/prism-media/",
           "packageDependencies": [
-            ["prism-media", "virtual:c97a8d96de976a4d5d6ead9f060baf694034caf6a90daf04ce4f4ba11f2481e76b7e3516e0a84af3a996305ff874dfe8410a2a0e6743ae2c8dfa20b6cfd8f016#npm:1.3.1"],
+            ["prism-media", "virtual:d53383a51e08fb9ebe862d8c89a114bbcd4a54bd3e023e4ab180801d8c383d26dcc78086055b2b43031ec629bc2f7cce0bfde79a383952194423c3147436b476#npm:1.3.1"],
             ["@discordjs/opus", null],
             ["@types/discordjs__opus", null],
             ["@types/ffmpeg-static", null],
@@ -4815,7 +4822,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["signal", "workspace:."],
             ["@discordjs/opus", "npm:0.5.3"],
-            ["@discordjs/voice", "npm:0.5.4"],
+            ["@discordjs/voice", "npm:0.5.5"],
             ["@iamtraction/google-translate", "npm:1.1.2"],
             ["@ksoft/api", "npm:3.1.9"],
             ["amethyste-api", "npm:1.1.5"],
@@ -5618,10 +5625,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["virtual:c97a8d96de976a4d5d6ead9f060baf694034caf6a90daf04ce4f4ba11f2481e76b7e3516e0a84af3a996305ff874dfe8410a2a0e6743ae2c8dfa20b6cfd8f016#npm:7.5.0", {
-          "packageLocation": "./.yarn/$$virtual/ws-virtual-255492566f/0/cache/ws-npm-7.5.0-2736efb7e8-f9ac36310e.zip/node_modules/ws/",
+        ["virtual:d53383a51e08fb9ebe862d8c89a114bbcd4a54bd3e023e4ab180801d8c383d26dcc78086055b2b43031ec629bc2f7cce0bfde79a383952194423c3147436b476#npm:7.5.0", {
+          "packageLocation": "./.yarn/$$virtual/ws-virtual-bb5c0706b1/0/cache/ws-npm-7.5.0-2736efb7e8-f9ac36310e.zip/node_modules/ws/",
           "packageDependencies": [
-            ["ws", "virtual:c97a8d96de976a4d5d6ead9f060baf694034caf6a90daf04ce4f4ba11f2481e76b7e3516e0a84af3a996305ff874dfe8410a2a0e6743ae2c8dfa20b6cfd8f016#npm:7.5.0"],
+            ["ws", "virtual:d53383a51e08fb9ebe862d8c89a114bbcd4a54bd3e023e4ab180801d8c383d26dcc78086055b2b43031ec629bc2f7cce0bfde79a383952194423c3147436b476#npm:7.5.0"],
             ["@types/bufferutil", null],
             ["@types/utf-8-validate", null],
             ["bufferutil", null],
