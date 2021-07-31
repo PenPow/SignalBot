@@ -15,6 +15,8 @@ class Ready {
 		const bans = this.client.db.get('global_bans');
 		const reminders = this.client.db.get('global_reminders');
 
+		const commandArray = [];
+
 		this.client.expire(async (message) => {
 			const messageArray = message.split('-');
 

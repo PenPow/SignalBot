@@ -145,7 +145,7 @@ class Client extends Discord.Client {
 		const expired = () => {
 			const sub = redis.createClient({ url: this.config.apiKeys.redis.url });
 			sub.subscribe('__keyevent@0__:expired', () => {
-				sub.on('message', (channel, message) => {
+				sub.on('message', (_, message) => {
 					callback(message);
 				});
 			});

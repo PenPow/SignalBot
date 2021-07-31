@@ -21,7 +21,7 @@ module.exports = class HelpCommand extends Command {
 		const all = args?.first()?.value || '';
 
 		const embed = new SignalEmbed(interaction);
-		const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`);
+		const prefix = '/'
 
 		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, MUSIC } = interaction.client.types;
 		const { capitalize } = interaction.client.utils;
@@ -62,8 +62,8 @@ module.exports = class HelpCommand extends Command {
 				else if(!command_loop.userPermissions || all) commands[command_loop.type].push(`\`${command_loop.name}\``);
 			});
 
-			const total = Object.values(commands).reduce((a, b) => a + b.length, 0) - commands[OWNER].length;
-			const size = interaction.client.commands.size - commands[OWNER].length;
+			const total = Object.values(commands).reduce((a, b) => a + b.length, 0);
+			const size = interaction.client.commands.size;
 
 			embed
 				.setTitle('Signal\'s Commands')

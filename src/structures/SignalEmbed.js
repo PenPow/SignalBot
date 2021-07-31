@@ -7,7 +7,7 @@ class SignalEmbed extends MessageEmbed {
 
 		this.setTimestamp()
 			.setColor(interaction.guild.me.displayHexColor)
-			.setFooter(interaction.member.displayName, messageInteraction?.user?.displayAvatarURL({ dynamic: true }));
+			.setFooter(interaction.member.displayName, interaction?.user?.displayAvatarURL({ dynamic: true }));
 	}
 
 	setDescriptionFromBlockArray(blocks) {
