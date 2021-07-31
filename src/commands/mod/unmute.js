@@ -75,7 +75,20 @@ module.exports = class UnmuteCommand extends Command {
 		}
 
 		else {
-			this.client.utils.unmute(this.client, { guild: interaction.guild.id, member: member.id, moderator: interaction.user.id });
+			try {
+				const guildmember = await guild.members.fetch(member.id);
+				guildmember.roles.remove(role.id);
+			}
+			catch(e) {
+				// eslint disable-line
+			}
+		
+			const embed = new MessageEmbed()
+				.setTitle(`${require('./emojis.js').mod} Your Mute Expired (or was removed) in ${guild.name}`)
+				.setTimestamp()
+				.setColor(guild.me.displayHexColor);
+		
+			member.send({ embeds: [embed] }).catch();
 		}
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });

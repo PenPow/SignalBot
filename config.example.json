@@ -10,7 +10,7 @@
             "token": ""
         },
         "redis": {
-            "url": ""
+            "ip": ""
         },
         "amethyste": {
             "token": ""

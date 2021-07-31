@@ -69,8 +69,9 @@ class ActionManager {
      */
 	initRedis(client) {
 		return createClient({
-			url: client.config.apiKeys.redis.url,
+			host: client.config.apiKeys.redis.ip,
 			enable_offline_queue: true,
+			db: 0,
 		});
 	}
 }
