@@ -122,14 +122,14 @@ class Command {
 
 	/**
      * Helper Method to check permissions
-     * @param {Message} message
+     * @param {interaction} interaction
      * @param {boolean} ownerOverride
      */
-	checkPermissions(message, ownerOverride = true) {
-		if(!message.channel.permissionsFor(message.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) return false;
+	checkPermissions(interaction, ownerOverride = true) {
+		if(!interaction.channel.permissionsFor(interaction.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) return false;
 
-		const clientPermission = this.checkClientPermissions(message);
-		const userPermission = this.checkUserPermissions(message, ownerOverride);
+		const clientPermission = this.checkClientPermissions(interaction);
+		const userPermission = this.checkUserPermissions(interaction, ownerOverride);
 
 		if(clientPermission && userPermission) return true;
 		else return false;
@@ -138,25 +138,25 @@ class Command {
 	/**
      * Checks the user permissions
      * Code modified from: https://github.com/discordjs/Commando/blob/master/src/commands/base.js
-     * @param {Message} message
+     * @param {interaction} interaction
      * @param {boolean} ownerOverride
      */
-	checkUserPermissions(message, ownerOverride = true) {
+	checkUserPermissions(interaction, ownerOverride = true) {
 		if(!this.ownerOnly && !this.userPermissions) return true;
-		if(ownerOverride && this.client.isOwner(message.member)) return true;
+		if(ownerOverride && this.client.isOwner(interaction.member)) return true;
 
-		if(this.ownerOnly && !this.client.isOwner(message.member)) return false;
+		if(this.ownerOnly && !this.client.isOwner(interaction.member)) return false;
 
-		if(message.guild.members.cache.get(message.member.id).permissions.has('ADMINISTRATOR')) return true;
+		if(interaction.guild.members.cache.get(interaction.member.id).permissions.has('ADMINISTRATOR')) return true;
 		if(this.userPermissions !== null) {
-			const missingPermissions = message.channel.permissionsFor(message.author || message.user).missing(this.userPermissions).map(p => permissions[p]);
+			const missingPermissions = interaction.channel.permissionsFor(interaction.user).missing(this.userPermissions).map(p => permissions[p]);
 			if(missingPermissions.length !== 0) {
-				const embed = new SignalEmbed(message)
-					.setAuthor(`${message?.author?.tag || message?.user?.tag}`, message?.author?.displayAvatarURL({ dynamic: true }) || message?.user?.displayAvatarURL({ dynamic: true }))
+				const embed = new SignalEmbed(interaction)
+					.setAuthor(`${interaction?.user?.tag}`, interaction?.user?.displayAvatarURL({ dynamic: true }))
 					.setTitle(`${fail} Missing User Permissions`)
 					.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
 
-				message.reply({ embeds: [embed], ephemeral: true });
+				interaction.reply({ embeds: [embed], ephemeral: true });
 				return false;
 			}
 		}
@@ -166,38 +166,36 @@ class Command {
 
 	/**
      * Checks the Client Permissions
-     * @param {Message} message
+     * @param {interaction} interaction
      */
-	checkClientPermissions(message) {
-		const missingPermissions = message.channel.permissionsFor(message.guild.me).missing(this.clientPermissions).map(p => permissions[p]);
+	checkClientPermissions(interaction) {
+		const missingPermissions = interaction.channel.permissionsFor(interaction.guild.me).missing(this.clientPermissions).map(p => permissions[p]);
 		if(missingPermissions.length !== 0) {
-			const embed = new SignalEmbed(message)
-				.setAuthor(`${this.client.user.tag}`, message.client.user.displayAvatarURL({ dynamic: true }))
+			const embed = new SignalEmbed(interaction)
+				.setAuthor(`${this.client.user.tag}`, interaction.client.user.displayAvatarURL({ dynamic: true }))
 				.setTitle(`${fail} Missing Bot Permissions`)
 				.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
 
-			message.reply({ embeds: [embed], ephemeral: true });
+				interaction.reply({ embeds: [embed], ephemeral: true });
 			return false;
 		}
-		else {return true;}
+		else { return true; }
 	}
 
 	/**
      * Creates and sends command failure embed
-     * @param {Message} message
+     * @param {interaction} interaction
      * @param {int} errorType
      * @param {string} reason
      * @param {string} errorMessage
      * @param {boolean} fatal
      */
-	sendErrorMessage(message, errorType, reason, errorMessage = null, fatal = false) {
+	sendErrorMessage(interaction, errorType, reason, errorMessage = null, fatal = false) {
 		errorType = this.errorTypes[errorType];
 
-		let prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
+		const prefix = '/'
 
-		if(!message?.author) prefix = '/';
-
-		const embed = new SignalEmbed(message)
+		const embed = new SignalEmbed(interaction)
 			.setDescription(`\`\`\`diff\n- ${errorType}\n+ ${reason}\`\`\``);
 
 		if(fatal) {
@@ -214,13 +212,8 @@ class Command {
 
 		if(errorMessage) embed.addField('Error Message', `\`\`\`${errorMessage}\`\`\``);
 
-		if(!message.author) {
-			if(message.deferred || message.replied) {message.followUp({ ephemeral: true, embeds: [embed] });}
-			else { message.reply({ embeds: [embed], ephemeral: true }); }
-		}
-		else {
-			message.reply({ embeds: [embed] });
-		}
+		if(interaction.deferred || interaction.replied) {interaction.followUp({ ephemeral: true, embeds: [embed] });}
+		else { interaction.reply({ embeds: [embed], ephemeral: true }); }
 
 		return;
 
@@ -228,77 +221,80 @@ class Command {
 
 	/**
      * Creates and Sends Mod Log Embed
-     * @param {Message} message
+     * @param {interaction} interaction
      * @param {string} reason
 	 * @param {User} target
      * @param {Object} fields
      */
-	async sendModLogMessage(message, reason, target, action, fields = {}) {
-		await message.guild.channels.fetch();
+	async sendModLogMessage(interaction, reason, target, action, fields = {}) {
+		await interaction.guild.channels.fetch();
 		let user;
 		try {
-			user = await message.client.users.fetch(target);
+			user = await interaction.client.users.fetch(target);
 		}
 		// eslint-disable-next-line no-empty
 		catch(e) {
 
 		}
-		const modLog = message.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
 
-		if(modLog && modLog.viewable && modLog.permissionsFor(message.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
-			const caseNumber = parseInt(message.client.utils.getCaseNumber(message.client, message.guild, modLog));
-			const prefix = message.client.db.get(`${message.guild.id}_prefix`) || message.client.prefix;
+		if(modLog && modLog.viewable && modLog.permissionsFor(interaction.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
+			const caseNumber = parseInt(interaction.client.utils.getCaseNumber(interaction.client, interaction.guild, modLog));
+			const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`) || interaction.client.prefix;
+			let reply = null;
+			if(interaction.replied) reply = await interaction.fetchReply();
+
 			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
-			const embed = new SignalEmbed(message)
+			const embed = new SignalEmbed(interaction)
 				.setFooter(`Case #${caseNumber}`)
 				.setThumbnail(user?.displayAvatarURL({ dynamic: true }))
-				.setAuthor(`${message?.author?.tag || message?.user?.tag} (${message?.author?.id || message?.user?.id})`, message?.author?.displayAvatarURL({ dynamic: true }) || message?.user?.displayAvatarURL({ dynamic: true }));
+				.setAuthor(`${interaction?.user?.tag} (${interaction?.user?.id})`, interaction?.user?.displayAvatarURL({ dynamic: true }));
 
 			switch(action) {
 
 			case 'mute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Context:** ${message?.url ? `[Link](${message?.url})` : 'Slash Command'}\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Context:** ${reply ? `[Link](${reply?.url})` : 'N/A'}\n**Reason:** ${reason}`);
 				embed.setColor('#ffcc00');
 				break;
 
 			case 'warn':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Context:** ${message?.url ? `[Link](${message?.url})` : 'Slash Command'}\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Context:** ${reply ? `[Link](${reply?.url})` : 'Slash Command'}\n**Reason:** ${reason}`);
 				embed.setColor('#f9f906');
 				break;
 
 			case 'unmute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#7ef31f');
 				break;
 
 			case 'unban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#7ef31f');
 				break;
 
 			case 'ban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#ff1a00');
 				break;
 
 			case 'kick':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#f98406');
 				break;
 
 			case 'softban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#f98406');
 				break;
 
 			case 'slowmode':
-				embed.setDescription(`**Channel:** <#${target}> (${target})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setDescription(`**Channel:** <#${target}> (${target})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#496bdd');
 				embed.setThumbnail();
 				break;
 
 			case 'default':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${message.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
 				embed.setColor('#ff1a00');
 				break;
 			}
@@ -307,7 +303,7 @@ class Command {
 				embed.addField(field, fields[field], true);
 			}
 
-			const sentMessage = await modLog.send({ embeds: [embed] }).catch(err => message.client.logger.error(err.stack));
+			const sentMessage = await modLog.send({ embeds: [embed] }).catch(err => interaction.client.logger.error(err.stack));
 
 			return sentMessage.id;
 		}
