@@ -16,7 +16,7 @@ module.exports = class AvatarCommand extends Command {
 		});
 	}
 
-	slashRun(interaction, args) {
+	run(interaction, args) {
 		const member = args?.first()?.member || interaction.member;
 
 		const embed = new SignalEmbed(interaction)

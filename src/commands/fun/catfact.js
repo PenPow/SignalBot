@@ -19,7 +19,7 @@ module.exports = class CatFactCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('https://catfact.ninja/fact');
 			const fact = (await res.json()).fact;

@@ -14,7 +14,7 @@ module.exports = class ToBeContinuedCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const member = args.get('member')?.member;
 
 		await interaction.defer();

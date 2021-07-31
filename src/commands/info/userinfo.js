@@ -33,7 +33,7 @@ module.exports = class UserInfoCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const member = args?.first()?.member || interaction.member;
 		const userFlags = (await member.user.fetchFlags()).toArray();
 

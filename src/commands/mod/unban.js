@@ -18,7 +18,7 @@ module.exports = class UnbanCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const exists = promisify(this.client.redis.exists).bind(this.client.redis);
 
 		let member;

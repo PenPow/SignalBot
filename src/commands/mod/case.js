@@ -18,7 +18,7 @@ module.exports = class CaseCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		let caseID = args.get('caseid')?.value || 'latest';
 
 		if(caseID === 'latest') {

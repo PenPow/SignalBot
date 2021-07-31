@@ -14,7 +14,7 @@ module.exports = class OwoCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const embed = new SignalEmbed(interaction)
 			.setDescription(Owoify(args.get('text').value));
 		interaction.reply({ embeds: [embed], ephemeral: true });

@@ -15,7 +15,7 @@ module.exports = class EnableCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const toEnable = args.get('command')?.value;
 		let keyExists = this.client.db.includes(`${interaction.guild.id}-disabled-modules`, toEnable.toLowerCase()) || this.client.db.includes(`${interaction.guild.id}-disabled-commands`, toEnable.toLowerCase());
 		if(['deploy', 'eval'].includes(toEnable)) keyExists = false;

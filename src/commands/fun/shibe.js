@@ -19,7 +19,7 @@ module.exports = class ShibeCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('http://shibe.online/api/shibes');
 			const img = (await res.json())[0];

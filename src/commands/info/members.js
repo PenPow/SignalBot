@@ -18,7 +18,7 @@ module.exports = class MembersCommand extends Command {
 		});
 	}
 
-	slashRun(interaction) {
+	run(interaction) {
 		const members = interaction.guild.members.cache.array();
 		const online = members.filter((m) => m.presence.status === 'online').length;
 		const offline = members.filter((m) => m.presence.status === 'offline').length;

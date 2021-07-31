@@ -30,7 +30,7 @@ module.exports = class EmojifyCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		let msg = args.first()?.value.slice(args.first()?.value.indexOf(args.first()?.value), args.first()?.value.length);
 		msg = msg.split('').map(c => {
 			if(c === ' ') return c;

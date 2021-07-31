@@ -16,7 +16,7 @@ module.exports = class MinCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		try {
 			const minRoll = new DiceExpression(args.get('roll')?.value).min();
 			interaction.reply({ content: `The lowest diceroll possible is **${minRoll}**`, ephemeral: true });

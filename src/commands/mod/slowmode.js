@@ -18,7 +18,7 @@ module.exports = class SlowmodeCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const time = ms(args.get('time')?.value);
 		if(isNaN(time)) return this.sendErrorMessage(interaction, 0, 'Please specify a valid time. (ex. 10m, 10s, 1h)');
 		if(interaction.channel.type !== 'GUILD_TEXT') return this.sendErrorMessage(interaction, 0, 'Due to discord restrictions, we can only adjust the rate limit in guild text channels.');

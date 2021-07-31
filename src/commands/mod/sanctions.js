@@ -18,7 +18,7 @@ module.exports = class SanctionsCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const member = args.get('member')?.member;
 
 		const embed = new SignalEmbed(interaction)

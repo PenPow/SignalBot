@@ -15,7 +15,7 @@ module.exports = class PingCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		const embed = new SignalEmbed(interaction)
 			.setDescription('`Pinging...`');
 

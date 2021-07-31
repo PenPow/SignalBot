@@ -15,7 +15,7 @@ module.exports = class WeatherCommand extends Command {
 		});
 	}
 
-	slashRun(interaction, args) {
+	run(interaction, args) {
 		try {
 			weather.find({ search: args.first().value, degreeType: 'C' }, (err, result) => {
 				if(err) interaction.channel.send(err.message);

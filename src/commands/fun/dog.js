@@ -19,7 +19,7 @@ module.exports = class DogCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('https://dog.ceo/api/breeds/image/random');
 			const img = (await res.json()).message;

@@ -16,7 +16,7 @@ module.exports = class ReminderCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 		if (isNaN(ms(args.get('time')?.value))) return this.sendErrorMessage(interaction, 0, 'Please provide a valid time');
 		const time = args.get('time')?.value;

@@ -19,7 +19,7 @@ module.exports = class FoxCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('https://randomfox.ca/floof/');
 			const img = (await res.json()).image;

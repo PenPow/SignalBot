@@ -15,7 +15,7 @@ module.exports = class ServerIconCommand extends Command {
 		});
 	}
 
-	slashRun(interaction) {
+	run(interaction) {
 		const embed = new SignalEmbed(interaction)
 			.setTitle(`${interaction.guild.name}'s Icon`)
 			.setImage(interaction.guild.iconURL({ dynamic: true, size: 512 }));

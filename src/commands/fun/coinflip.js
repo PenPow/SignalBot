@@ -17,7 +17,7 @@ module.exports = class CoinFlipCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		const n = Math.floor(Math.random() * 2);
 
 		let result;

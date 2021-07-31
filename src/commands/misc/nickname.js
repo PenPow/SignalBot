@@ -18,7 +18,7 @@ module.exports = class NicknameCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const nickname = args.first()?.value;
 
 		if (nickname.length > 32) {return this.sendErrorMessage(interaction, 0, 'Please ensure the nickname is no larger than 32 characters');}

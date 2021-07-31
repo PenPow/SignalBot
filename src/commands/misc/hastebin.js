@@ -16,7 +16,7 @@ module.exports = class HastebinCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const content = args.get('message').value;
 		try {
 			const res = await fetch('https://hastebin.com/documents', {

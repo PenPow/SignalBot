@@ -18,7 +18,7 @@ module.exports = class CountryCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const embed = new SignalEmbed(interaction);
 
 		const endpoint = args.get('country')?.value.split('').length <= 3 ? 'alpha' : 'name';

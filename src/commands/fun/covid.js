@@ -15,7 +15,7 @@ module.exports = class CovidCommand extends Command {
 		});
 	}
 
-	slashRun(interaction, args) {
+	run(interaction, args) {
 		const countries = args.first()?.value || 'world';
 
 		if(countries === 'world' || countries === 'global' || countries === 'all') {

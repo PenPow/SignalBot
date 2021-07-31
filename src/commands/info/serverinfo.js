@@ -31,7 +31,7 @@ module.exports = class ServerInfoCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		const roleCount = interaction.guild.roles.cache.size - 1;
 
 		const guildOwner = await interaction.client.users.fetch(interaction.guild.ownerID);

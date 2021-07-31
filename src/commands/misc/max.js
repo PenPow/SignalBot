@@ -16,7 +16,7 @@ module.exports = class MaxCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		try {
 			const maxRoll = new DiceExpression(args.get('roll')?.value).min();
 			interaction.reply({ content: `The highest diceroll possible is **${maxRoll}**`, ephemeral: true });

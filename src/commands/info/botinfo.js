@@ -18,7 +18,7 @@ module.exports = class BotInfoCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		const botOwner = await interaction.client.users.fetch(interaction.client.ownerId);
 		const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`);
 		const tech = stripIndent`

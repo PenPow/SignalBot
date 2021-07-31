@@ -15,7 +15,7 @@ module.exports = class lmgtfyCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const url = new URL('https://letmegooglethat.com/');
 		url.searchParams.append('q', args.get('query')?.value);
 

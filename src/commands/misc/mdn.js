@@ -21,7 +21,7 @@ module.exports = class mdnCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const query = args.get('search')?.value.trim();
 		await interaction.defer({ ephemeral: true });
 

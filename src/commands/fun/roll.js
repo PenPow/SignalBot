@@ -17,7 +17,7 @@ module.exports = class RollCommand extends Command {
 		});
 	}
 
-	slashRun(interaction, args) {
+	run(interaction, args) {
 		const limit = args.first()?.value || 6;
 
 		const n = Math.floor(Math.random() * limit + 1);

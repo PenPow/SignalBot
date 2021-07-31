@@ -1,5 +1,4 @@
 const Command = require('../../structures/Command');
-const SignalEmbed = require('../../structures/SignalEmbed');
 const { MessageAttachment } = require('discord.js');
 
 module.exports = class ApprovedCommand extends Command {
@@ -15,7 +14,7 @@ module.exports = class ApprovedCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const member = args.get('member')?.member;
 
 		await interaction.defer();

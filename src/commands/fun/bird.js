@@ -19,7 +19,7 @@ module.exports = class BirdCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('http://shibe.online/api/birds');
 			const img = (await res.json())[0];

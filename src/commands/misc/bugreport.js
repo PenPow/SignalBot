@@ -17,7 +17,7 @@ module.exports = class BugReportCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		let feedback = args.first()?.value;
 
 		let feedbackChannel;

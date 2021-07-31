@@ -21,7 +21,7 @@ module.exports = class TranslateCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		if(!langs.includes(args.get('language').value.toLowerCase())) return this.sendErrorMessage(interaction, 0, 'Please provide a valid language');
 
 		const language = args.get('language').value.toLowerCase();

@@ -29,7 +29,7 @@ module.exports = class ChannelInfoCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const channel = interaction.guild.channels.cache.get(args?.first()?.value) || interaction.channel;
 
 		const embed = new SignalEmbed(interaction)

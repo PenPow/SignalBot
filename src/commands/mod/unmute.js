@@ -17,7 +17,7 @@ module.exports = class UnmuteCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const muteRole = this.client.db.get(`muterole-${interaction.guild.id}`) || interaction.guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 
 		if(!muteRole) return this.sendErrorMessage(interaction, 1, 'There is currently no mute role set on this server');
@@ -76,19 +76,20 @@ module.exports = class UnmuteCommand extends Command {
 
 		else {
 			try {
-				const guildmember = await guild.members.fetch(member.id);
+				const guildmember = await interaction.guild.members.fetch(member.id);
+				const role = this.client.db.get(`muterole-${interaction.guild.id}`) || interaction.guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 				guildmember.roles.remove(role.id);
 			}
 			catch(e) {
 				// eslint disable-line
 			}
-		
-			const embed = new MessageEmbed()
-				.setTitle(`${require('./emojis.js').mod} Your Mute Expired (or was removed) in ${guild.name}`)
+
+			const unmuteEmbed = new SignalEmbed(interaction)
+				.setTitle(`${require('./emojis.js').mod} Your Mute Expired (or was removed) in ${interaction.guild.name}`)
 				.setTimestamp()
-				.setColor(guild.me.displayHexColor);
-		
-			member.send({ embeds: [embed] }).catch();
+				.setColor(interaction.guild.me.displayHexColor);
+
+			member.send({ embeds: [unmuteEmbed] }).catch();
 		}
 
 		interaction.reply({ ephemeral: true, embeds: [embed] });

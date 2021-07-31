@@ -17,11 +17,11 @@ module.exports = class HelpCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const all = args?.first()?.value || '';
 
 		const embed = new SignalEmbed(interaction);
-		const prefix = '/'
+		const prefix = '/';
 
 		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, MUSIC } = interaction.client.types;
 		const { capitalize } = interaction.client.utils;

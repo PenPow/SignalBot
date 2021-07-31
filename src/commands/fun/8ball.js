@@ -40,7 +40,7 @@ module.exports = class EightBallCommand extends Command {
 		});
 	}
 
-	slashRun(interaction, args) {
+	run(interaction, args) {
 		const question = args.first()?.value;
 
 		const embed = new SignalEmbed(interaction)

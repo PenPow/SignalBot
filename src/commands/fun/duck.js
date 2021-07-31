@@ -19,7 +19,7 @@ module.exports = class DuckCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('https://random-d.uk/api/v2/random');
 			const img = (await res.json()).url;

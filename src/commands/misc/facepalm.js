@@ -13,7 +13,7 @@ module.exports = class FacepalmCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		interaction.reply({ content: 'https://ss.penpow.dev/i/UCGFnx.jpg' });
 	}
 

@@ -19,7 +19,7 @@ module.exports = class DogFactCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('https://dog-api.kinduff.com/api/facts');
 			const fact = (await res.json()).facts[0];

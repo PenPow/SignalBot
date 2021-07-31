@@ -15,7 +15,7 @@ module.exports = class AsciiCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const rendered = await asyncFiglet(args.get('text').value);
 		interaction.reply({ content: '```' + rendered + '```', ephemeral: true });
 	}

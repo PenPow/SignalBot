@@ -19,7 +19,7 @@ module.exports = class GModCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const ip = args.get('ip')?.value;
 		let options = {
 			type: 'garrysmod',

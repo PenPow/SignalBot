@@ -108,7 +108,7 @@ class Command {
      * @param {Interaction} interaction
      * @param {Array<options>} args
      */
-	slashRun(interaction, args) { // eslint-disable-line
+	run(interaction, args) { // eslint-disable-line
 		throw new Error(`${this.name} has no slashRun() method`);
 	}
 
@@ -176,7 +176,7 @@ class Command {
 				.setTitle(`${fail} Missing Bot Permissions`)
 				.setDescription(`\`\`\`diff\n${missingPermissions.map(p => `- ${p}`).join('\n')}\`\`\``);
 
-				interaction.reply({ embeds: [embed], ephemeral: true });
+			interaction.reply({ embeds: [embed], ephemeral: true });
 			return false;
 		}
 		else { return true; }
@@ -193,7 +193,7 @@ class Command {
 	sendErrorMessage(interaction, errorType, reason, errorMessage = null, fatal = false) {
 		errorType = this.errorTypes[errorType];
 
-		const prefix = '/'
+		const prefix = '/';
 
 		const embed = new SignalEmbed(interaction)
 			.setDescription(`\`\`\`diff\n- ${errorType}\n+ ${reason}\`\`\``);

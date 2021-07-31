@@ -17,7 +17,7 @@ module.exports = class StatsCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		const days = parseInt((interaction.client.uptime / (1000 * 60 * 60 * 24)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60) : parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60);
 		const hours = parseInt((this.client.uptime / (1000 * 60 * 60)) % 24) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60)) % 24) : parseInt((this.client.uptime / (1000 * 60 * 60)) % 24);
 		const minutes = parseInt((this.client.uptime / (1000 * 60)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60)) % 60) : parseInt((this.client.uptime / (1000 * 60)) % 60);

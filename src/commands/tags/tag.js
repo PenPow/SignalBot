@@ -17,7 +17,7 @@ module.exports = class TagCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		await this.client.db.ensure(`guild_tags_${interaction.guild.id}`, []);
 		await this.client.db.ensure('guild_tags', []);
 		switch(args.first().name) {

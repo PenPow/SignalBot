@@ -15,7 +15,7 @@ module.exports = class DisableCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const toDisable = args.get('command')?.value;
 
 		if(['disable', 'enable'].includes(toDisable.toLowerCase())) return this.sendErrorMessage(interaction, 0, 'Cannot disable this command, as it would brick Signal');

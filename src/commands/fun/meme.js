@@ -18,7 +18,7 @@ module.exports = class MemeCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('https://meme-api.herokuapp.com/gimme');
 			const jsonres = await res.json();

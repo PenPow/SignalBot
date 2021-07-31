@@ -19,7 +19,7 @@ module.exports = class MinecraftCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const ip = args.get('ip')?.value;
 		const favicon = `https://eu.mc-api.net/v3/server/favicon/${ip}`;
 

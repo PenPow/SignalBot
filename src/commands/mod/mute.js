@@ -18,7 +18,7 @@ module.exports = class MuteCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const muteRole = this.client.db.get(`muterole-${interaction.guild.id}`) || interaction.guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 
 		if(!muteRole) return this.sendErrorMessage(interaction, 1, 'There is currently no mute role set on this server');

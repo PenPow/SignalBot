@@ -16,7 +16,7 @@ module.exports = class BinaryCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const embed = new SignalEmbed(interaction);
 
 		const input = args.get('text')?.value;

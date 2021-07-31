@@ -17,7 +17,7 @@ module.exports = class WarnCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		let member;
 
 		try {

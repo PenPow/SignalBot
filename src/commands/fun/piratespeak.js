@@ -15,7 +15,7 @@ module.exports = class yarrCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const embed = new SignalEmbed(interaction)
 			.setDescription(PirateSpeak.translate(args.get('text').value));
 		interaction.reply({ embeds: [embed], ephemeral: true });

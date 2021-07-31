@@ -19,7 +19,7 @@ module.exports = class ShortURLCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		try {
 			const res = await fetch(`https://is.gd/create.php?format=simple&url=${encodeURI(args.get('url')?.value)}`);
 			const body = await res.text();

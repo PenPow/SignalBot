@@ -17,7 +17,7 @@ module.exports = class ReasonCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const caseInformation = this.client.db.get(`case-${interaction.guild.id}-${args.get('caseid')?.value}`);
 		if(!caseInformation) return this.sendErrorMessage(interaction, 1, 'No Case Found');
 		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');

@@ -12,7 +12,7 @@ module.exports = class ReverseCommand extends Command {
 		});
 	}
 
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		interaction.reply({ content: args.get('text').value.split('').reverse().join(''), ephemeral: true });
 	}
 
