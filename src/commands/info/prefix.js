@@ -14,29 +14,6 @@ module.exports = class PrefixCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-
-		if(!message.member.permissions.has('ADMINISTRATOR') || !args[0]) {
-			const prefix = this.client.db.get(`${message.guild.id}_prefix`);
-			const embed = new SignalEmbed(message)
-				.setTitle(`Signal's Prefix for ${message.guild.name}`)
-				.addField('Prefix', `\`${prefix}\``, true)
-				.addField('Example', `\`${prefix}ping\``, true);
-			return message.reply({ embeds: [embed] });
-		}
-
-		else {
-			const prefix = this.client.db.get(`${message.guild.id}_prefix`);
-			this.client.db.set(`${message.guild.id}_prefix`, args[0]);
-
-			const embed = new SignalEmbed(message)
-				.setTitle(`Updated Prefix for ${message.guild.name}`)
-				.addField('Prefix', `\`${prefix}\` ➔ \`${args[0]}\``, true)
-				.addField('Example', `\`${args[0]}ping\``, true);
-			return message.reply({ embeds: [embed] });
-		}
-
-	}
 
 	async slashRun(interaction, args) {
 

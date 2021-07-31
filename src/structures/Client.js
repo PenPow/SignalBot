@@ -49,7 +49,6 @@ class Client extends Discord.Client {
 			MUSIC: 'music',
 			MOD: 'mod',
 			ADMIN: 'admin',
-			OWNER: 'owner',
 		};
 
 		/**

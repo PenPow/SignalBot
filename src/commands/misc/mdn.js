@@ -20,49 +20,6 @@ module.exports = class mdnCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide a search term');
-
-		const query = args.join(' ').trim();
-		message.channel.startTyping();
-
-		try {
-			const qString = `https://developer.mozilla.org/api/v1/search?${encode({ q: query })}`;
-			let hit = cache.get(qString);
-
-			if (!hit) {
-				const result = await fetch(qString).then((r) => r.json());
-				hit = result.documents?.[0];
-				cache.set(qString, hit);
-			}
-
-			if (!hit) {
-				return this.sendErrorMessage(message, 0, `No search result found for query \`${query}\``);
-			}
-
-			const url = `https://developer.mozilla.org/${hit.mdn_url}`;
-
-			const linkReplaceRegex = /\[(.+?)\]\((.+?)\)/g;
-			const boldCodeBlockRegex = /`\*\*(.*)\*\*`/g;
-			const intro = hit.summary
-				.replace(/\s+/g, ' ')
-				.replace(linkReplaceRegex, '[$1](https://developer.mozilla.org/<$2>)')
-				.replace(boldCodeBlockRegex, '**`$1`**');
-
-			const parts = [`💻 __[**${hit.title}**](<${url}>)__`, intro];
-
-			message.channel.stopTyping();
-			const embed = new SignalEmbed(message)
-				.setTitle(`${misc} MDN Lookup 💻`)
-				.setDescription(parts.join('\n'));
-
-			message.reply({ embeds: [embed] });
-		}
-		catch(err) {
-			message.client.logger.error(err.stack);
-			this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);
-		}
-	}
 
 	async slashRun(interaction, args) {
 		const query = args.get('search')?.value.trim();

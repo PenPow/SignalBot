@@ -29,26 +29,6 @@ module.exports = class EmojifyCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if (!args[0]) return this.sendErrorMessage(message, 0, 'Please provide a message to emojify');
-		let msg = message.content.slice(message.content.indexOf(args[0]), message.content.length);
-		msg = msg.split('').map(c => {
-			if(c === ' ') return c;
-			else if (/[0-9]/.test(c)) return numberMap[c];
-			else return (/[a-zA-Z]/.test(c)) ? ':regional_indicator_' + c.toLowerCase() + ':' : '';
-		}).join('');
-
-		if(msg.length > 2048) {
-			msg = msg.slice(0, msg.length - (msg.length - 2033));
-			msg = msg.slice(0, msg.lastIndexOf(':')) + '**...**';
-		}
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${fun} Emojify ▶️`)
-			.setDescription(msg);
-
-		message.reply({ embeds: [embed] });
-	}
 
 	async slashRun(interaction, args) {
 		let msg = args.first()?.value.slice(args.first()?.value.indexOf(args.first()?.value), args.first()?.value.length);

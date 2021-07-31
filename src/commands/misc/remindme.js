@@ -15,40 +15,6 @@ module.exports = class ReminderCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-		if (!args[0] || isNaN(ms(args[0]))) return this.sendErrorMessage(message, 0, 'Please provide a valid time');
-		const time = args[0];
-		const msg = args.slice(1).join(' ');
-
-		if(!msg) return this.sendErrorMessage(message, 0, 'Please provide a message for the reminder');
-		const uuid = genRanHex(6);
-
-		const rData = {
-			user: message.author.id,
-			uuid: uuid,
-			message: msg,
-			createdAt: (new Date(Date.now()).getTime() / 1000).toFixed(0),
-			expireAt: (new Date(Date.now()).getTime() / 1000).toFixed(0),
-		};
-
-		this.client.db.push('global_reminders', rData);
-		this.client.db.set(`reminder_${uuid}`, rData);
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${success} Reminder Set`);
-
-		const redisClient = this.client.redis;
-		try {
-			const redisKey = `reminder-${uuid}`;
-			redisClient.set(redisKey, 'Reminder', 'EX', Math.round(ms(time) / 1000));
-		}
-		catch(e) {
-			this.client.logger.error(e.stack);
-		}
-
-		message.reply({ embeds: [embed] });
-	}
 
 	async slashRun(interaction, args) {
 		const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');

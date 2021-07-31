@@ -18,23 +18,6 @@ module.exports = class CatCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		const apiKey = message.client.apiKeys.catApi.token;
-		try {
-			const res = await fetch('https://api.thecatapi.com/v1/images/search', { headers: { 'x-api-key': apiKey } });
-			const img = (await res.json())[0].url;
-
-			const embed = new SignalEmbed(message)
-				.setTitle(`${fun} Meow! 🐈`)
-				.setImage(img);
-
-			message.reply({ embeds: [embed] });
-		}
-		catch(err) {
-			message.client.logger.error(err.stack);
-			this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);
-		}
-	}
 
 	async slashRun(interaction) {
 		const apiKey = interaction.client.apiKeys.catApi.token;

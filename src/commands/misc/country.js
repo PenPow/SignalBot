@@ -17,35 +17,6 @@ module.exports = class CountryCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 1, 'Please provide a country name/acronym');
-		const embed = new SignalEmbed(message);
-
-		const endpoint = args.join(' ').split('').length <= 3 ? 'alpha' : 'name';
-
-		try {
-			const data = await fetch(`https://restcountries.eu/rest/v2/${endpoint}/${encodeURIComponent(args.join(' '))}`).then(res => res.json()).then(body => body[0] || body).catch(err => err);
-
-			if(data.status && data.status !== 200) throw new Error('No Country Found');
-
-			embed.setTitle(`:flag_${data.alpha2Code.toLowerCase()}: ${data.name}`)
-				.addFields([
-					{ name: 'Also Known As', value: data.altSpellings.join(', '), inline: true },
-					{ name: 'Languages', value: data.languages.map(l => `**${l.name}** (${l.nativeName})`).join(', '), inline: true },
-					{ name: 'Capital', value: data.capital, inline: true },
-					{ name: 'Region', value: data.region, inline: true },
-					{ name: 'Population', value: this.formatNumber(data.population), inline: true },
-					{ name: 'Area', value: this.formatNumber(data.area), inline: true },
-					{ name: 'Timezones', value: data.altSpellings.join(', '), inline: true },
-					{ name: 'Currencies', value: data.currencies.map(c => `**${c.name}** (${c.symbol})`).join(', '), inline: true },
-				]);
-
-			message.reply({ embeds: [embed] });
-		}
-		catch(err) {
-			this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);
-		}
-	}
 
 	async slashRun(interaction, args) {
 		const embed = new SignalEmbed(interaction);

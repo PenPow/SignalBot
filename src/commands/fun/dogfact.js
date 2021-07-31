@@ -18,22 +18,6 @@ module.exports = class DogFactCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		try {
-			const res = await fetch('https://dog-api.kinduff.com/api/facts');
-			const fact = (await res.json()).facts[0];
-
-			const embed = new SignalEmbed(message)
-				.setTitle(`${fun} Dog Fact 🐕`)
-				.setDescription(fact);
-
-			message.reply({ embeds: [embed] });
-		}
-		catch(err) {
-			message.client.logger.error(err.stack);
-			this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);
-		}
-	}
 
 	async slashRun(interaction) {
 		try {

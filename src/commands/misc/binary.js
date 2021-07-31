@@ -15,24 +15,6 @@ module.exports = class BinaryCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		const embed = new SignalEmbed(message);
-
-		const input = args.join(' ');
-
-		if (input.match(BinaryRegex)) {
-			embed
-				.setTitle('Binary to Text')
-				.setDescription(this.binaryToText(input));
-		}
-		else {
-			embed
-				.setTitle('Text to Binary')
-				.setDescription(this.textToBinary(input));
-		}
-
-		message.reply({ embeds: [embed] });
-	}
 
 	async slashRun(interaction, args) {
 		const embed = new SignalEmbed(interaction);

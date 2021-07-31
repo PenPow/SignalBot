@@ -15,15 +15,6 @@ module.exports = class AvatarCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		const member = (await this.getUserFromMention(message, args[0])) || message.guild.members.cache.get(args[0]) || message.author;
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${member.username}'s Avatar`)
-			.setImage(member.displayAvatarURL({ dynamic: true, size: 512 }));
-
-		message.reply({ embeds: [embed] });
-	}
 
 	slashRun(interaction, args) {
 		const member = args?.first()?.member || interaction.member;

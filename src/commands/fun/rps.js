@@ -18,26 +18,6 @@ module.exports = class RPSCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	run(message, args) {
-		if(!args[0] || (args && !rps.includes(args[0].toLowerCase()))) return this.sendErrorMessage(message, 0, 'Please enter rock, paper, or scissors');
-
-		const userChoice = rps.indexOf(args[0].toLowerCase());
-		const botChoice = Math.floor(Math.random() * 3);
-
-		let result;
-
-		if(botChoice === userChoice) result = 'It\'s a draw!';
-		else if(botChoice > userChoice || botChoice === 0 && userChoice === 2) result = '**Signal** wins!';
-		else result = `<@${message.author.id}> wins!`;
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${fun} ${message.author.tag} vs Signal`)
-			.addField('Your Choice:', res[userChoice], true)
-			.addField('Signal\'s Choice', res[botChoice], true)
-			.addField('Result', result, true);
-
-		message.reply({ embeds: [embed] });
-	}
 
 	slashRun(interaction, args) {
 		const userChoice = rps.indexOf(args.first()?.value.toLowerCase());

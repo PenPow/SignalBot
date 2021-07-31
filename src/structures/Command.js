@@ -104,15 +104,6 @@ class Command {
 	}
 
 	/**
-     * Runs the command
-     * @param {Message} message
-     * @param {Array<string>} args
-     */
-	run(message, args) { // eslint-disable-line
-		throw new Error(`${this.name} has no run() method`);
-	}
-
-	/**
      * Runs the Slash Command Variant of the Command
      * @param {Interaction} interaction
      * @param {Array<options>} args
@@ -127,70 +118,6 @@ class Command {
      */
 	generateSlashCommand() {
 		throw new Error(`${this.name} has no generateSlashCommand() method`);
-	}
-
-	/**
-     * Gets member from mention
-     * @param {Message} message
-     * @param {string} mention
-     */
-	async getMemberFromMention(message, mention) {
-		if(!mention) return null;
-		const matches = mention.match(/^<@!?(\d+)>$/);
-
-		if(!matches) return null;
-
-		const id = matches[1];
-
-		return await message.guild.members.fetch(id);
-	}
-
-
-	/**
-     * Gets user from mention
-     * @param {Message} message
-     * @param {string} mention
-     */
-	async getUserFromMention(message, mention) {
-		if(!mention) return null;
-		const matches = mention.match(/^<@!?(\d+)>$/);
-
-		if(!matches) return null;
-
-		const id = matches[1];
-
-		return await message.client.users.fetch(id);
-	}
-	/**
-     * Gets a role from a mention
-     * @param {Message} message
-     * @param {string} mention
-     */
-	async getRoleFromMention(message, mention) {
-		if(!mention) return null;
-		const matches = mention.match(/^<@&(\d+)>$/);
-
-		if(!matches) return null;
-
-		const id = matches[1];
-
-		return await message.guild.roles.fetch(id);
-	}
-
-	/**
-     * Gets a channel from a mention
-     * @param {Message} message
-     * @param {string} mention
-     */
-	async getChannelFromMention(message, mention) {
-		if(!mention) return null;
-		const matches = mention.match(/^<#(\d+)>$/);
-
-		if(!matches) return null;
-
-		const id = matches[1];
-
-		return await message.guild.channels.cache.get(id);
 	}
 
 	/**

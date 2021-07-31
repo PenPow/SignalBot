@@ -1,7 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 const { success, mod } = require('../../utils/emojis');
-const { promisify } = require('util');
 
 module.exports = class UnmuteCommand extends Command {
 	constructor(client) {
@@ -16,94 +15,6 @@ module.exports = class UnmuteCommand extends Command {
 			guilds: ['GLOBAL'],
 			guldOnly: true,
 		});
-	}
-	async run(message, args) {
-		const exists = promisify(this.client.redis.exists).bind(this.client.redis);
-		const muteRole = this.client.db.get(`muterole-${message.guild.id}`) || message.guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
-
-		if(!muteRole) return this.sendErrorMessage(message, 1, 'There is currently no mute role set on this server');
-
-		let member;
-
-		try {
-			if(this.client.db.get(`case-${message.guild.id}-${args[0]}`)?.caseInfo?.type === 'mute') member = await message.guild.members.fetch(this.client.db.get(`case-${message.guild.id}-${args[0]}`)?.caseInfo?.target);
-			member = await this.getMemberFromMention(message, args[0]) || (await message.guild.members.fetch(args[0]));
-		}
-		catch(e) {
-			// eslint disable-line
-		}
-
-		if (!args[0] || !member) return this.sendErrorMessage(message, 0, 'Please mention a user, provide a valid user ID, or provide a valid case ID');
-		if (member.roles.highest.position >= message.member.roles.highest.position) return this.sendErrorMessage(message, 0, 'You cannot umute someone with an equal or higher role');
-
-		let reason = args.slice(2).join(' ');
-		if (!reason) reason = '`No Reason Provided`';
-		if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
-
-		if (!member.roles.cache.has(muteRole.id)) return this.sendErrorMessage(message, 0, 'Provided member is not muted');
-		if (member.user.bot) return this.sendErrorMessage(message, 0, 'I cannot edit a bot.');
-
-		const approved = await this.client.utils.confirmation(message, `Are you sure you want to unmute \`${member.user.tag}\`?`, message.author.id);
-
-		if(!approved) return this.sendErrorMessage(message, 1, 'Cancelled Command (Command Timed Out or Confirmation Declined)');
-
-		const caseID = this.client.utils.getCaseNumber(this.client, message.guild);
-		const oldCaseInfo = this.client.db.get(`lastcase-mute-${member.id}`);
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${success} Unmuted Member ${mod}`)
-			.setDescription(`${member} has now been unmuted`)
-			.addField('Moderator', `<@${message.author.id}>`, true)
-			.addField('Member', `<@${member.id}>`, true)
-			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
-
-		const redisClient = this.client.redis;
-		if(oldCaseInfo) {
-			const redisKey = `mute-${message.guild.id}-${oldCaseInfo?.caseInfo?.caseID}`;
-			try {
-				redisClient.expire(redisKey, 1);
-			}
-			catch(e) {
-				this.client.logger.error(e.stack);
-			}
-
-			if(!exists(redisKey)) {
-				await message.guild.bans.fetch();
-				await message.guild.bans.remove(member.id.toString(), 'Ban Revoked/Expired');
-			}
-
-			this.client.db.set(`case-${message.guild.id}`, caseID);
-
-			const mutes = this.client.db.get('global_mutes');
-			for(let i = 0; i < mutes.length; i++) {
-				if(mutes[i].caseInfo.caseID === oldCaseInfo.caseInfo.caseID) this.client.db.set('global_mutes', mutes.splice(i, 1));
-			}
-		}
-
-		else {
-			this.client.utils.unmute(this.client, { guild: message.guild.id, member: member.id, moderator: message.author.id });
-		}
-
-		const muteObject = {
-			guild: message.guild.id,
-			channel: message.channel.id,
-			caseInfo: {
-				caseID: caseID,
-				type: 'unmute',
-				target: member.id,
-				moderator: message.author.id,
-				reason: reason,
-				expiry: null,
-				date: new Date(Date.now()).getTime(),
-				auditId: await this.sendModLogMessage(message, reason, member.id, 'unmute'),
-			},
-		};
-
-		message.reply({ embeds: [embed] });
-		this.client.db.set(`case-${message.guild.id}-${caseID}`, muteObject);
-		this.client.db.ensure(`sanctions-${member.id}`, []);
-		this.client.db.push(`sanctions-${member.id}`, muteObject);
 	}
 
 	async slashRun(interaction, args) {

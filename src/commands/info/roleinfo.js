@@ -16,35 +16,6 @@ module.exports = class RoleInfoCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}
-	async run(message, args) {
-		const role = (await this.getRoleFromMention(message, args[0])) || message.guild.roles.cache.get(args[0]);
-		if (!role) return this.sendErrorMessage(message, 0, 'Please mention a role or provide a valid role ID');
-
-		const rolePermissions = role.permissions.toArray();
-		const finalPermissions = [];
-		for (const permission in permissions) {
-			if (rolePermissions.includes(permission)) finalPermissions.push(`+ ${permissions[permission]}`);
-			else finalPermissions.push(`- ${permissions[permission]}`);
-		}
-
-		const position = `\`${message.guild.roles.cache.size - role.position}\`/\`${message.guild.roles.cache.size}\``;
-
-		const embed = new SignalEmbed(message)
-			.setTitle('Role Information')
-			.setThumbnail(message.guild.iconURL({ dynamic: true }))
-			.addField('Role', `\`${role.name}\``, true)
-			.addField('Role ID', `\`${role.id}\``, true)
-			.addField('Position', position, true)
-			.addField('Mentionable', `\`${role.mentionable}\``, true)
-			.addField('Bot Role', `\`${role.managed}\``, true)
-			.addField('Color', `\`${role.hexColor.toUpperCase()}\``, true)
-			.addField('Members', `\`${role.members.size}\``, true)
-			.addField('Hoisted', `\`${role.hoist}\``, true)
-			.addField('Created On', `\`${moment(role.createdAt).format('MMM DD YYYY')}\``, true)
-			.addField('Permissions', `\`\`\`diff\n${finalPermissions.join('\n')}\`\`\``);
-
-		message.reply({ embeds: [embed] });
-	}
 
 	async slashRun(interaction, args) {
 		const role = args.first().role;

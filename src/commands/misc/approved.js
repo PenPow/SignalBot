@@ -14,29 +14,6 @@ module.exports = class ApprovedCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		let member;
-
-		try {
-			member = await this.getMemberFromMention(message, args[0]) || await message.guild.members.fetch(args[0]);
-		}
-		catch(e) {
-			// eslint disable-line
-		}
-
-		const embed = new SignalEmbed(message)
-			.setTitle('🔎 Searching!')
-			.setDescription('Please note that this make take up to 5 seconds while we connect to the image gateway.');
-
-		const m = await message.reply({ embeds: [embed] });
-
-		if(!args[0]) member = message.member;
-
-		const buffer = await this.client.images.generate('approved', { url: member.user.displayAvatarURL({ format: 'png', size: 512 }) });
-		const attachment = new MessageAttachment(buffer, 'approved.png');
-		m.delete();
-		message.reply({ files: [attachment] });
-	}
 
 	async slashRun(interaction, args) {
 		const member = args.get('member')?.member;

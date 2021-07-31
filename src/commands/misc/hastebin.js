@@ -15,34 +15,6 @@ module.exports = class HastebinCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if (!args[0]) return this.sendErrorMessage(message, 0, 'Please provide a message to upload');
-
-		const content = args.join(' ');
-		try {
-			const res = await fetch('https://hastebin.com/documents', {
-				method: 'POST',
-				body: content,
-				headers: { 'Content-Type': 'text/plain' },
-			});
-
-			const json = await res.json();
-			if(!json.key) {
-				return this.sendErrorMessage(message, 1, 'Please try again in a few seconds');
-			}
-			const url = 'https://hastebin.com/' + json.key + '.js';
-
-			const embed = new SignalEmbed(message)
-				.setTitle(`${success} Hastebin Created`)
-				.setDescription(url);
-
-			message.reply({ embeds: [embed] });
-		}
-		catch(err) {
-			message.client.logger.error(err.stack);
-			return this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);
-		}
-	}
 
 	async slashRun(interaction, args) {
 		const content = args.get('message').value;

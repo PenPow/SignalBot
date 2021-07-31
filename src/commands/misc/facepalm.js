@@ -12,9 +12,6 @@ module.exports = class FacepalmCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		message.reply({ content: 'https://ss.penpow.dev/i/UCGFnx.jpg' });
-	}
 
 	async slashRun(interaction) {
 		interaction.reply({ content: 'https://ss.penpow.dev/i/UCGFnx.jpg' });

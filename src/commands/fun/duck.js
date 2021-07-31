@@ -18,22 +18,6 @@ module.exports = class DuckCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		try {
-			const res = await fetch('https://random-d.uk/api/v2/random');
-			const img = (await res.json()).url;
-
-			const embed = new SignalEmbed(message)
-				.setTitle(`${fun} Quack! 🦆`)
-				.setImage(img);
-
-			message.reply({ embeds: [embed] });
-		}
-		catch(err) {
-			message.client.logger.error(err.stack);
-			this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);
-		}
-	}
 
 	async slashRun(interaction) {
 		try {

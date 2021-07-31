@@ -13,14 +13,6 @@ module.exports = class OwoCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide some text to OWOify');
-
-		const embed = new SignalEmbed(message)
-			.setDescription(Owoify(args.join(' ')));
-
-		message.reply({ embeds: [embed] });
-	}
 
 	async slashRun(interaction, args) {
 		const embed = new SignalEmbed(interaction)

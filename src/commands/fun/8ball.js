@@ -39,18 +39,6 @@ module.exports = class EightBallCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	run(message, args) {
-		const question = args.join(' ');
-
-		if (!question) return this.sendErrorMessage(message, 0, 'Please provide a question to ask');
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${fun} Magic 8-Ball 🎱`)
-			.addField('Question', question)
-			.addField('Answer', answers[Math.floor(Math.random() * answers.length)]);
-
-		message.reply({ embeds: [embed] });
-	}
 
 	slashRun(interaction, args) {
 		const question = args.first()?.value;

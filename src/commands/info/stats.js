@@ -16,41 +16,6 @@ module.exports = class StatsCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		const days = parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60) : parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60);
-		const hours = parseInt((this.client.uptime / (1000 * 60 * 60)) % 24) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60)) % 24) : parseInt((this.client.uptime / (1000 * 60 * 60)) % 24);
-		const minutes = parseInt((this.client.uptime / (1000 * 60)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60)) % 60) : parseInt((this.client.uptime / (1000 * 60)) % 60);
-		const clientStats = stripIndent`
-		  Servers   :: ${message.client.guilds.cache.size}
-		  Users     :: ${message.client.users.cache.size}
-		  Channels  :: ${message.client.channels.cache.size}
-		  WS Ping   :: ${Math.round(message.client.ws.ping)}ms
-		  Uptime    :: ${days} days, ${hours} hours, and ${minutes} minutes
-		`;
-		const { totalMemMb, usedMemMb } = await mem.info();
-		let platform = await os.oos();
-		if(platform === 'not supported') platform = 'Windows 10';
-		const serverStats = stripIndent`
-		  OS        :: ${platform}
-		  CPU       :: ${cpu.model()}
-		  Cores     :: ${cpu.count()}
-		  CPU Usage :: ${await cpu.usage()} %
-		  RAM       :: ${totalMemMb} MB
-		  RAM Usage :: ${(Math.round((usedMemMb / totalMemMb) * 1e4) / 1e2).toString()}%
-		`;
-		const embed = new SignalEmbed(message)
-			.setTitle('Signal\'s Statistics')
-			.addField('Commands', `\`${message.client.commands.size}\` commands`, true)
-			.addField('Aliases', `\`${message.client.aliases.size}\` aliases`, true)
-			.addField('Command Types', `\`${Object.keys(message.client.types).length}\` Command types`, true)
-			.addField('Client', `\`\`\`asciidoc\n${clientStats}\`\`\``)
-			.addField('Server', `\`\`\`asciidoc\n${serverStats}\`\`\``)
-			.addField(
-				'Links',
-				'**[Invite Me](https://discord.com/oauth2/authorize?client_id=789809995478597642&scope=bot&permissions=498330710) | ' +
-				'[Support Server](https://discord.gg/BGDyZMdvbw)**');
-		message.reply({ embeds: [embed] });
-	}
 
 	async slashRun(interaction) {
 		const days = parseInt((interaction.client.uptime / (1000 * 60 * 60 * 24)) % 60) < 10 ? '0' + parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60) : parseInt((this.client.uptime / (1000 * 60 * 60 * 24)) % 60);

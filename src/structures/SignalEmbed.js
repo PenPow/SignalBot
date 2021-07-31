@@ -2,8 +2,8 @@ const { MessageEmbed } = require('discord.js');
 
 class SignalEmbed extends MessageEmbed {
 	constructor(messageInteraction, data = {}) {
-		if(!messageInteraction) throw new Error('Missing MessageInteraction');
 		super(data);
+		if(!messageInteraction) throw new Error('Missing MessageInteraction');
 
 		this.setTimestamp()
 			.setColor(messageInteraction.guild.me.displayHexColor)

@@ -15,19 +15,6 @@ module.exports = class MaxCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide a dice roll');
-
-		try {
-			const maxRoll = new DiceExpression(args.join(' ')).max();
-
-			message.reply({ content: `The highest diceroll possible is **${maxRoll}**` });
-		}
-		catch(err) {
-			this.sendErrorMessage(message, 1, 'Invalid Dice Expression', oneLine`Dice expressions can contain the standard representations of dice in text form (e.g. 2d20 is two 20-sided dice), with addition and subtraction allowed.
-			You may also use a single \`>\` or \`<\` symbol at the end of the expression to add a target for the total dice roll - for example, \`2d20 + d15 > 35\`.`);
-		}
-	}
 
 	async slashRun(interaction, args) {
 		try {

@@ -1,5 +1,4 @@
 const Command = require('../../structures/Command');
-const SignalEmbed = require('../../structures/SignalEmbed');
 const { MessageAttachment } = require('discord.js');
 
 module.exports = class ToBeContinuedCommand extends Command {
@@ -13,29 +12,6 @@ module.exports = class ToBeContinuedCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			guilds: ['GLOBAL'],
 		});
-	}
-	async run(message, args) {
-		let member;
-
-		try {
-			member = await this.getMemberFromMention(message, args[0]) || await message.guild.members.fetch(args[0]);
-		}
-		catch(e) {
-			// eslint disable-line
-		}
-
-		const embed = new SignalEmbed(message)
-			.setTitle('🔎 Searching!')
-			.setDescription('Please note that this make take up to 5 seconds while we connect to the image gateway.');
-
-		const m = await message.reply({ embeds: [embed] });
-
-		if(!args[0]) member = message.member;
-
-		const buffer = await this.client.images.generate('tobecontinued', { url: member.user.displayAvatarURL({ format: 'png', size: 512 }) });
-		const attachment = new MessageAttachment(buffer, 'tobecontinued.png');
-		m.delete();
-		message.reply({ files: [attachment] });
 	}
 
 	async slashRun(interaction, args) {

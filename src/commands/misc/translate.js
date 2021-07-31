@@ -20,22 +20,6 @@ module.exports = class TranslateCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0] || !langs.includes(args[0].toLowerCase())) return this.sendErrorMessage(message, 0, 'Please provide a valid language');
-
-		const language = args[0].toLowerCase();
-		const text = args.slice(1).join(' ');
-
-		const translated = await translate(text, { to: language });
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${misc} Translated`)
-			.setDescription(`${translated.from.language.iso} > ${language}`)
-			.addField(translated.from.language.iso, '```' + text + '```')
-			.addField(language, '```' + translated.text + '```');
-
-		message.reply({ embeds: [embed] });
-	}
 
 	async slashRun(interaction, args) {
 		if(!langs.includes(args.get('language').value.toLowerCase())) return this.sendErrorMessage(interaction, 0, 'Please provide a valid language');

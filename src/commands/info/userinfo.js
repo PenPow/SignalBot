@@ -32,30 +32,6 @@ module.exports = class UserInfoCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}
-	async run(message, args) {
-		const member = (await this.getMemberFromMention(message, args[0])) || message.guild.members.cache.get(args[0]) || message.member;
-		const userFlags = (await member?.user?.fetchFlags())?.toArray();
-
-		let roles = message.client.utils.trimArray(member.roles.cache.array().filter(r => !r.name.startsWith('#')));
-		roles = message.client.utils.removeElement(roles, message.guild.roles.everyone)
-			.sort((a, b) => b.position - a.position).join(' ');
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${member.displayName}'s Information`)
-			.setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-			.addField('User', `\`${member.user.tag}\``, true)
-			.addField('Discriminator', `\`#${member.user.discriminator}\``, true)
-			.addField('ID', `\`${member.id}\``, true)
-			.addField('Bot', `\`${member.user.bot}\``, true)
-			.addField('Highest Role', `\`${member.roles.highest.name}\``, true)
-			.addField('Joined server on', `\`${moment(member.joinedAt).format('MMM DD YYYY')}\``, true)
-			.addField('Joined Discord on', `\`${moment(member.user.createdAt).format('MMM DD YYYY')}\``, true)
-			.addField('Roles', roles || '`None`');
-
-		if (userFlags.length > 0) embed.addField('Badges', userFlags.map(flag => flags[flag]).join('\n'));
-
-		message.reply({ embeds: [embed] });
-	}
 
 	async slashRun(interaction, args) {
 		const member = args?.first()?.member || interaction.member;
