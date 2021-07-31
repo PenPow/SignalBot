@@ -14,19 +14,8 @@ module.exports = class lmgtfyCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide a search query');
-		const url = new URL('https://letmegooglethat.com/');
-		url.searchParams.append('q', args.join(' '));
 
-		const embed = new SignalEmbed(message)
-			.setTitle('Let Me Google That for You')
-			.setDescription(`[Link](${url})`);
-
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const url = new URL('https://letmegooglethat.com/');
 		url.searchParams.append('q', args.get('query')?.value);
 

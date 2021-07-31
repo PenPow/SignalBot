@@ -11,13 +11,8 @@ module.exports = class ReverseCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide some text to ASCIIify');
 
-		message.reply({ content: args.join(' ').split('').reverse().join('') });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		interaction.reply({ content: args.get('text').value.split('').reverse().join(''), ephemeral: true });
 	}
 

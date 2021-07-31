@@ -14,14 +14,8 @@ module.exports = class AsciiCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide some text to ASCIIify');
 
-		const rendered = await asyncFiglet(args.join(' '));
-		message.reply({ content: '```' + rendered + '```' });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const rendered = await asyncFiglet(args.get('text').value);
 		interaction.reply({ content: '```' + rendered + '```', ephemeral: true });
 	}

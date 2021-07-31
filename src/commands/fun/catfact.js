@@ -18,24 +18,8 @@ module.exports = class CatFactCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		try {
-			const res = await fetch('https://catfact.ninja/fact');
-			const fact = (await res.json()).fact;
 
-			const embed = new SignalEmbed(message)
-				.setTitle(`${fun} Cat Fact 🐈`)
-				.setDescription(fact);
-
-			message.reply({ embeds: [embed] });
-		}
-		catch(err) {
-			message.client.logger.error(err.stack);
-			this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);
-		}
-	}
-
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('https://catfact.ninja/fact');
 			const fact = (await res.json()).fact;

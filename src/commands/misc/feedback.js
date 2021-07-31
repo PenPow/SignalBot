@@ -16,45 +16,8 @@ module.exports = class FeedbackCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if (!args[0]) return this.sendErrorMessage(message, 0, 'Please provide a message to send');
-		let feedback = message.content.slice(message.content.indexOf(args[0]), message.content.length);
 
-		let feedbackChannel;
-
-		try {
-			feedbackChannel = await message.client.channels.fetch('846084994963341353');
-		}
-		catch(e) {
-			this.client.logger.error(`An Error Occured in Fetching Channel ->\n${e}`);
-		}
-
-		if (!feedbackChannel) return this.sendErrorMessage(message, 1, 'Unable to find feedback channel');
-
-		const feedbackEmbed = new SignalEmbed(message)
-			.setTitle(`${unread_pin} New Feedback`)
-			.setThumbnail(feedbackChannel.guild.iconURL({ dynamic: true }))
-			.setDescription(feedback)
-			.addField('User', `<@${message.author.id}>`, true)
-			.addField('Server', message?.guild?.name || 'Direct Messsage', true);
-
-		feedbackChannel.send(feedbackEmbed);
-
-		if (feedback.length > 1024) feedback = feedback.slice(0, 1021) + '...';
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${success} Feedback Sent`)
-			.setThumbnail(message.client.user.displayAvatarURL())
-			.setDescription(oneLine`
-          Successfully sent feedback!
-        `)
-			.addField('Member', message.member, true)
-			.addField('Message', feedback);
-
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		let feedback = args.first()?.value;
 
 		let feedbackChannel;

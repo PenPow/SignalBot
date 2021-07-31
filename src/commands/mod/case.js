@@ -17,53 +17,8 @@ module.exports = class CaseCommand extends Command {
 			guildOnly: true,
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) args[0] = 'latest';
 
-		let caseID;
-
-		if(args[0].toLowerCase() === 'latest') {
-			await message.guild.channels.fetch();
-			const modLog = message.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
-
-			const sentMessage = (await modLog.messages.fetch({ limit: 100 })).filter(m => m.member === message.guild.me &&
-			m.embeds[0] &&
-			m.embeds[0].type == 'rich' &&
-			m.embeds[0].footer &&
-			m.embeds[0].footer.text &&
-			m.embeds[0].footer.text.startsWith('Case #'),
-			).first();
-			caseID = sentMessage.embeds[0].footer.text.substring(6);
-		}
-		else { caseID = args[0]; }
-
-		const caseInfo = this.client.db.get(`case-${message.guild.id}-${caseID}`);
-		if(!caseInfo) return this.sendErrorMessage(message, 2, 'No Cases Found');
-		if(caseInfo.caseInfo.type !== 'slowmode') {
-			const target = await this.client.users.fetch(caseInfo.caseInfo.target);
-			const moderator = await message.guild.members.fetch(caseInfo.caseInfo.moderator);
-
-			const embed = new SignalEmbed(message)
-				.setTitle(`Case #${caseID} ${mod}`)
-				.setDescription(`**Member**\n\`${target.tag}\`(${caseInfo.caseInfo.target})\n**Action:** \`${message.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Moderator**\n\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`)
-				.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
-
-			message.reply({ embeds: [embed] });
-		}
-		else {
-			const target = caseInfo.caseInfo.target;
-			const moderator = await message.guild.members.fetch(caseInfo.caseInfo.moderator);
-
-			const embed = new SignalEmbed(message)
-				.setTitle(`Case #${caseID} ${mod}`)
-				.setDescription(`**Channel**\n\`${target}\`(${target})\n**Action:** \`${message.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Moderator**\n\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`)
-				.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
-
-			message.reply({ embeds: [embed] });
-		}
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		let caseID = args.get('caseid')?.value || 'latest';
 
 		if(caseID === 'latest') {

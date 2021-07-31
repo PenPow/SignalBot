@@ -14,34 +14,8 @@ module.exports = class EnableCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 1, 'Please provide a command/category to enable');
-		const toEnable = args[0];
 
-		let keyExists = this.client.db.includes(`${message.guild.id}-disabled-modules`, toEnable.toLowerCase()) || this.client.db.includes(`${message.guild.id}-disabled-commands`, toEnable.toLowerCase());
-
-		if(['deploy', 'eval'].includes(toEnable)) keyExists = false;
-
-		if((Object.values(this.client.types).indexOf(toEnable.toLowerCase()) > -1) && keyExists) {
-			this.client.db.remove(`${message.guild.id}-disabled-modules`, toEnable.toLowerCase());
-		}
-		else if((this.client.commands.get(toEnable.toLowerCase()) || this.client.aliases.get(toEnable.toLowerCase())) && keyExists) {
-			const command = this.client.commands.get(toEnable.toLowerCase()) || this.client.aliases.get(toEnable.toLowerCase());
-
-			this.client.db.remove(`${message.guild.id}-disabled-commands`, command.name.toLowerCase());
-		}
-		else {
-			return this.sendErrorMessage(message, 0, 'No Command/Module with that name found or it was not disabled in the first place, if you encounter this issue, try enabling the module');
-		}
-
-		const embed = new SignalEmbed(message)
-			.setTitle('Enabled Successfully')
-			.setDescription('I have successfully allowed the command/module from being executed in this guild');
-
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const toEnable = args.get('command')?.value;
 		let keyExists = this.client.db.includes(`${interaction.guild.id}-disabled-modules`, toEnable.toLowerCase()) || this.client.db.includes(`${interaction.guild.id}-disabled-commands`, toEnable.toLowerCase());
 		if(['deploy', 'eval'].includes(toEnable)) keyExists = false;

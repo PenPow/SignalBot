@@ -16,22 +16,8 @@ module.exports = class CoinFlipCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		const n = Math.floor(Math.random() * 2);
 
-		let result;
-
-		if(n === 1) result = 'Heads';
-		else result = 'Tails';
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${fun} Coinflip 🪙`)
-			.setDescription(`I flipped a coin for you <@${message.author.id}>. It was **${result}**`);
-
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction) {
+	async run(interaction) {
 		const n = Math.floor(Math.random() * 2);
 
 		let result;

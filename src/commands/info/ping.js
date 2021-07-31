@@ -14,23 +14,8 @@ module.exports = class PingCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}
-	async run(message) {
-		const embed = new SignalEmbed(message)
-			.setDescription('`Pinging...`');
 
-		const msg = await message.reply({ embeds: [embed] });
-		const timestamp = (message.editedTimestamp) ? message.editedTimestamp : message.createdTimestamp;
-		const latency = `\`\`\`ini\n[ ${Math.floor(msg.createdTimestamp - timestamp)}ms ]\`\`\``;
-		const apiLatency = `\`\`\`ini\n[ ${Math.round(message.client.ws.ping)}ms ]\`\`\``;
-		embed.setTitle(`Pong!  ${pong}`)
-			.setDescription('')
-			.addField('Latency', latency, true)
-			.addField('API Latency', apiLatency, true);
-
-		msg.edit({ embeds: [embed] });
-	}
-
-	async slashRun(interaction) {
+	async run(interaction) {
 		const embed = new SignalEmbed(interaction)
 			.setDescription('`Pinging...`');
 

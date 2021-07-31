@@ -14,17 +14,8 @@ module.exports = class GuildIconCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		const embed = new SignalEmbed(message)
-			.setTitle('Server Icon');
 
-		if(!message.guild.iconURL) embed.setDescription(`${message.guild.name} has no icon`);
-		else embed.setImage(message.guild.iconURL({ format: 'png', dynamic: true }));
-
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction) {
+	async run(interaction) {
 		const embed = new SignalEmbed(interaction)
 			.setTitle('Server Icon');
 

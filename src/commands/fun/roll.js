@@ -16,21 +16,8 @@ module.exports = class RollCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		const limit = args[0] || 6;
 
-		const n = Math.floor(Math.random() * limit + 1);
-
-		if (!n || limit <= 0) return this.sendErrorMessage(message, 0, 'Please provide a valid number of dice sides');
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${fun} Dice Roll 🎲`)
-			.setDescription(`<@${message.author.id}>, you rolled a **${n}**!`);
-
-		message.reply({ embeds: [embed] });
-	}
-
-	slashRun(interaction, args) {
+	run(interaction, args) {
 		const limit = args.first()?.value || 6;
 
 		const n = Math.floor(Math.random() * limit + 1);

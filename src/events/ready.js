@@ -21,6 +21,8 @@ class Ready {
 			if(messageArray[0] === 'reminder') {
 				const info = this.client.db.get(`reminder_${messageArray[1]}`);
 
+				if(!info) return;
+
 				const author = await this.client.users.fetch(info.user);
 
 				if(!author) return;
@@ -41,6 +43,8 @@ class Ready {
 			}
 			else {
 				const caseInfo = this.client.db.get(`case-${messageArray[1]}-${messageArray[2]}`);
+
+				if(!caseInfo) return;
 
 				if(caseInfo.caseInfo.type === 'mute') {
 					for(let i = 0; i < mutes.length; i++) {

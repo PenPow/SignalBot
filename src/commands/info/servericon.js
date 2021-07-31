@@ -14,14 +14,8 @@ module.exports = class ServerIconCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		const embed = new SignalEmbed(message)
-			.setTitle(`${message.guild.name}'s Icon`)
-			.setImage(message.guild.iconURL({ dynamic: true, size: 512 }));
-		message.reply({ embeds: [embed] });
-	}
 
-	slashRun(interaction) {
+	run(interaction) {
 		const embed = new SignalEmbed(interaction)
 			.setTitle(`${interaction.guild.name}'s Icon`)
 			.setImage(interaction.guild.iconURL({ dynamic: true, size: 512 }));

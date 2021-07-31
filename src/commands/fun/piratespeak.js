@@ -14,16 +14,8 @@ module.exports = class yarrCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message, args) {
-		if(!args[0]) return this.sendErrorMessage(message, 0, 'Please provide some text to ASCIIify');
 
-		const embed = new SignalEmbed(message)
-			.setDescription(PirateSpeak.translate(args.join(' ')));
-
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const embed = new SignalEmbed(interaction)
 			.setDescription(PirateSpeak.translate(args.get('text').value));
 		interaction.reply({ embeds: [embed], ephemeral: true });

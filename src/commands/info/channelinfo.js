@@ -28,50 +28,8 @@ module.exports = class ChannelInfoCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}
-	async run(message, args) {
-		let channel = (await this.getChannelFromMention(message, args[0])) || message.guild.channels.cache.get(args[0]);
-		if (channel) {
-			args.shift();
-		}
-		else {channel = message.channel;}
-		const embed = new SignalEmbed(message)
-			.setTitle('Channel Information')
-			.setThumbnail(message.guild.iconURL({ dynamic: true }))
-			.addField('Channel', `\`${channel.name}\``, true)
-			.addField('ID', `\`${channel.id}\``, true)
-			.addField('Type', `\`${channelTypes[channel.type]}\``, true)
-			.addField('Members', `\`${channel.members.size}\``, true)
-			.addField('Bots', `\`${channel.members.array().filter(b => b.user.bot).length}\``, true)
-			.addField('Created On', `\`${moment(channel.createdAt).format('MMM DD YYYY')}\``, true);
 
-		if (channel.type === 'text') {
-			embed
-				.addField('Rate Limit', `\`${channel.rateLimitPerUser}\``, true)
-				.addField('NSFW', `\`${channel.nsfw}\``, true);
-		}
-		else if (channel.type === 'news') {
-			embed
-				.addField('NSFW', `\`${channel.nsfw}\``, true);
-		}
-		else if (channel.type === 'voice') {
-			embed
-				.addField('Channel', `\`${voice} ${channel.name}\``, true)
-				.addField('User Limit', `\`${channel.userLimit}\``, true)
-				.addField('Full', `\`${channel.full}\``, true);
-			const members = channel.members.array();
-			if (members.length > 0) {embed.addField('Members Joined', message.client.utils.trimArray(channel.members.array()).join(' '));}
-		}
-		else {
-			return this.sendErrorMessage(message, 0, stripIndent`
-      Please enter mention a valid text or announcement channel` +
-      ' or provide a valid text, announcement, or voice channel ID',
-			);
-		}
-		if (channel.topic) embed.addField('Topic', channel.topic);
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const channel = interaction.guild.channels.cache.get(args?.first()?.value) || interaction.channel;
 
 		const embed = new SignalEmbed(interaction)

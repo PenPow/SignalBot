@@ -17,27 +17,8 @@ module.exports = class ClearSanctionsCommand extends Command {
 			guildOnly: true,
 		});
 	}
-	async run(message, args) {
-		let member;
 
-		try {
-			member = await this.getMemberFromMention(message, args[0]) || (await message.guild.members.fetch(args[0])) || message.member;
-		}
-		catch(e) {
-			// eslint disable-line
-		}
-
-		if (!args[0] || !member) return this.sendErrorMessage(message, 0, 'Please mention a user or provide a valid user ID');
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${mod} Cleared History for ${member.displayName}`);
-
-		this.client.db.set(`sanctions-${member.id}`, []);
-
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		const member = args.get('member')?.member;
 
 		const embed = new SignalEmbed(interaction)

@@ -13,11 +13,8 @@ module.exports = class TipsFedoraCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		message.reply({ files: [new MessageAttachment('https://i.kym-cdn.com/photos/images/masonry/000/747/485/3a1.gif')] });
-	}
 
-	async slashRun(interaction) {
+	async run(interaction) {
 		interaction.reply({ files: [new MessageAttachment('https://i.kym-cdn.com/photos/images/masonry/000/747/485/3a1.gif')] });
 	}
 

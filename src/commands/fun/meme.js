@@ -10,7 +10,6 @@ module.exports = class MemeCommand extends Command {
 		super(client, {
 			name: 'meme',
 			usage: 'meme',
-			// aliases: ['foxpic'],
 			description: 'Finds a random meme',
 			type: client.types.FUN,
 			examples: ['meme'],
@@ -18,25 +17,8 @@ module.exports = class MemeCommand extends Command {
 			guilds: ['GLOBAL'],
 		});
 	}
-	async run(message) {
-		try {
-			const res = await fetch('https://meme-api.herokuapp.com/gimme');
-			const jsonres = await res.json();
 
-			const embed = new SignalEmbed(message)
-				.setTitle(`${fun} ${jsonres.title} (r/${jsonres.subreddit})`)
-				.setURL(jsonres.postLink)
-				.setImage(jsonres.url);
-
-			message.reply({ embeds: [embed] });
-		}
-		catch(err) {
-			message.client.logger.error(err.stack);
-			this.sendErrorMessage(message, 1, 'Please try again in a few seconds', err.message);
-		}
-	}
-
-	async slashRun(interaction) {
+	async run(interaction) {
 		try {
 			const res = await fetch('https://meme-api.herokuapp.com/gimme');
 			const jsonres = await res.json();

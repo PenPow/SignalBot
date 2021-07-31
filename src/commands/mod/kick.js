@@ -16,75 +16,8 @@ module.exports = class KickCommand extends Command {
 			guildOnly: true,
 		});
 	}
-	async run(message, args) {
-		let member;
 
-		try {
-			member = await this.getMemberFromMention(message, args[0]) || (await message.guild.members.fetch(args[0]));
-		}
-		catch(e) {
-			// eslint disable-line
-		}
-
-		if (!args[0] || !member) return this.sendErrorMessage(message, 0, 'Please mention a user or provide a valid user ID');
-		if (member === message.member) return this.sendErrorMessage(message, 0, 'You cannot kick yourself');
-		if (member === message.guild.me) return this.sendErrorMessage(message, 0, 'You cannot kick me');
-		if (!member.kickable) return this.sendErrorMessage(message, 0, 'Provided member is not kickable');
-		if (member.roles.highest.position >= message.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(message, 0, 'You cannot kick someone with an equal or higher role');
-		if (member.user.bot) return this.sendErrorMessage(message, 0, 'I cannot punish a bot.');
-
-		let reason = args.slice(1).join(' ');
-		if (!reason) reason = '`No Reason Provided`';
-		if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
-
-		const approved = await this.client.utils.confirmation(message, `Are you sure you want to kick \`${member.user.tag}\`?`, message.author.id);
-
-		if(!approved) return this.sendErrorMessage(message, 1, 'Cancelled Command (Command Timed Out or Confirmation Declined)');
-
-		const caseID = this.client.utils.getCaseNumber(this.client, message.guild);
-
-		const embed = new SignalEmbed(message)
-			.setTitle(`${success} Kicked Member ${mod}`)
-			.setDescription(`${member} has now been kicked.`)
-			.addField('Moderator', `<@${message.author.id}>`, true)
-			.addField('Member', `<@${member.id}>`, true)
-			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
-
-		const embed2 = new SignalEmbed(message)
-			.setTitle(`${mod} You were Kicked from ${message.guild.name}`)
-			.addField('Moderator', `<@${message.author.id}>`, true)
-			.addField('Member', `<@${member.id}>`, true)
-			.addField('Reason', reason)
-			.setFooter(`Case #${caseID} • ${message.member.displayName}`, message.author.displayAvatarURL({ dynamic: true }));
-
-		await member.user.send({ embeds: [embed2] }).catch();
-
-		await member.kick({ reason: `Kicked by ${message.author.tag} | Case #${caseID}` });
-
-		const kickObject = {
-			guild: message.guild.id,
-			channel: message.channel.id,
-			caseInfo: {
-				caseID: caseID,
-				type: 'kick',
-				date: new Date(Date.now()).getTime(),
-				target: member.id,
-				moderator: message.author.id,
-				reason: reason,
-				auditId: await this.sendModLogMessage(message, reason, member.id, 'kick'),
-			},
-		};
-
-		this.client.db.set(`case-${message.guild.id}`, caseID);
-		this.client.db.set(`case-${message.guild.id}-${caseID}`, kickObject);
-		this.client.db.ensure(`sanctions-${member.id}`, []);
-		this.client.db.push(`sanctions-${member.id}`, kickObject);
-
-		message.reply({ embeds: [embed] });
-	}
-
-	async slashRun(interaction, args) {
+	async run(interaction, args) {
 		let member;
 
 		try {
