@@ -109,9 +109,6 @@ dist
 # Enmap Files
 data/
 
-# Config Files
-config.json
-
 # Yarn
 .yarn/*
 !.yarn/cache

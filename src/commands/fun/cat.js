@@ -20,7 +20,7 @@ module.exports = class CatCommand extends Command {
 	}
 
 	async run(interaction) {
-		const apiKey = interaction.client.apiKeys.catApi.token;
+		const apiKey = process.env.CAT_TOKEN;
 		try {
 			const res = await fetch('https://api.thecatapi.com/v1/images/search', { headers: { 'x-api-key': apiKey } });
 			const img = (await res.json())[0].url;
