@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const Enmap = require('enmap');
 const redis = require('redis');
 const api = require('amethyste-api');
+const setup = require('../../test/setup.js');
 const ActionManager = require('../managers/ActionManager');
 
 /**
@@ -15,10 +16,9 @@ const ActionManager = require('../managers/ActionManager');
 class Client extends Discord.Client {
 	/**
      * Creates a new client
-     * @param {Object} config
      * @param {ClientOptions} options
      */
-	constructor(config, options = {}) {
+	constructor(options = {}) {
 		super(options);
 
 		/**
@@ -64,36 +64,6 @@ class Client extends Discord.Client {
 		this.aliases = new Discord.Collection();
 
 		/**
-         * Music Subscriptions
-         * @type {Collection<Snowflake, MusicSubscription>}
-         */
-		this.subscriptions = new Discord.Collection();
-
-		/**
-         * Discord Token
-         * @type {string}
-         */
-		this.token = config.apiKeys.discord.token;
-
-		/**
-         * API Keys
-         * @type {Object}
-         */
-		this.apiKeys = config.apiKeys;
-
-		/**
-         * Configuration
-         * @type {Object}
-         */
-		this.config = require('../../config.json');
-
-		/**
-         * Signal Owner ID
-         * @type {string}
-         */
-		this.ownerId = config.configuration.ownerId;
-
-		/**
          * Utility Functions
          * @type {Object}
          */
@@ -116,21 +86,21 @@ class Client extends Discord.Client {
 		 * Images API
 		 * @type {api}
 		 */
-		this.images = new api(this.config.apiKeys.amethyste.token);
-
-		this.logger.info('Initalizing...');
+		this.images = new api(process.env.AMETHYSTE_TOKEN);
 	}
 
 	/**
 	 * Inits the Client
 	 * @returns {Promise<void>}
 	 */
-	async init() {
+	async init(dry = false) {
+		if(!dry) await this.verifyConfig();
+		this.logger.info('Initalizing...');
 		try {
 			this.actionManager.initCommands(this);
 			this.actionManager.initEvents(this);
-			this.redis = this.actionManager.initRedis(this);
-			await this.login(this.token);
+			this.redis = this.actionManager.initRedis();
+			await this.login(process.env.DISCORD_TOKEN);
 		}
 		catch (e) {
 			this.logger.error(`Failed to Init: ${e.stack}`);
@@ -138,21 +108,35 @@ class Client extends Discord.Client {
 	}
 
 	/**
+	 * Verifies the Configuration Provided
+	 */
+	async verifyConfig() {
+		const environment = await setup.test();
+		if(!environment) process.exit(1);
+	}
+
+	/**
 	 * Redis Expiry Database
 	 * @returns {Callback}
 	 */
 	expire(callback) {
-		const expired = () => {
-			const sub = redis.createClient({ url: this.config.apiKeys.redis.url });
-			sub.subscribe('__keyevent@0__:expired', () => {
-				sub.on('message', (_, message) => {
-					callback(message);
+		try {
+			const expired = () => {
+				const sub = redis.createClient({ host: process.env.REDIS_IP, port: process.env.REDIS_PORT || 6379 });
+				sub.subscribe('__keyevent@0__:expired', () => {
+					sub.on('message', (_, message) => {
+						callback(message);
+					});
 				});
-			});
-		};
+			};
 
-		const pub = redis.createClient({ url: this.config.apiKeys.redis.url });
-		pub.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], expired());
+			const pub = redis.createClient({ host: process.env.REDIS_IP, port: process.env.REDIS_PORT || 6379 });
+			pub.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], expired());
+		}
+		catch {
+			this.logger.error('Failed to Connect to the Punishment Database, check the Redis Credentials are correct');
+			process.exit(1);
+		}
 	}
 
 	/**
@@ -160,7 +144,7 @@ class Client extends Discord.Client {
      * @param {User} user
      */
 	isOwner(user) {
-		if(user.id === this.ownerId) return true;
+		if(user.id === process.env.OWNER_ID) return true;
 		else return false;
 	}
 

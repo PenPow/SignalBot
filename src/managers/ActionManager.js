@@ -64,12 +64,12 @@ class ActionManager {
 
 	/**
      * Initializes the Redis Database
-     * @param {SignalClient} client The original client, for access to the configuration.
      * @returns {RedisClient}
      */
-	initRedis(client) {
+	initRedis() {
 		return createClient({
-			host: client.config.apiKeys.redis.ip,
+			host: process.env.REDIS_IP,
+			port: process.env.REDIS_PORT || 6379,
 			enable_offline_queue: true,
 			db: 0,
 		});
