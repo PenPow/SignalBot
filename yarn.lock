@@ -117,6 +117,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@discordjs/rest@npm:^0.1.0-canary.0":
+  version: 0.1.0-canary.0
+  resolution: "@discordjs/rest@npm:0.1.0-canary.0"
+  dependencies:
+    "@discordjs/collection": ^0.1.6
+    "@sapphire/async-queue": ^1.1.4
+    "@sapphire/snowflake": ^1.3.5
+    abort-controller: ^3.0.0
+    discord-api-types: ^0.18.1
+    form-data: ^4.0.0
+    node-fetch: ^2.6.1
+    tslib: ^2.3.0
+  checksum: 51b5f345cc03f2e8bb9a6d439f48ad959c1a78a3186657040e6f642daf20c1cb5c726b422b0e30f2fca20a678e48f425195ee034c1fe2ced2cfd0d07f5140674
+  languageName: node
+  linkType: hard
+
 "@discordjs/voice@npm:^0.5.5":
   version: 0.5.5
   resolution: "@discordjs/voice@npm:0.5.5"
@@ -213,10 +229,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@promises/core@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@promises/core@npm:0.5.0"
+  checksum: 4f6f6472c87be7196f456d031a880f6cff9ae4d68560649f4d2a9133c33bc5218dbbc80b590b746658465a980f32480974e7d96b1385652c6c4568763cd50515
+  languageName: node
+  linkType: hard
+
+"@promises/timer@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@promises/timer@npm:0.5.0"
+  dependencies:
+    "@promises/core": ^0.5.0
+  checksum: 77e5ec8cd9bc4f346d77dc30f3d7b0eaccc4884ff792afe7bd2a4d34da6ed9ecd60c429ff7d522f89a4378d5dd7d983b1ccfa700272addc740bcc26be58f768b
+  languageName: node
+  linkType: hard
+
 "@sapphire/async-queue@npm:^1.1.4":
   version: 1.1.4
   resolution: "@sapphire/async-queue@npm:1.1.4"
   checksum: 325e416a44dd919a6a3eee03852efea207fcfd02db9bb0534dc495c7a695e7298895193cb8674712a7ad619d0e7a742c28589671a9ab2571e320c142f9d7f9e0
+  languageName: node
+  linkType: hard
+
+"@sapphire/snowflake@npm:^1.3.5":
+  version: 1.3.6
+  resolution: "@sapphire/snowflake@npm:1.3.6"
+  checksum: 92e85cc515f9e603965c6ee84968960b1d339b79607f19e0a9098c6d6137aff9f5573bcb2c25dd2d09cfc9e0c490a4194e1eb1cf761c04f0cf44ec291385da8a
   languageName: node
   linkType: hard
 
@@ -1313,6 +1352,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"discord-api-types@npm:^0.22.0":
+  version: 0.22.0
+  resolution: "discord-api-types@npm:0.22.0"
+  checksum: 81e7862f7d0fa495cd4bb645f2d5910bdc3bcec62a9cbee803c79223adccaff21236dd90e684edfb12a8e7db5a57691fe3b82d7065ffc0d56cbf0dec4e7a2c86
+  languageName: node
+  linkType: hard
+
 "discord.js@npm:dev":
   version: 13.0.0-dev.d433fe8.1625961832
   resolution: "discord.js@npm:13.0.0-dev.d433fe8.1625961832"
@@ -1997,6 +2043,17 @@ __metadata:
   version: 0.6.1
   resolution: "forever-agent@npm:0.6.1"
   checksum: 9cc0054dd4ea5fc26e014b8c929d1fb9247e931e81165cbd965a712061d65fb84791b2124f64cd79492e516662b94068d29fe1d824732382237321b3f61955fe
+  languageName: node
+  linkType: hard
+
+"form-data@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "form-data@npm:4.0.0"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: ecbe8f41bcf5c415f38e39058b34598a9261bb74a3d54b633d0b5dd8b7cf9a30b0626cd06ae8e79874a2ca88c222041142a7893e5afdd35fdfc3272264d03d44
   languageName: node
   linkType: hard
 
@@ -3903,6 +3960,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"promises@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "promises@npm:0.2.5"
+  checksum: a22582362d1a8eb4eb89fac5510e3d26275220767d436cda1fe20f1ae03178f42ca421693f7639c7332fa8e4d09101d6332dce62bbd3ad2226c71ceed237a701
+  languageName: node
+  linkType: hard
+
 "psl@npm:^1.1.28":
   version: 1.8.0
   resolution: "psl@npm:1.8.0"
@@ -4400,9 +4464,11 @@ fsevents@~2.3.2:
   resolution: "signal@workspace:."
   dependencies:
     "@discordjs/opus": ^0.5.0
+    "@discordjs/rest": ^0.1.0-canary.0
     "@discordjs/voice": ^0.5.5
     "@iamtraction/google-translate": ^1.1.2
     "@ksoft/api": ^3.1.9
+    "@promises/timer": ^0.5.0
     amethyste-api: ^1.1.5
     bufferutil: ^4.0.3
     canvas: ^2.8.0
@@ -4411,6 +4477,7 @@ fsevents@~2.3.2:
     consola: ^2.15.3
     crypto-js: ^4.0.0
     dice-expression-evaluator: ^0.1.2
+    discord-api-types: ^0.22.0
     discord.js: dev
     dotenv: ^10.0.0
     enmap: ^5.8.5
@@ -4435,9 +4502,11 @@ fsevents@~2.3.2:
     pirate-speak: ^1.0.1
     prettier: 2.3.1
     prism-media: ^1.3.1
+    promises: ^0.2.5
     read-last-lines: ^1.8.0
     redis: ^3.1.2
     sequelize: ^6.6.5
+    timers: ^0.1.1
     utf-8-validate: ^5.0.5
     uuid: ^8.3.2
     validator: ^13.6.0
@@ -4840,6 +4909,13 @@ fsevents@~2.3.2:
   dependencies:
     any-promise: ^1.0.0
   checksum: c3cbda4f5f0ee82d6a282b3a2ed3f890fad65b5c855d61f8f1946c6daf7e0d7a1e84377ded30b16ae2bedd13f02ba35266af3ca018272b08629c85753b1cd682
+  languageName: node
+  linkType: hard
+
+"timers@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "timers@npm:0.1.1"
+  checksum: da1f909cfdc25281c8ad433201ce65013a9fa468a6acd859601556f1b4b40d871aa3b6d6893749f8faa3400740b78805a3dba1a994a172cde38f7fffb0c8d0a6
   languageName: node
   linkType: hard
 

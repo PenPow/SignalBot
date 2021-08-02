@@ -38,9 +38,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["@discordjs/opus", "npm:0.5.3"],
+            ["@discordjs/rest", "npm:0.1.0-canary.0"],
             ["@discordjs/voice", "npm:0.5.5"],
             ["@iamtraction/google-translate", "npm:1.1.2"],
             ["@ksoft/api", "npm:3.1.9"],
+            ["@promises/timer", "npm:0.5.0"],
             ["amethyste-api", "npm:1.1.5"],
             ["bufferutil", "npm:4.0.3"],
             ["canvas", "npm:2.8.0"],
@@ -49,6 +51,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["consola", "npm:2.15.3"],
             ["crypto-js", "npm:4.0.0"],
             ["dice-expression-evaluator", "npm:0.1.2"],
+            ["discord-api-types", "npm:0.22.0"],
             ["discord.js", "npm:13.0.0-dev.d433fe8.1625961832"],
             ["dotenv", "npm:10.0.0"],
             ["enmap", "npm:5.8.5"],
@@ -73,9 +76,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pirate-speak", "npm:1.0.1"],
             ["prettier", "npm:2.3.1"],
             ["prism-media", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:1.3.1"],
+            ["promises", "npm:0.2.5"],
             ["read-last-lines", "npm:1.8.0"],
             ["redis", "npm:3.1.2"],
             ["sequelize", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:6.6.5"],
+            ["timers", "npm:0.1.1"],
             ["utf-8-validate", "npm:5.0.5"],
             ["uuid", "npm:8.3.2"],
             ["validator", "npm:13.6.0"],
@@ -212,6 +217,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@discordjs/rest", [
+        ["npm:0.1.0-canary.0", {
+          "packageLocation": "./.yarn/cache/@discordjs-rest-npm-0.1.0-canary.0-5a6170a1b0-51b5f345cc.zip/node_modules/@discordjs/rest/",
+          "packageDependencies": [
+            ["@discordjs/rest", "npm:0.1.0-canary.0"],
+            ["@discordjs/collection", "npm:0.1.6"],
+            ["@sapphire/async-queue", "npm:1.1.4"],
+            ["@sapphire/snowflake", "npm:1.3.6"],
+            ["abort-controller", "npm:3.0.0"],
+            ["discord-api-types", "npm:0.18.1"],
+            ["form-data", "npm:4.0.0"],
+            ["node-fetch", "npm:2.6.1"],
+            ["tslib", "npm:2.3.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@discordjs/voice", [
         ["npm:0.5.5", {
           "packageLocation": "./.yarn/cache/@discordjs-voice-npm-0.5.5-d53383a51e-9b7856aa79.zip/node_modules/@discordjs/voice/",
@@ -315,11 +337,39 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@promises/core", [
+        ["npm:0.5.0", {
+          "packageLocation": "./.yarn/cache/@promises-core-npm-0.5.0-125747d7ed-4f6f6472c8.zip/node_modules/@promises/core/",
+          "packageDependencies": [
+            ["@promises/core", "npm:0.5.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@promises/timer", [
+        ["npm:0.5.0", {
+          "packageLocation": "./.yarn/cache/@promises-timer-npm-0.5.0-cc52241e90-77e5ec8cd9.zip/node_modules/@promises/timer/",
+          "packageDependencies": [
+            ["@promises/timer", "npm:0.5.0"],
+            ["@promises/core", "npm:0.5.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@sapphire/async-queue", [
         ["npm:1.1.4", {
           "packageLocation": "./.yarn/cache/@sapphire-async-queue-npm-1.1.4-6872a0fc9f-325e416a44.zip/node_modules/@sapphire/async-queue/",
           "packageDependencies": [
             ["@sapphire/async-queue", "npm:1.1.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@sapphire/snowflake", [
+        ["npm:1.3.6", {
+          "packageLocation": "./.yarn/cache/@sapphire-snowflake-npm-1.3.6-cc3270d128-92e85cc515.zip/node_modules/@sapphire/snowflake/",
+          "packageDependencies": [
+            ["@sapphire/snowflake", "npm:1.3.6"]
           ],
           "linkType": "HARD",
         }]
@@ -1597,6 +1647,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["discord-api-types", "npm:0.19.0-next.f393ba520d7d6d2aacaca7b3ca5d355fab614f6e"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:0.22.0", {
+          "packageLocation": "./.yarn/cache/discord-api-types-npm-0.22.0-7691882bd6-81e7862f7d.zip/node_modules/discord-api-types/",
+          "packageDependencies": [
+            ["discord-api-types", "npm:0.22.0"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["discord.js", [
@@ -2419,6 +2476,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/form-data-npm-2.3.3-c016cc11c0-862e686b10.zip/node_modules/form-data/",
           "packageDependencies": [
             ["form-data", "npm:2.3.3"],
+            ["asynckit", "npm:0.4.0"],
+            ["combined-stream", "npm:1.0.8"],
+            ["mime-types", "npm:2.1.31"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:4.0.0", {
+          "packageLocation": "./.yarn/cache/form-data-npm-4.0.0-916facec2d-ecbe8f41bc.zip/node_modules/form-data/",
+          "packageDependencies": [
+            ["form-data", "npm:4.0.0"],
             ["asynckit", "npm:0.4.0"],
             ["combined-stream", "npm:1.0.8"],
             ["mime-types", "npm:2.1.31"]
@@ -4637,6 +4704,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["promises", [
+        ["npm:0.2.5", {
+          "packageLocation": "./.yarn/cache/promises-npm-0.2.5-a6580cabf7-a22582362d.zip/node_modules/promises/",
+          "packageDependencies": [
+            ["promises", "npm:0.2.5"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["psl", [
         ["npm:1.8.0", {
           "packageLocation": "./.yarn/cache/psl-npm-1.8.0-226099d70e-92d47c6257.zip/node_modules/psl/",
@@ -5171,9 +5247,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["signal", "workspace:."],
             ["@discordjs/opus", "npm:0.5.3"],
+            ["@discordjs/rest", "npm:0.1.0-canary.0"],
             ["@discordjs/voice", "npm:0.5.5"],
             ["@iamtraction/google-translate", "npm:1.1.2"],
             ["@ksoft/api", "npm:3.1.9"],
+            ["@promises/timer", "npm:0.5.0"],
             ["amethyste-api", "npm:1.1.5"],
             ["bufferutil", "npm:4.0.3"],
             ["canvas", "npm:2.8.0"],
@@ -5182,6 +5260,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["consola", "npm:2.15.3"],
             ["crypto-js", "npm:4.0.0"],
             ["dice-expression-evaluator", "npm:0.1.2"],
+            ["discord-api-types", "npm:0.22.0"],
             ["discord.js", "npm:13.0.0-dev.d433fe8.1625961832"],
             ["dotenv", "npm:10.0.0"],
             ["enmap", "npm:5.8.5"],
@@ -5206,9 +5285,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pirate-speak", "npm:1.0.1"],
             ["prettier", "npm:2.3.1"],
             ["prism-media", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:1.3.1"],
+            ["promises", "npm:0.2.5"],
             ["read-last-lines", "npm:1.8.0"],
             ["redis", "npm:3.1.2"],
             ["sequelize", "virtual:75a0f5a7db5cedeb21620eccee30d194d360abf489d794aeb781e6beaf4cb53d2375733ec39bf0fe76f18d27a26588c92634aec424062eec09ecf7188348440f#npm:6.6.5"],
+            ["timers", "npm:0.1.1"],
             ["utf-8-validate", "npm:5.0.5"],
             ["uuid", "npm:8.3.2"],
             ["validator", "npm:13.6.0"],
@@ -5653,6 +5734,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["thenify-all", "npm:1.6.0"],
             ["thenify", "npm:3.3.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["timers", [
+        ["npm:0.1.1", {
+          "packageLocation": "./.yarn/cache/timers-npm-0.1.1-caf37d810c-da1f909cfd.zip/node_modules/timers/",
+          "packageDependencies": [
+            ["timers", "npm:0.1.1"]
           ],
           "linkType": "HARD",
         }]

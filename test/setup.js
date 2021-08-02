@@ -187,7 +187,7 @@ const test = async () => {
 	}
 
 	if(testResult && line !== 'SETUP_COMPLETE = TRUE') {
-		await fs.appendFileSync(path.join(global.__basedir, './.env'), '\n\n# Do Not Touch, doing so will corrupt the installation\nSETUP_COMPLETE = TRUE');
+		await fs.appendFileSync(path.join(global.__basedir, './.env'), '\n\n# Do Not Touch, doing so will corrupt the installation\nENVIRONMENT = \'PRODUCTION\'\nSETUP_COMPLETE = TRUE');
 	}
 
 	if(testResult) { success('Successfully Verified Installation\n'); }

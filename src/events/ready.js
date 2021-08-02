@@ -6,6 +6,9 @@ class Ready {
 	}
 
 	async run() {
+
+		if(process.env.ENVIRONMENT === 'DEVELOPMENT') this.register();
+
 		this.client.logger.warn('Checking For Expired Punishments');
 		this.client.db.ensure('global_mutes', []);
 		this.client.db.ensure('global_bans', []);
@@ -157,6 +160,21 @@ class Ready {
 
 		this.client.logger.success('Signal is now online');
 		this.client.logger.info(`Signal is running on ${this.client.guilds.cache.size} servers`);
+	}
+
+	async register() {
+		this.client.logger.info('Started refreshing application (/) commands');
+
+		const array = [];
+		this.client.commands.each(async command => {
+			if(command.disabled || command.ownerOnly) return;
+
+			array.push(command.generateSlashCommand());
+		});
+
+		(await this.client.guilds.fetch(process.env.DEVELOPER_CHANNEL)).commands.set(array);
+
+		this.client.logger.success('Successfully reloaded application (/) commands.');
 	}
 }
 
