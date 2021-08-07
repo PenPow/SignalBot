@@ -1,7 +1,8 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { success, mod } = require('../../utils/emojis');
 const ms = require('ms');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
+const { success, mod } = require('../../utils/emojis');
 
 module.exports = class BanCommand extends Command {
 	constructor(client) {
@@ -13,7 +14,6 @@ module.exports = class BanCommand extends Command {
 			examples: ['ban @PenPow He was mean', 'ban @PenPow 365y Naughty'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'BAN_MEMBERS'],
 			userPermissions: ['BAN_MEMBERS'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
@@ -113,19 +113,19 @@ module.exports = class BanCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: 'User to apply the moderation actions to',
 				required: true,
 			},
 			{
 				name: 'time',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Length of time (1s/m/h/d/w/y)',
 				required: false,
 			},
 			{
 				name: 'reason',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
 				required: false,
 			}],

@@ -43,6 +43,7 @@ const emojis = {
 	delete_channel: '<:delete_channel:843023281883971604>',
 	mention: '<:mention:843023489534394379>',
 	streaming: '<:streamer:843023735568334891>',
+	certified_moderator: '<:certified_moderator:873472343563976734>',
 };
 
 module.exports = emojis;

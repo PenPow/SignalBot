@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { mod } = require('../../utils/emojis');
 
 module.exports = class CaseCommand extends Command {
@@ -7,13 +8,11 @@ module.exports = class CaseCommand extends Command {
 		super(client, {
 			name: 'case',
 			usage: 'case <caseID | latest>',
-			aliases: ['caseinfo'],
 			description: 'Gets the detailed information about a case.',
 			type: client.types.MOD,
-			examples: ['case 1', 'caseinfo latest'],
+			examples: ['case 1', 'case latest'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			userPermissions: [],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
@@ -68,7 +67,7 @@ module.exports = class CaseCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'caseid',
-				type: 'INTEGER',
+				type: ApplicationCommandOptionType.Integer,
 				description: 'CaseID to edit the reason for',
 				required: false,
 			}],

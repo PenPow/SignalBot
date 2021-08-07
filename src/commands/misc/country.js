@@ -1,6 +1,8 @@
 const Command = require('../../structures/Command');
-const fetch = require('node-fetch');
 const SignalEmbed = require('../../structures/SignalEmbed');
+
+const fetch = require('node-fetch');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 const Intl = require('intl');
 Intl.__disableRegExpRestore();
@@ -14,7 +16,6 @@ module.exports = class CountryCommand extends Command {
 			type: client.types.MISC,
 			examples: ['country usa'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -58,7 +59,7 @@ module.exports = class CountryCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'country',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The country name/acronym',
 				required: true,
 			}],

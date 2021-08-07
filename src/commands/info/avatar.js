@@ -1,18 +1,16 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class AvatarCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'avatar',
 			usage: 'avatar [user]',
-			aliases: ['profilepic', 'pic', 'av'],
 			description: 'Displays a user\'s avatar (or your own, if no user is mentioned).',
 			type: client.types.INFO,
-			examples: ['avatar', 'profilepic @PenPow', 'pic @PenPow', 'av @PenPow'],
+			examples: ['avatar'],
 			clientPermissions: ['EMBED_LINKS'],
-			//   userPermissions: ['CHANGE_NICKNAME'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -32,7 +30,7 @@ module.exports = class AvatarCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: '(Optional) Gets the user\'s avatar, defaults to you if none is given.',
 				required: false,
 			}],

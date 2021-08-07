@@ -5,8 +5,7 @@ const { encode } = require('querystring');
 const { misc } = require('../../utils/emojis.js');
 
 const fetch = require('node-fetch');
-
-const cache = new Map();
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class mdnCommand extends Command {
 	constructor(client) {
@@ -17,22 +16,21 @@ module.exports = class mdnCommand extends Command {
 			type: client.types.MISC,
 			examples: ['mdn string.prototype.replace'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
 	async run(interaction, args) {
 		const query = args.get('search')?.value.trim();
-		await interaction.defer({ ephemeral: true });
 
 		try {
 			const qString = `https://developer.mozilla.org/api/v1/search?${encode({ q: query })}`;
-			let hit = cache.get(qString);
+			let hit = this.client.cache.get(qString);
 
 			if (!hit) {
+				await interaction.deferReply({ ephemeral: true });
 				const result = await fetch(qString).then((r) => r.json());
 				hit = result.documents?.[0];
-				cache.set(qString, hit);
+				this.client.cache.set(qString, hit);
 			}
 
 			if (!hit) {
@@ -48,7 +46,7 @@ module.exports = class mdnCommand extends Command {
 				.replace(linkReplaceRegex, '[$1](https://developer.mozilla.org/<$2>)')
 				.replace(boldCodeBlockRegex, '**`$1`**');
 
-			const parts = [`💻 __[**${hit.title}**](<${url}>)__`, intro];
+			const parts = [`__[**${hit.title}**](<${url}>)__`, intro];
 
 			const embed = new SignalEmbed(interaction)
 				.setTitle(`${misc} MDN Lookup 💻`)
@@ -68,7 +66,7 @@ module.exports = class mdnCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'search',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Search Term to provide to MDN',
 				required: true,
 			}],

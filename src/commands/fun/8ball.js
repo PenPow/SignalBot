@@ -2,6 +2,7 @@ const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 const answers = [
 	'It is certain.',
@@ -31,12 +32,10 @@ module.exports = class EightBallCommand extends Command {
 		super(client, {
 			name: '8ball',
 			usage: '8ball <question>',
-			aliases: ['fortune'],
 			description: 'Asks the magic 8-Ball for some physic wisdom.',
 			type: client.types.FUN,
-			examples: ['8ball Am I going to become a superhero?', 'fortune Is Signal a good bot?'],
+			examples: ['8ball Am I going to become a superhero?'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -57,7 +56,7 @@ module.exports = class EightBallCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'question',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Question to ask the mystical eight ball',
 				required: true,
 			}],

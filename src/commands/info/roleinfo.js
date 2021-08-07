@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const moment = require('moment');
 const permissions = require('../../utils/permissions.json');
 
@@ -7,12 +8,10 @@ module.exports = class RoleInfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'roleinfo',
-			aliases: ['role', 'ri'],
 			usage: 'roleinfo <role mention/ID>',
 			description: 'Fetches information about the provided role.',
 			type: client.types.INFO,
-			guilds: ['GLOBAL'],
-			examples: ['roleinfo @owner', 'ri 690664655751872564'],
+			examples: ['roleinfo @owner'],
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}
@@ -53,7 +52,7 @@ module.exports = class RoleInfoCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'role',
-				type: 'ROLE',
+				type: ApplicationCommandOptionType.Role,
 				description: 'Info about the role specified',
 				required: true,
 			}],

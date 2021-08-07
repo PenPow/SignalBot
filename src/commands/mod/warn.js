@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { success, mod } = require('../../utils/emojis');
 
 module.exports = class WarnCommand extends Command {
@@ -12,7 +13,6 @@ module.exports = class WarnCommand extends Command {
 			examples: ['warn @PenPow He was mean', 'warn @PenPow Naughty'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			userPermissions: ['MANAGE_MESSAGES'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
@@ -84,13 +84,13 @@ module.exports = class WarnCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.String,
 				description: 'User to apply the moderation actions to',
 				required: true,
 			},
 			{
 				name: 'reason',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
 				required: false,
 			}],

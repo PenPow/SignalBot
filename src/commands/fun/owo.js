@@ -1,16 +1,15 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class OwoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'owo',
 			usage: 'owo <text>',
-			aliases: ['owoify', 'uwu', 'uwuify'],
 			description: 'Converts text into OWO!',
 			type: client.types.FUN,
-			examples: ['owo test', 'owoify Hi!', 'uwu Hi!', 'uwuify test'],
-			guilds: ['GLOBAL'],
+			examples: ['owo test', 'owo Hi!'],
 		});
 	}
 
@@ -26,7 +25,7 @@ module.exports = class OwoCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'text',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'What text should we OWOify?',
 				required: true,
 			}],

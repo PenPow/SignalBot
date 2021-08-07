@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { mod } = require('../../utils/emojis');
 
 module.exports = class ClearSanctionsCommand extends Command {
@@ -7,13 +8,11 @@ module.exports = class ClearSanctionsCommand extends Command {
 		super(client, {
 			name: 'clearsanctions',
 			usage: 'clearsanctions <member>',
-			aliases: ['clearhistory'],
 			description: 'Clears the specified user\'s moderation history.',
 			type: client.types.MOD,
-			examples: ['clearsanctions @PenPow', 'clearhistory PenPow'],
+			examples: ['clearsanctions @PenPow'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			userPermissions: ['ADMINISTRATOR'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
@@ -35,7 +34,7 @@ module.exports = class ClearSanctionsCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'member',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: 'Member to get the case history for',
 				required: true,
 			}],

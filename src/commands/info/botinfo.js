@@ -1,19 +1,17 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const pkg = require(__basedir + '/package.json'); // eslint-disable-line
-const { owner } = require('../../utils/emojis.js');
 const { oneLine, stripIndent } = require('common-tags');
+const pkg = require(global.__basedir + '/package.json');
+const { owner } = require('../../utils/emojis.js');
 
 module.exports = class BotInfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'botinfo',
-			aliases: ['bot', 'bi'],
 			usage: 'botinfo',
 			description: 'Fetches Signal\'s bot information.',
 			type: client.types.INFO,
-			guilds: ['GLOBAL'],
-			examples: ['botinfo', 'bot', 'bi'],
+			examples: ['botinfo'],
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}

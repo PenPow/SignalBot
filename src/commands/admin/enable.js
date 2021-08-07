@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class EnableCommand extends Command {
 	constructor(client) {
@@ -8,22 +9,20 @@ module.exports = class EnableCommand extends Command {
 			usage: 'enable <command | category>',
 			description: 'Enables a disabled module/command',
 			type: client.types.ADMIN,
-			examples: ['enable music', 'enable cat'],
+			examples: ['enable mod', 'enable cat'],
 			clientPermissions: ['EMBED_LINKS'],
 			userPermissions: ['ADMINISTRATOR'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
 	async run(interaction, args) {
 		const toEnable = args.get('command')?.value;
-		let keyExists = this.client.db.includes(`${interaction.guild.id}-disabled-modules`, toEnable.toLowerCase()) || this.client.db.includes(`${interaction.guild.id}-disabled-commands`, toEnable.toLowerCase());
-		if(['deploy', 'eval'].includes(toEnable)) keyExists = false;
+		const keyExists = this.client.db.includes(`${interaction.guild.id}-disabled-modules`, toEnable.toLowerCase()) || this.client.db.includes(`${interaction.guild.id}-disabled-commands`, toEnable.toLowerCase());
 		if((Object.values(this.client.types).indexOf(toEnable.toLowerCase()) > -1) && keyExists) {
 			this.client.db.remove(`${interaction.guild.id}-disabled-modules`, toEnable.toLowerCase());
 		}
-		else if((this.client.commands.get(toEnable.toLowerCase()) || this.client.aliases.get(toEnable.toLowerCase())) && keyExists) {
-			const command = this.client.commands.get(toEnable.toLowerCase()) || this.client.aliases.get(toEnable.toLowerCase());
+		else if((this.client.commands.get(toEnable.toLowerCase())) && keyExists) {
+			const command = this.client.commands.get(toEnable.toLowerCase());
 
 			this.client.db.remove(`${interaction.guild.id}-disabled-commands`, command.name.toLowerCase());
 		}
@@ -44,7 +43,7 @@ module.exports = class EnableCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'command',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The command/module you wish to enable',
 				required: true,
 			}],

@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { success, mod } = require('../../utils/emojis');
 
 module.exports = class UnmuteCommand extends Command {
@@ -12,7 +13,6 @@ module.exports = class UnmuteCommand extends Command {
 			examples: ['unmute @PenPow Successfully Appealed Punishment'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'MANAGE_ROLES'],
 			userPermissions: ['MANAGE_ROLES', 'MANAGE_MESSAGES'],
-			guilds: ['GLOBAL'],
 			guldOnly: true,
 		});
 	}
@@ -119,19 +119,19 @@ module.exports = class UnmuteCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: 'User to remove the mute for',
 				required: false,
 			},
 			{
 				name: 'caseid',
-				type: 'INTEGER',
+				type: ApplicationCommandOptionType.Integer,
 				description: 'Case ID of the punishment to remove',
 				required: false,
 			},
 			{
 				name: 'reason',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the removal of the punishment',
 				required: false,
 			}],

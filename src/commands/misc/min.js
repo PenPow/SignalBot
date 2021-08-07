@@ -1,18 +1,17 @@
 const Command = require('../../structures/Command');
-const DiceExpression = require('dice-expression-evaluator');
 const oneLine = require('common-tags').oneLine;
+const DiceExpression = require('dice-expression-evaluator');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class MinCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'min',
 			usage: 'min <roll>',
-			aliases: ['minroll', 'min-roll'],
 			description: 'Calculates the minimum possible roll for a dice expression, in standard RP format.',
 			type: client.types.MISC,
-			examples: ['min 2d20', 'minroll 1d8 - 2d4', 'min-roll 4d6 + 3d8 - 2d12'],
+			examples: ['min 2d20'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -33,7 +32,7 @@ module.exports = class MinCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'roll',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The dice roll to evaluate',
 				required: true,
 			}],

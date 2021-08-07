@@ -1,19 +1,18 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { success, info2 } = require('../../utils/emojis');
 const { oneLine } = require('common-tags');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
+const { success, info2 } = require('../../utils/emojis');
 
 module.exports = class BugReportCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'reportbug',
 			usage: 'reportbug <message>',
-			aliases: ['bugreport', 'report', 'bug', 'rb', 'br'],
 			description: 'Sends a message to our bug report server, include as much information as possible.',
 			type: client.types.MISC,
-			examples: ['reportbug The bot doesnt work', 'bugreport it broke', 'report it went offline', 'bug it didnt run command correctly', 'rb the profile was broken', 'br prefix didnt change'],
+			examples: ['reportbug The bot doesnt work'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -59,7 +58,7 @@ module.exports = class BugReportCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'message',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Message to send to our team',
 				required: true,
 			}],

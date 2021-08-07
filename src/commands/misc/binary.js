@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const BinaryRegex = /\b[01]+\b/;
 
 module.exports = class BinaryCommand extends Command {
@@ -7,12 +8,10 @@ module.exports = class BinaryCommand extends Command {
 		super(client, {
 			name: 'binary',
 			usage: 'binary <text>',
-			aliases: ['t2b', 'texttobinary', 'ttb'],
 			description: 'Converts any text/message into binary notation (and any binary into text).',
 			type: client.types.MISC,
-			examples: ['binary Signal V3 When?', 't2b Signal V2?', 'texttobinary Signal is Awesome Bot', 'ttb Hello There'],
+			examples: ['binary Signal V3 When?'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -57,7 +56,7 @@ module.exports = class BinaryCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'text',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The message to convert to binary (and vice versa)',
 				required: true,
 			}],

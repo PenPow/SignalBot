@@ -4,18 +4,17 @@ const SignalEmbed = require('../../structures/SignalEmbed');
 const { fun } = require('../../utils/emojis.js');
 
 const gamedig = require('gamedig');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class GModCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'gmod',
 			usage: 'gmod <ip>',
-			aliases: ['gmodlookup'],
 			description: 'Fetches information about a given Garry\'s Mod server!',
 			type: client.types.MISC,
-			examples: ['gmod <IP>', 'gmodlookup <IP>'],
+			examples: ['gmod <IP>'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -36,13 +35,12 @@ module.exports = class GModCommand extends Command {
 
 		const embed = new SignalEmbed(interaction);
 
-		await interaction.defer({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: true });
 
 		let json = null;
 
 		await gamedig.query(options).then((res) => {
 			json = res;
-		// eslint-disable-next-line no-empty-function
 		}).catch(() => {
 			return this.sendErrorMessage(interaction, 2, 'Unable to reach server', 'This is likely caused by the fact that\nA) The Server is Offline\nB) Query is disabled\nC) Firewall is incorrectly configured.');
 		});
@@ -62,7 +60,7 @@ module.exports = class GModCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'ip',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'IP Adress of the GMOD server to lookup',
 				required: true,
 			}],

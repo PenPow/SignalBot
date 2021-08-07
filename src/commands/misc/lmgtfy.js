@@ -1,17 +1,16 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class lmgtfyCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'lmgtfy',
 			usage: 'lmgtfy <query>',
-			aliases: ['letmegooglethatforyou', 'letmegooglethat'],
 			description: 'Send a LMGTFY (Let Me Google That For You) link.',
 			type: client.types.MISC,
-			examples: ['lmgtfy discord', 'letmegooglethatforyou signal bot', 'letmegooglethat internet'],
+			examples: ['lmgtfy discord'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -32,7 +31,7 @@ module.exports = class lmgtfyCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'query',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The google search term.',
 				required: true,
 			}],

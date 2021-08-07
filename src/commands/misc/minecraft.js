@@ -4,18 +4,17 @@ const SignalEmbed = require('../../structures/SignalEmbed');
 const { fun } = require('../../utils/emojis.js');
 
 const gamedig = require('gamedig');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class MinecraftCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'minecraft',
 			usage: 'minecraft <ip>',
-			aliases: ['mc', 'mclookup'],
 			description: 'Fetches information about a given minecraft server! (Java and Bedrock Supported)',
 			type: client.types.MISC,
-			examples: ['minecraft play.hypixel.net', 'mc play.hypixel.net', 'mclookup play.hypixel.net'],
+			examples: ['minecraft play.hypixel.net'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -38,7 +37,7 @@ module.exports = class MinecraftCommand extends Command {
 
 		const embed = new SignalEmbed(interaction);
 
-		await interaction.defer({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: true });
 
 		let json = null;
 
@@ -77,7 +76,7 @@ module.exports = class MinecraftCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'ip',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'IP Adress of the MC server to lookup',
 				required: true,
 			}],

@@ -1,18 +1,17 @@
 const Command = require('../../structures/Command');
-const DiceExpression = require('dice-expression-evaluator');
 const oneLine = require('common-tags').oneLine;
+const DiceExpression = require('dice-expression-evaluator');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class MaxCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'max',
 			usage: 'max <roll>',
-			aliases: ['maxroll', 'max-roll'],
 			description: 'Calculates the highest possible roll for a dice expression, in standard RP format.',
 			type: client.types.MISC,
-			examples: ['max 2d20', 'maxroll 1d8 - 2d4', 'max-roll 4d6 + 3d8 - 2d12'],
+			examples: ['max 2d20'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -33,7 +32,7 @@ module.exports = class MaxCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'roll',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The dice roll to evaluate',
 				required: true,
 			}],

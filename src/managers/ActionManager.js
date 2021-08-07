@@ -1,6 +1,7 @@
 const { join, resolve } = require('path');
 const { readdirSync, readdir } = require('fs');
 const { createClient } = require('redis');
+const CacheManager = require('./CacheManager');
 
 /**
  * Signal's Custom Action Manager
@@ -24,12 +25,6 @@ class ActionManager {
 				const command = new Command(client);
 				if(command.name && !command.disabled) {
 					client.commands.set(command.name, command);
-
-					if(command.aliases) {
-						command.aliases.forEach((alias) => {
-							client.aliases.set(alias, command);
-						});
-					}
 				}
 			});
 		});
@@ -40,7 +35,7 @@ class ActionManager {
      * @param {SignalClient} client The original client, for access to the configuration.
      * @returns {void}
     */
-	initEvents(client) {
+	initEvents(client, dry) {
 		readdir(join(global.__basedir, 'src/events'), (err, files) => {
 			if (err) client.logger.error(err);
 
@@ -51,7 +46,7 @@ class ActionManager {
 					evt,
 				));
 
-				const event = new Event(client);
+				const event = new Event(client, dry);
 				const eventName = evt.split('.')[0];
 
 				client.on(
@@ -73,6 +68,14 @@ class ActionManager {
 			enable_offline_queue: true,
 			db: 0,
 		});
+	}
+
+	/**
+	 * Loads the Cache Manager
+	 * @returns {CacheManager}
+	 */
+	initCache() {
+		return new CacheManager();
 	}
 }
 

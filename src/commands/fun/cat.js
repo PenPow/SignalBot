@@ -10,12 +10,11 @@ module.exports = class CatCommand extends Command {
 		super(client, {
 			name: 'cat',
 			usage: 'cat',
-			aliases: ['catpic', 'kitten', 'kittenpic'],
 			description: 'Finds a random cat to watch',
 			type: client.types.FUN,
-			examples: ['cat', 'catpic', 'kitten', 'kittenpic'],
+			examples: ['cat'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
+
 		});
 	}
 

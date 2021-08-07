@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -8,12 +9,10 @@ module.exports = class RollCommand extends Command {
 		super(client, {
 			name: 'roll',
 			usage: 'roll [dice sides]',
-			aliases: ['dice', 'r'],
 			description: 'Rolls a dice with the specified number of sides. Will default to 6 sides if no number is given.',
 			type: client.types.FUN,
-			examples: ['roll 6', 'dice 12', 'r 20'],
+			examples: ['roll 6', 'roll 12', 'roll 20'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -37,7 +36,7 @@ module.exports = class RollCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'sides',
-				type: 'INTEGER',
+				type: ApplicationCommandOptionType.Integer,
 				description: 'How many sides do you want on the dice.',
 				required: false,
 			}],

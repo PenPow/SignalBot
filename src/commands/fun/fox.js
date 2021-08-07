@@ -10,12 +10,10 @@ module.exports = class FoxCommand extends Command {
 		super(client, {
 			name: 'fox',
 			usage: 'fox',
-			aliases: ['foxpic'],
 			description: 'Finds a random fox to watch',
 			type: client.types.FUN,
-			examples: ['fox', 'foxpic'],
+			examples: ['fox'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

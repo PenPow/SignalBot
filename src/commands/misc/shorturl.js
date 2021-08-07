@@ -4,18 +4,17 @@ const SignalEmbed = require('../../structures/SignalEmbed');
 const { misc } = require('../../utils/emojis.js');
 
 const fetch = require('node-fetch');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class ShortURLCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'shorturl',
 			usage: 'shorturl <URL>',
-			aliases: ['short', 'url'],
 			description: 'Shortens a URL down to a smaller one!',
 			type: client.types.MISC,
-			examples: ['shorturl www.google.com', 'short www.google.com', 'url www.google.com'],
+			examples: ['shorturl www.google.com'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -46,7 +45,7 @@ module.exports = class ShortURLCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'url',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'URL to shorten',
 				required: true,
 			}],

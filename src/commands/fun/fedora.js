@@ -6,11 +6,9 @@ module.exports = class TipsFedoraCommand extends Command {
 		super(client, {
 			name: 'fedora',
 			usage: 'fedora',
-			aliases: ['tipsfedora'],
 			description: '*Tips Fedora*',
 			type: client.types.FUN,
 			examples: ['tipsfedora', 'fedora'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

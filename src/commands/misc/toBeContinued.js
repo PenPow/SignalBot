@@ -1,4 +1,5 @@
 const Command = require('../../structures/Command');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { MessageAttachment } = require('discord.js');
 
 module.exports = class ToBeContinuedCommand extends Command {
@@ -10,14 +11,13 @@ module.exports = class ToBeContinuedCommand extends Command {
 			type: client.types.MISC,
 			examples: ['tobecontinued 207198455301537793', 'tobecontinued', 'tobecontinued @PenPow'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
 	async run(interaction, args) {
 		const member = args.get('member')?.member;
 
-		await interaction.defer();
+		await interaction.deferReply();
 
 		const buffer = await this.client.images.generate('tobecontinued', { url: member.user.displayAvatarURL({ format: 'png', size: 512 }) });
 		const attachment = new MessageAttachment(buffer, 'tobecontinued.png');
@@ -30,7 +30,7 @@ module.exports = class ToBeContinuedCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'member',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: 'The member to generate the image for',
 				required: true,
 			}],

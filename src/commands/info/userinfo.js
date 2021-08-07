@@ -1,11 +1,13 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const emojis = require('../../utils/emojis.js');
 const moment = require('moment');
 
 const flags = {
+	DISCORD_CERTIFIED_MODERATOR: `${emojis.certified_moderator} \`Discord Certified Moderator\``,
 	DISCORD_EMPLOYEE: `${emojis.discord_employee} \`Discord Employee\``,
-	DISCORD_PARTNER: `${emojis.discord_partner} \`Partnered Server Owner\``,
+	PARTNERED_SERVER_OWNER: `${emojis.discord_partner} \`Partnered Server Owner\``,
 	BUGHUNTER_LEVEL_1: `${emojis.bughunter_level_1} \`Bug Hunter (Level 1)\``,
 	BUGHUNTER_LEVEL_2: `${emojis.bughunter_level_2} \`Bug Hunter (Level 2)\``,
 	HYPESQUAD_EVENTS: `${emojis.hypesquad_events} \`HypeSquad Events\``,
@@ -16,19 +18,17 @@ const flags = {
 	TEAM_USER: 'Team User',
 	SYSTEM: 'System',
 	VERIFIED_BOT: `${emojis.verified_bot} \`Verified Bot\``,
-	VERIFIED_DEVELOPER: `${emojis.verified_developer} \`Early Verified Bot Developer\``,
+	EARLY_VERIFIED_BOT_DEVELOPER: `${emojis.verified_developer} \`Early Verified Bot Developer\``,
 };
 
 module.exports = class UserInfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'userinfo',
-			aliases: ['user', 'ui', 'whois'],
 			usage: 'userinfo [user mention/ID]',
 			description: 'Fetches a user\'s information. If no user is given, your own information will be displayed.',
 			type: client.types.INFO,
-			guilds: ['GLOBAL'],
-			examples: ['userinfo @PenPow', 'user', 'ui @Discord', 'whois'],
+			examples: ['userinfo @PenPow'],
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}
@@ -64,7 +64,7 @@ module.exports = class UserInfoCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: '(Optional) Gets the user\'s information, defaults to you if none is given.',
 				required: false,
 			}],

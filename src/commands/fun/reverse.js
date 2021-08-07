@@ -1,4 +1,5 @@
 const Command = require('../../structures/Command');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class ReverseCommand extends Command {
 	constructor(client) {
@@ -8,7 +9,6 @@ module.exports = class ReverseCommand extends Command {
 			description: 'Reverses any text',
 			type: client.types.FUN,
 			examples: ['reverse test'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -22,7 +22,7 @@ module.exports = class ReverseCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'text',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'What text should we ASCIIify?',
 				required: true,
 			}],

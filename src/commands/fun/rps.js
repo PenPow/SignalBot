@@ -5,6 +5,7 @@ const { fun } = require('../../utils/emojis.js');
 
 const rps = ['scissors', 'rock', 'paper'];
 const res = ['Scissors :v:', 'Rock :fist:', 'Paper :raised_hand:'];
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class RPSCommand extends Command {
 	constructor(client) {
@@ -15,7 +16,6 @@ module.exports = class RPSCommand extends Command {
 			type: client.types.FUN,
 			examples: ['rps rock'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -44,7 +44,7 @@ module.exports = class RPSCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'option',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Rock, paper or scissors',
 				required: true,
 				choices: [

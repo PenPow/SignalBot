@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { success, mod } = require('../../utils/emojis');
 
 module.exports = class KickCommand extends Command {
@@ -12,7 +13,6 @@ module.exports = class KickCommand extends Command {
 			examples: ['kick @PenPow He was mean', 'kick @PenPow Naughty'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'KICK_MEMBERS'],
 			userPermissions: ['KICK_MEMBERS'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
@@ -87,13 +87,13 @@ module.exports = class KickCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: 'User to apply the moderation actions to',
 				required: true,
 			},
 			{
 				name: 'reason',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
 				required: false,
 			}],

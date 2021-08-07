@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 const { fun } = require('../../utils/emojis.js');
 
@@ -21,12 +22,10 @@ module.exports = class EmojifyCommand extends Command {
 		super(client, {
 			name: 'emojify',
 			usage: 'emojify <message>',
-			aliases: ['sayemoji'],
 			description: 'Converts message to emoji',
 			type: client.types.FUN,
-			examples: ['emojify Hello World', 'sayemoji How are you'],
+			examples: ['emojify Hello World'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -56,7 +55,7 @@ module.exports = class EmojifyCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'message',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Message to emojify',
 				required: true,
 			}],

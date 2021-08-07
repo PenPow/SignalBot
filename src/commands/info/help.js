@@ -1,6 +1,7 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 const { stripIndent } = require('common-tags');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { info, fun, misc, mod, admin } = require('../../utils/emojis');
 
 module.exports = class HelpCommand extends Command {
@@ -8,12 +9,11 @@ module.exports = class HelpCommand extends Command {
 		super(client, {
 			name: 'help',
 			usage: 'help <command | all>',
-			aliases: ['commands', 'command', 'h'],
 			description: 'Shows the information about the bot or commands.',
 			type: client.types.INFO,
 			examples: ['help', 'help all', 'help nick', 'help cat'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
+
 		});
 	}
 
@@ -26,7 +26,7 @@ module.exports = class HelpCommand extends Command {
 		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, MUSIC } = interaction.client.types;
 		const { capitalize } = interaction.client.utils;
 
-		const command = interaction.client.commands.get(args?.first()?.value.toLowerCase()) || interaction.client.aliases.get(args?.first()?.value.toLowerCase());
+		const command = interaction.client.commands.get(args?.first()?.value.toLowerCase());
 		if(command && (command.type !== OWNER || interaction.client.isOwner(interaction.user))) {
 			embed
 				.setTitle(`Command: \`${command.name}\``)
@@ -35,7 +35,6 @@ module.exports = class HelpCommand extends Command {
 				.addField('Usage', `\`${prefix}${command.usage}\``, true)
 				.addField('Type', `\`${capitalize(command.type)}\``, true);
 
-			if (command.aliases) embed.addField('Aliases', command.aliases.map(c => `\`${c}\``).join(' '));
 			if (command.examples) embed.addField('Examples', command.examples.map(c => `\`${prefix}${c}\``).join('\n'));
 		}
 		else if(args?.first()?.value && all) {
@@ -102,7 +101,7 @@ module.exports = class HelpCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'command',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Get Detailed Information about a command',
 				required: false,
 			}],

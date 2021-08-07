@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { store } = require('../../utils/emojis.js');
 
 module.exports = class TagCommand extends Command {
@@ -7,12 +8,10 @@ module.exports = class TagCommand extends Command {
 		super(client, {
 			name: 'tag',
 			usage: 'tag <create | list | show | delete | edit | guide>',
-			aliases: ['tags'],
 			description: 'Creates/Lists/Shows/Edits/Deletes a tag (run s!tags guide for more information)',
 			type: client.types.TAG,
 			examples: ['tag create', 'tag show', 'tag list', 'tag delete', 'tag edit', 'tag guide'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
@@ -165,7 +164,7 @@ module.exports = class TagCommand extends Command {
 			break;
 		}
 		case 'create': {
-			if(this.client.commands.some((command) => command.name === args.get('create').options.get('name').value.toLowerCase()) || this.client.aliases.some((command) => command.aliases.includes(args.get('create').options.get('name')?.value.toLowerCase()))) {
+			if(this.client.commands.some((command) => command.name === args.get('create').options.get('name').value.toLowerCase())) {
 				embed.setTitle(`${store} Command Exists`)
 					.setDescription('A command/command alias already exists with that name, to avoid issues, we are cancelling the creation. Try again with another name');
 
@@ -204,79 +203,79 @@ module.exports = class TagCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'create',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Creates a new tag',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				},
 				{
 					name: 'content',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The content of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'list',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Lists the tags for the server',
 			},
 			{
 				name: 'show',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Shows information about an existing tag',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'query',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Shows the tag for a slash command',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'edit',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Edits a tag',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				},
 				{
 					name: 'content',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The content of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'delete',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Deletes a tag',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'guide',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Shows the guide regarding tags',
 			}],
 		};

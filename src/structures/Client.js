@@ -58,12 +58,6 @@ class Client extends Discord.Client {
 		this.commands = new Discord.Collection();
 
 		/**
-         * Collection of Aliases
-         * @type {Collection<string, Command>}
-         */
-		this.aliases = new Discord.Collection();
-
-		/**
          * Utility Functions
          * @type {Object}
          */
@@ -98,8 +92,9 @@ class Client extends Discord.Client {
 		this.logger.info('Initalizing...');
 		try {
 			this.actionManager.initCommands(this);
-			this.actionManager.initEvents(this);
+			this.actionManager.initEvents(this, dry);
 			this.redis = this.actionManager.initRedis();
+			this.cache = this.actionManager.initCache();
 			await this.login(process.env.DISCORD_TOKEN);
 		}
 		catch (e) {

@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const PirateSpeak = require('pirate-speak');
 
 module.exports = class yarrCommand extends Command {
@@ -7,11 +8,9 @@ module.exports = class yarrCommand extends Command {
 		super(client, {
 			name: 'piratespeak',
 			usage: 'piratespeak <text>',
-			aliases: ['ps', 'yarr', 'yarrspeak'],
 			description: 'Yarr! Me hearties.',
 			type: client.types.FUN,
-			examples: ['piratespeak test', 'ps Hi!', 'yarr Hi!', 'yarrspeak test'],
-			guilds: ['GLOBAL'],
+			examples: ['piratespeak test', 'piratespeak Hi!', 'piratespeak Hi!', 'piratespeak test'],
 		});
 	}
 
@@ -27,7 +26,7 @@ module.exports = class yarrCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'text',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Yarr! Me hearties. What text should I translate',
 				required: true,
 			}],

@@ -1,19 +1,18 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { success, unread_pin } = require('../../utils/emojis');
 const { oneLine } = require('common-tags');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
+const { success, unread_pin } = require('../../utils/emojis');
 
 module.exports = class FeedbackCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'feedback',
 			usage: 'feedback <message>',
-			aliases: ['fb'],
 			description: 'Sends a message to our feedback server',
 			type: client.types.MISC,
 			examples: ['feedback I really like this bot', 'feedback Could you add a new feature?'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -60,7 +59,7 @@ module.exports = class FeedbackCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'message',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Message to send to our team',
 				required: true,
 			}],

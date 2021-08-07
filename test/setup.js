@@ -1,9 +1,12 @@
-const chalk = require('chalk');
-const fetch = require('node-fetch');
 const { createClient } = require('redis');
 const fs = require('fs');
+const chalk = require('chalk');
+const fetch = require('node-fetch');
 const path = require('path');
 const readLastLines = require('read-last-lines');
+const semver = require('semver');
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
 
 const success = (message) => console.log(`   ${chalk.green('✓')} ${message}`);
 const error = (message, howToFix) => console.log(`   ${chalk.red('✗')} ${message}${howToFix ? ` : ${howToFix}` : ''}`);
@@ -15,11 +18,11 @@ const checks = [
 		info('Environment');
 		return new Promise((resolve, reject) => {
 			let shouldReject = false;
-			if(parseInt(process.version.split('.')[0].split('v')[1]) >= 12) {
+			if(semver.satisfies(process.version.split('v').slice(1).toString(), '>=16.6')) {
 				success('Node Version');
 			}
 			else {
-				error('Node Version < 14', 'Install Node V14 or Greater');
+				error('Node Version < 16', 'Install Node V16.6 or Greater');
 				shouldReject = true;
 			}
 
@@ -187,7 +190,50 @@ const test = async () => {
 	}
 
 	if(testResult && line !== 'SETUP_COMPLETE = TRUE') {
-		await fs.appendFileSync(path.join(global.__basedir, './.env'), '\n\n# Do Not Touch, doing so will corrupt the installation\nSETUP_COMPLETE = TRUE');
+		const { Intents } = require('discord.js');
+		const Client = require('../src/structures/Client');
+
+		const intents = new Intents();
+		intents.add(
+			Intents.FLAGS.GUILDS,
+			Intents.FLAGS.GUILD_MESSAGES,
+			Intents.FLAGS.DIRECT_MESSAGES,
+			Intents.FLAGS.GUILD_BANS,
+			Intents.FLAGS.GUILD_MEMBERS,
+			Intents.FLAGS.GUILD_VOICE_STATES,
+		);
+
+		const client = new Client({
+			intents: intents,
+			allowedMentions: { parse: ['users', 'everyone', 'roles'], repliedUser: false },
+			partials: ['USER', 'CHANNEL', 'MESSAGE'],
+			presence: {
+				status: 'online',
+				activities: [{ name: 'to @Signal', type: 'LISTENING' }],
+			},
+		});
+		const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
+
+		await client.init(true);
+
+		const array = [];
+		client.commands.each(async command => {
+			if(command.disabled || command.ownerOnly) return;
+
+			array.push(command.generateSlashCommand());
+		});
+
+		try {
+			await rest.put(
+				Routes.applicationCommands(client.user.id, process.env.DEVELOPER_GUILD),
+				{ body: array },
+			);
+		}
+		catch (e) {
+			console.error(e);
+		}
+
+		await fs.appendFileSync(path.join(global.__basedir, './.env'), '\n\n# Do Not Touch, doing so will corrupt the installation\nENVIRONMENT = \'PRODUCTION\'\nSETUP_COMPLETE = TRUE');
 	}
 
 	if(testResult) { success('Successfully Verified Installation\n'); }

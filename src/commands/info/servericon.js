@@ -6,12 +6,10 @@ module.exports = class ServerIconCommand extends Command {
 		super(client, {
 			name: 'servericon',
 			usage: 'servericon',
-			aliases: ['icon', 'i'],
 			description: 'Displays the server\'s icon.',
 			type: client.types.INFO,
-			examples: ['servericon', 'icon', 'i'],
+			examples: ['servericon'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

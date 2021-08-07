@@ -10,12 +10,10 @@ module.exports = class DogFactCommand extends Command {
 		super(client, {
 			name: 'dogfact',
 			usage: 'dogfact',
-			// aliases: ['catpic'],
 			description: 'Finds a random dog fact',
 			type: client.types.FUN,
 			examples: ['dogfact'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

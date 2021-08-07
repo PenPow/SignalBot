@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const permissions = require('../../utils/permissions.json');
 
 module.exports = class PermissionsCommand extends Command {
@@ -7,13 +8,10 @@ module.exports = class PermissionsCommand extends Command {
 		super(client, {
 			name: 'permissions',
 			usage: 'permissions [user]',
-			aliases: ['perms'],
 			description: 'Displays all current permissions for the specified user, defaulting to you.',
 			type: client.types.INFO,
-			examples: ['permissions', 'perms @PenPow', 'permissions 207198455301537793'],
+			examples: ['permissions'],
 			clientPermissions: ['EMBED_LINKS'],
-			//   userPermissions: ['CHANGE_NICKNAME'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -41,7 +39,7 @@ module.exports = class PermissionsCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: '(Optional) Shows permission for that user, defaults to you if none is given',
 				required: false,
 			}],
