@@ -52,7 +52,7 @@ module.exports = class mdnCommand extends Command {
 				.setTitle(`${misc} MDN Lookup 💻`)
 				.setDescription(parts.join('\n'));
 
-			interaction.editReply({ embeds: [embed], ephemeral: true });
+			interaction.deferred ? interaction.editReply({ embeds: [embed], ephemeral: true }) : interaction.reply({ embeds: [embed], ephemeral: true });
 		}
 		catch(err) {
 			interaction.client.logger.error(err.stack);
