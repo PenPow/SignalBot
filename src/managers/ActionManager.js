@@ -1,6 +1,7 @@
 const { join, resolve } = require('path');
 const { readdirSync, readdir } = require('fs');
 const { createClient } = require('redis');
+const CacheManager = require('./CacheManager');
 
 /**
  * Signal's Custom Action Manager
@@ -73,6 +74,14 @@ class ActionManager {
 			enable_offline_queue: true,
 			db: 0,
 		});
+	}
+
+	/**
+	 * Loads the Cache Manager
+	 * @returns {CacheManager}
+	 */
+	initCache() {
+		return new CacheManager();
 	}
 }
 

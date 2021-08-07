@@ -100,6 +100,7 @@ class Client extends Discord.Client {
 			this.actionManager.initCommands(this);
 			this.actionManager.initEvents(this, dry);
 			this.redis = this.actionManager.initRedis();
+			this.cache = this.actionManager.initCache();
 			await this.login(process.env.DISCORD_TOKEN);
 		}
 		catch (e) {
