@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class OwoCommand extends Command {
 	constructor(client) {
@@ -26,7 +27,7 @@ module.exports = class OwoCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'text',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'What text should we OWOify?',
 				required: true,
 			}],

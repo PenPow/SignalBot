@@ -1,6 +1,7 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 const fetch = require('node-fetch');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class CovidCommand extends Command {
 	constructor(client) {
@@ -60,7 +61,7 @@ module.exports = class CovidCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'country',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Country to lookup Covid Statistics For',
 				required: false,
 			}],

@@ -10,7 +10,6 @@ module.exports = class ShibeCommand extends Command {
 		super(client, {
 			name: 'shibe',
 			usage: 'shibe',
-			// aliases: ['puppy', 'puppypic', 'pup', 'puppic'],
 			description: 'Shibe pictures',
 			type: client.types.FUN,
 			examples: ['shibe'],

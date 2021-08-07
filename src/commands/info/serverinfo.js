@@ -1,8 +1,8 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { owner, voice } = require('../../utils/emojis.js');
 const { stripIndent } = require('common-tags');
 const moment = require('moment');
+const { owner, voice } = require('../../utils/emojis.js');
 
 const verificationLevels = {
 	NONE: '`None`',

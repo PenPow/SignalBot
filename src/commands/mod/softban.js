@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { success, mod } = require('../../utils/emojis');
 
 module.exports = class SoftBanCommand extends Command {
@@ -95,13 +96,13 @@ module.exports = class SoftBanCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: 'User to apply the moderation actions to',
 				required: true,
 			},
 			{
 				name: 'reason',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
 				required: false,
 			}],

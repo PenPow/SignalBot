@@ -34,7 +34,7 @@ require('dotenv').config();
 /**
  * @global
  */
-global.__basedir = __dirname; // eslint-disable-line
+global.__basedir = __dirname;
 
 /**
  * Constructs new Intents
@@ -43,11 +43,7 @@ global.__basedir = __dirname; // eslint-disable-line
 const intents = new Intents();
 intents.add(
 	Intents.FLAGS.GUILDS,
-	Intents.FLAGS.GUILD_MESSAGES,
-	Intents.FLAGS.DIRECT_MESSAGES,
-	Intents.FLAGS.GUILD_BANS,
 	Intents.FLAGS.GUILD_MEMBERS,
-	Intents.FLAGS.GUILD_VOICE_STATES,
 );
 
 /**
@@ -57,7 +53,7 @@ intents.add(
 const client = new Client({
 	intents: intents,
 	allowedMentions: { parse: ['users', 'everyone', 'roles'], repliedUser: false },
-	partials: ['USER', 'CHANNEL', 'MESSAGE'],
+	failIfNotExists: true,
 	presence: {
 		status: 'online',
 		activities: [{ name: 'to @Signal', type: 'LISTENING' }],
@@ -78,4 +74,4 @@ init();
  * Handles Promise Rejections
  * @type {Event}
 */
-process.on('unhandledRejection', err => client.logger.error(err)); // eslint-disable-line
+process.on('unhandledRejection', err => client.logger.error(err));

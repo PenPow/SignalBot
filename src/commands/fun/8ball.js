@@ -2,6 +2,7 @@ const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 
 const { fun } = require('../../utils/emojis.js');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 const answers = [
 	'It is certain.',
@@ -57,7 +58,7 @@ module.exports = class EightBallCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'question',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Question to ask the mystical eight ball',
 				required: true,
 			}],

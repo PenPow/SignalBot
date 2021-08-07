@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const PirateSpeak = require('pirate-speak');
 
 module.exports = class yarrCommand extends Command {
@@ -27,7 +28,7 @@ module.exports = class yarrCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'text',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Yarr! Me hearties. What text should I translate',
 				required: true,
 			}],

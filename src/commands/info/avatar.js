@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class AvatarCommand extends Command {
 	constructor(client) {
@@ -32,7 +33,7 @@ module.exports = class AvatarCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: '(Optional) Gets the user\'s avatar, defaults to you if none is given.',
 				required: false,
 			}],

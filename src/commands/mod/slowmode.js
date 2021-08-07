@@ -1,6 +1,7 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 const ms = require('ms');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { mod } = require('../../utils/emojis');
 
 module.exports = class SlowmodeCommand extends Command {
@@ -60,13 +61,13 @@ module.exports = class SlowmodeCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'time',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Length of time (1s/m/h/d/w/y)',
 				required: true,
 			},
 			{
 				name: 'reason',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
 				required: false,
 			}],

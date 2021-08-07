@@ -1,6 +1,7 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 const ms = require('ms');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { success } = require('../../utils/emojis');
 
 module.exports = class ReminderCommand extends Command {
@@ -56,13 +57,13 @@ module.exports = class ReminderCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'time',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'How long until I should send this reminder (s/m/h/d/w/m/y)',
 				required: true,
 			},
 			{
 				name: 'message',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Message to attach to this reminder',
 				required: true,
 			}],

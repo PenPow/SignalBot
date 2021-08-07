@@ -1,7 +1,7 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { mem, cpu, os } = require('node-os-utils');
 const { stripIndent } = require('common-tags');
+const { mem, cpu, os } = require('node-os-utils');
 
 module.exports = class StatsCommand extends Command {
 	constructor(client) {

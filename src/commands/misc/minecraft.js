@@ -4,6 +4,7 @@ const SignalEmbed = require('../../structures/SignalEmbed');
 const { fun } = require('../../utils/emojis.js');
 
 const gamedig = require('gamedig');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class MinecraftCommand extends Command {
 	constructor(client) {
@@ -77,7 +78,7 @@ module.exports = class MinecraftCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'ip',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'IP Adress of the MC server to lookup',
 				required: true,
 			}],

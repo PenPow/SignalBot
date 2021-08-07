@@ -40,7 +40,7 @@ class ActionManager {
      * @param {SignalClient} client The original client, for access to the configuration.
      * @returns {void}
     */
-	initEvents(client) {
+	initEvents(client, dry) {
 		readdir(join(global.__basedir, 'src/events'), (err, files) => {
 			if (err) client.logger.error(err);
 
@@ -51,7 +51,7 @@ class ActionManager {
 					evt,
 				));
 
-				const event = new Event(client);
+				const event = new Event(client, dry);
 				const eventName = evt.split('.')[0];
 
 				client.on(

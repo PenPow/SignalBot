@@ -1,6 +1,7 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 const { stripIndent } = require('common-tags');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { info, fun, misc, mod, admin } = require('../../utils/emojis');
 
 module.exports = class HelpCommand extends Command {
@@ -102,7 +103,7 @@ module.exports = class HelpCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'command',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Get Detailed Information about a command',
 				required: false,
 			}],

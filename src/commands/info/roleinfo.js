@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const moment = require('moment');
 const permissions = require('../../utils/permissions.json');
 
@@ -53,7 +54,7 @@ module.exports = class RoleInfoCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'role',
-				type: 'ROLE',
+				type: ApplicationCommandOptionType.Role,
 				description: 'Info about the role specified',
 				required: true,
 			}],

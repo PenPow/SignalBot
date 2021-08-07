@@ -98,7 +98,7 @@ class Client extends Discord.Client {
 		this.logger.info('Initalizing...');
 		try {
 			this.actionManager.initCommands(this);
-			this.actionManager.initEvents(this);
+			this.actionManager.initEvents(this, dry);
 			this.redis = this.actionManager.initRedis();
 			await this.login(process.env.DISCORD_TOKEN);
 		}

@@ -1,8 +1,9 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const moment = require('moment');
-const { voice } = require('../../utils/emojis.js');
 const { oneLine, stripIndent } = require('common-tags');
+const moment = require('moment');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
+const { voice } = require('../../utils/emojis.js');
 const channelTypes = {
 	dm: 'DM',
 	text: 'Text',
@@ -42,22 +43,26 @@ module.exports = class ChannelInfoCommand extends Command {
 			.addField('Bots', `\`${channel.members.array().filter(b => b.user.bot).length}\``, true)
 			.addField('Created On', `\`${moment(channel.createdAt).format('MMM DD YYYY')}\``, true);
 
-		if (channel.type === 'text') {
+		if(channel.type === 'GUILD_TEXT') {
 			embed
 				.spliceFields(3, 0, { name: 'Rate Limit', value: `\`${channel.rateLimitPerUser}\``, inline: true })
 				.spliceFields(6, 0, { name: 'NSFW', value: `\`${channel.nsfw}\``, inline: true });
 		}
-		else if (channel.type === 'news') {
+		else if(channel.type === 'GUILD_NEWS') {
 			embed
 				.spliceFields(6, 0, { name: 'NSFW', value: `\`${channel.nsfw}\``, inline: true });
 		}
-		else if (channel.type === 'voice') {
+		else if(channel.type === 'GUILD_VOICE') {
 			embed
 				.spliceFields(0, 1, { name: 'Channel', value: `${voice} ${channel.name}`, inline: true })
 				.spliceFields(5, 0, { name: 'User Limit', value: `\`${channel.userLimit}\``, inline: true })
 				.spliceFields(6, 0, { name: 'Full', value: `\`${channel.full}\``, inline: true });
 			const members = channel.members.array();
 			if (members.length > 0) {embed.addField('Members Joined', interaction.client.utils.trimArray(channel.members.array()).join(' '));}
+		}
+		else if(['GUILD_PUBLIC_THREAD', 'GUILD_PRIVATE_THREAD', 'GUILD_NEWS_THREAD'].includes(channel.type)) {
+			embed
+				.spliceFields(3, 0, { name: 'Rate Limit', value: `\`${channel.rateLimitPerUser}\``, inline: true });
 		}
 		else {
 			return this.sendErrorMessage(interaction, 0, stripIndent`
@@ -75,7 +80,7 @@ module.exports = class ChannelInfoCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'channel',
-				type: 'CHANNEL',
+				type: ApplicationCommandOptionType.Channel,
 				description: '(Optional) Info about the channel specified, defaults to this channel if none is given.',
 				required: false,
 			}],

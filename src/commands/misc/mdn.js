@@ -5,6 +5,7 @@ const { encode } = require('querystring');
 const { misc } = require('../../utils/emojis.js');
 
 const fetch = require('node-fetch');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 const cache = new Map();
 
@@ -68,7 +69,7 @@ module.exports = class mdnCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'search',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Search Term to provide to MDN',
 				required: true,
 			}],

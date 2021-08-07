@@ -1,6 +1,7 @@
 const Command = require('../../structures/Command');
-const DiceExpression = require('dice-expression-evaluator');
 const oneLine = require('common-tags').oneLine;
+const DiceExpression = require('dice-expression-evaluator');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class MaxCommand extends Command {
 	constructor(client) {
@@ -33,7 +34,7 @@ module.exports = class MaxCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'roll',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The dice roll to evaluate',
 				required: true,
 			}],

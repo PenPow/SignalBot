@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { success } = require('../../utils/emojis');
 
 module.exports = class NicknameCommand extends Command {
@@ -47,7 +48,7 @@ module.exports = class NicknameCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'nickname',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'What do you want your nickname to be updated to',
 				required: true,
 			}],

@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class DisableCommand extends Command {
 	constructor(client) {
@@ -46,7 +47,7 @@ module.exports = class DisableCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'command',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The command/module you wish to disable',
 				required: true,
 			}],

@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 const { misc } = require('../../utils/emojis.js');
 
@@ -44,13 +45,13 @@ module.exports = class TranslateCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'language',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Language to translate into',
 				required: true,
 			},
 			{
 				name: 'message',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Message to translate',
 				required: true,
 			}],

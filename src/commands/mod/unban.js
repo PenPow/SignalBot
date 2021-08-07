@@ -1,7 +1,8 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { success, mod } = require('../../utils/emojis');
 const { promisify } = require('util');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
+const { success, mod } = require('../../utils/emojis');
 
 module.exports = class UnbanCommand extends Command {
 	constructor(client) {
@@ -105,19 +106,19 @@ module.exports = class UnbanCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.User,
 				description: 'UserID to remove the ban for',
 				required: false,
 			},
 			{
 				name: 'caseid',
-				type: 'INTEGER',
+				type: ApplicationCommandOptionType.Integer,
 				description: 'Case ID of the punishment to remove',
 				required: false,
 			},
 			{
 				name: 'reason',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the removal of the punishment',
 				required: false,
 			}],

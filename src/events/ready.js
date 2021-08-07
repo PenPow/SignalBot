@@ -1,13 +1,16 @@
 const { MessageEmbed } = require('discord.js');
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
 
 class Ready {
-	constructor(client) {
+	constructor(client, dry) {
 		this.client = client;
+		this.dry = dry;
 	}
 
 	async run() {
 
-		if(process.env.ENVIRONMENT === 'DEVELOPMENT') this.register();
+		if(process.env.ENVIRONMENT === 'DEVELOPMENT' && this.dry === false) this.register();
 
 		this.client.logger.warn('Checking For Expired Punishments');
 		this.client.db.ensure('global_mutes', []);
@@ -118,52 +121,12 @@ class Ready {
 			}
 		}
 
-		for(const guild of this.client.guilds.cache.values()) {
-			let muteRole = guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
-
-			if(!muteRole) {
-				try {
-					muteRole = await guild.roles.create({
-						data: {
-							name: 'Muted',
-							permissions: [],
-							reason: 'Creating Mute Role Automatically',
-						},
-					});
-				}
-			catch (err) {} // eslint-disable-line 
-			}
-
-			if(muteRole) {
-				for(const channel of guild.channels.cache.values()) {
-					try {
-						if(channel.viewable && channel.permissionsFor(guild.me).has('MANAGE_ROLES')) {
-							if(channel.type === 'text') {
-								await channel.updateOverwrite(muteRole, {
-									'SEND_MESSAGES': false,
-									'ADD_REACTIONS': false,
-								});
-							}
-							else if(channel.type === 'voice' && channel.editable) {
-								await channel.updateOverwrite(muteRole, {
-									'SPEAK': false,
-									'STREAM': false,
-								});
-							}
-						}
-					}
-				catch (err) {} // eslint-disable-line 
-				}
-				this.client.db.set(`muterole-${guild.id}`, muteRole);
-			}
-		}
-
 		this.client.logger.success('Signal is now online');
 		this.client.logger.info(`Signal is running on ${this.client.guilds.cache.size} servers`);
 	}
 
 	async register() {
-		this.client.logger.info('Started refreshing application (/) commands');
+		const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 
 		const array = [];
 		this.client.commands.each(async command => {
@@ -172,9 +135,19 @@ class Ready {
 			array.push(command.generateSlashCommand());
 		});
 
-		(await this.client.guilds.fetch(process.env.DEVELOPER_CHANNEL)).commands.set(array);
+		try {
+			this.client.logger.info('Started refreshing application (/) commands');
 
-		this.client.logger.success('Successfully reloaded application (/) commands.');
+			await rest.put(
+				Routes.applicationGuildCommands(this.client.user.id, process.env.DEVELOPER_CHANNEL),
+				{ body: array },
+			);
+
+			this.client.logger.success('Successfully reloaded application (/) commands.');
+		}
+		catch (error) {
+			console.error(error);
+		}
 	}
 }
 

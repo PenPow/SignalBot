@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const weather = require('weather-js');
 
 module.exports = class WeatherCommand extends Command {
@@ -48,7 +49,7 @@ module.exports = class WeatherCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'location',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Location to search the weather for',
 				required: true,
 			}],

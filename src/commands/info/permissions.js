@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const permissions = require('../../utils/permissions.json');
 
 module.exports = class PermissionsCommand extends Command {
@@ -41,7 +42,7 @@ module.exports = class PermissionsCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: '(Optional) Shows permission for that user, defaults to you if none is given',
 				required: false,
 			}],

@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { store } = require('../../utils/emojis.js');
 
 module.exports = class TagCommand extends Command {
@@ -204,79 +205,79 @@ module.exports = class TagCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'create',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Creates a new tag',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				},
 				{
 					name: 'content',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The content of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'list',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Lists the tags for the server',
 			},
 			{
 				name: 'show',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Shows information about an existing tag',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'query',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Shows the tag for a slash command',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'edit',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Edits a tag',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				},
 				{
 					name: 'content',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The content of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'delete',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Deletes a tag',
 				options: [{
 					name: 'name',
-					type: 'STRING',
+					type: ApplicationCommandOptionType.String,
 					description: 'The name of the tag',
 					required: true,
 				}],
 			},
 			{
 				name: 'guide',
-				type: 'SUB_COMMAND',
+				type: ApplicationCommandOptionType.Subcommand,
 				description: 'Shows the guide regarding tags',
 			}],
 		};

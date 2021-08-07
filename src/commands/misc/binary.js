@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const BinaryRegex = /\b[01]+\b/;
 
 module.exports = class BinaryCommand extends Command {
@@ -57,7 +58,7 @@ module.exports = class BinaryCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'text',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The message to convert to binary (and vice versa)',
 				required: true,
 			}],

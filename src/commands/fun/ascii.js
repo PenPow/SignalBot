@@ -3,6 +3,8 @@ const Command = require('../../structures/Command');
 const figlet = require('figlet');
 const asyncFiglet = require('util').promisify(figlet);
 
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
+
 module.exports = class AsciiCommand extends Command {
 	constructor(client) {
 		super(client, {
@@ -26,7 +28,7 @@ module.exports = class AsciiCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'text',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'What text should we ASCIIify?',
 				required: true,
 			}],

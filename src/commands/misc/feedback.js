@@ -1,7 +1,8 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { success, unread_pin } = require('../../utils/emojis');
 const { oneLine } = require('common-tags');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
+const { success, unread_pin } = require('../../utils/emojis');
 
 module.exports = class FeedbackCommand extends Command {
 	constructor(client) {
@@ -60,7 +61,7 @@ module.exports = class FeedbackCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'message',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Message to send to our team',
 				required: true,
 			}],

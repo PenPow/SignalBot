@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class lmgtfyCommand extends Command {
 	constructor(client) {
@@ -32,7 +33,7 @@ module.exports = class lmgtfyCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'query',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'The google search term.',
 				required: true,
 			}],

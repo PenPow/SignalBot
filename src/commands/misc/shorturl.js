@@ -4,6 +4,7 @@ const SignalEmbed = require('../../structures/SignalEmbed');
 const { misc } = require('../../utils/emojis.js');
 
 const fetch = require('node-fetch');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
 module.exports = class ShortURLCommand extends Command {
 	constructor(client) {
@@ -46,7 +47,7 @@ module.exports = class ShortURLCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'url',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'URL to shorten',
 				required: true,
 			}],

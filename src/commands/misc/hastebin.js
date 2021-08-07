@@ -1,7 +1,8 @@
 const Command = require('../../structures/Command');
-const { success } = require('../../utils/emojis');
-const fetch = require('node-fetch');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const fetch = require('node-fetch');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
+const { success } = require('../../utils/emojis');
 
 module.exports = class HastebinCommand extends Command {
 	constructor(client) {
@@ -49,7 +50,7 @@ module.exports = class HastebinCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'message',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Content to upload into the bin',
 				required: true,
 			}],

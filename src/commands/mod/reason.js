@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { success, mod } = require('../../utils/emojis');
 
 module.exports = class ReasonCommand extends Command {
@@ -55,13 +56,13 @@ module.exports = class ReasonCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'caseid',
-				type: 'INTEGER',
+				type: ApplicationCommandOptionType.Integer,
 				description: 'CaseID to edit the reason for',
 				required: true,
 			},
 			{
 				name: 'reason',
-				type: 'STRING',
+				type: ApplicationCommandOptionType.String,
 				description: 'Reason to replace the old one',
 				required: true,
 			}],

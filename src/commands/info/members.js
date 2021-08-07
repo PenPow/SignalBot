@@ -1,7 +1,7 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const emojis = require('../../utils/emojis.js');
 const { stripIndent } = require('common-tags');
+const emojis = require('../../utils/emojis.js');
 
 module.exports = class MembersCommand extends Command {
 	constructor(client) {

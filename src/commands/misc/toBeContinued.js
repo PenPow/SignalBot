@@ -1,4 +1,5 @@
 const Command = require('../../structures/Command');
+const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { MessageAttachment } = require('discord.js');
 
 module.exports = class ToBeContinuedCommand extends Command {
@@ -30,7 +31,7 @@ module.exports = class ToBeContinuedCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'member',
-				type: 'USER',
+				type: ApplicationCommandOptionType.User,
 				description: 'The member to generate the image for',
 				required: true,
 			}],
