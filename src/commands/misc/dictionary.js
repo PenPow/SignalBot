@@ -1,56 +1,58 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { encode } = require('querystring');
 
 const { misc } = require('../../utils/emojis.js');
 
 const fetch = require('node-fetch');
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 
-module.exports = class mdnCommand extends Command {
+module.exports = class DictionaryCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: 'mdn',
-			usage: 'mdn <search>',
-			description: 'Allows you to search up something from MDN',
+			name: 'dictionary',
+			usage: 'dictionary <search>',
+			description: 'Allows you to search up something from the Oxford Dictionary',
 			type: client.types.MISC,
 			examples: ['mdn string.prototype.replace'],
 			clientPermissions: ['EMBED_LINKS'],
+
 		});
 	}
 
 	async run(interaction, args) {
 		const query = args.get('search')?.value.trim();
+		await interaction.deferReply({ ephemeral: true });
 
 		try {
-			const qString = `https://developer.mozilla.org/api/v1/search?${encode({ q: query })}`;
+			const qString = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${query}`;
 			let hit = this.client.cache.get(qString);
 
 			if (!hit) {
-				await interaction.deferReply({ ephemeral: true });
 				const result = await fetch(qString).then((r) => r.json());
-				hit = result.documents?.[0];
-				this.client.cache.set(qString, hit);
+
+				if(!Array.isArray(result)) { hit = undefined; }
+				else {
+					hit = result[0];
+					this.client.cache.set(qString, hit);
+				}
 			}
 
 			if (!hit) {
 				return this.sendErrorMessage(interaction, 0, `No search result found for query ${query}`);
 			}
 
-			const url = `https://developer.mozilla.org/${hit.mdn_url}`;
-
-			const linkReplaceRegex = /\[(.+?)\]\((.+?)\)/g;
-			const boldCodeBlockRegex = /`\*\*(.*)\*\*`/g;
-			const intro = hit.summary
-				.replace(/\s+/g, ' ')
-				.replace(linkReplaceRegex, '[$1](https://developer.mozilla.org/<$2>)')
-				.replace(boldCodeBlockRegex, '**`$1`**');
-
-			const parts = [`__[**${hit.title}**](<${url}>)__`, intro];
-
 			const embed = new SignalEmbed(interaction)
-				.setTitle(`${misc} MDN Lookup 💻`)
-				.setDescription(parts.join('\n'));
+				.setTitle(`${misc} ${hit.word} 📖`)
+				.addFields([
+					{ name: 'Phonetic Pronounciation', value: `[${hit.phonetic}](http:${hit.phonetics[0].audio})` },
+				]);
+
+			if(hit.meanings) {
+				embed.addFields([
+					{ name: 'Form', value: this.client.utils.capitalize(hit.meanings[0].partOfSpeech) },
+					{ name: 'Definition', value: hit.meanings[0].definitions[0].definition },
+				]);
+			}
 
 			interaction.editReply({ embeds: [embed], ephemeral: true });
 		}
@@ -67,7 +69,7 @@ module.exports = class mdnCommand extends Command {
 			options: [{
 				name: 'search',
 				type: ApplicationCommandOptionType.String,
-				description: 'Search Term to provide to MDN',
+				description: 'Search Term',
 				required: true,
 			}],
 		};
