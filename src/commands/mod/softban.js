@@ -13,7 +13,6 @@ module.exports = class SoftBanCommand extends Command {
 			examples: ['softban @PenPow He was mean'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'BAN_MEMBERS'],
 			userPermissions: ['BAN_MEMBERS'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

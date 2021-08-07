@@ -8,13 +8,11 @@ module.exports = class NicknameCommand extends Command {
 		super(client, {
 			name: 'nickname',
 			usage: 'nickname <nickname>',
-			aliases: ['changenickname', 'nick', 'nn'],
 			description: 'Changes your own nickname to the one specified. The nickname cannot be larger than 32 characters.',
 			type: client.types.MISC,
-			examples: ['nickname Jeff Bezos', 'changenickname Mike', 'nick Joe Biden', 'nn Trump'],
+			examples: ['nickname Jeff Bezos'],
 			clientPermissions: ['EMBED_LINKS', 'MANAGE_NICKNAMES'],
 			userPermissions: ['CHANGE_NICKNAME', 'MANAGE_NICKNAMES'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

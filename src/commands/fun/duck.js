@@ -10,12 +10,10 @@ module.exports = class DuckCommand extends Command {
 		super(client, {
 			name: 'duck',
 			usage: 'duck',
-			aliases: ['duckpic'],
 			description: 'Finds a random duck to watch',
 			type: client.types.FUN,
-			examples: ['duck', 'duckpic'],
+			examples: ['duck'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

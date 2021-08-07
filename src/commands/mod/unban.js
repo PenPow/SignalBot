@@ -14,7 +14,6 @@ module.exports = class UnbanCommand extends Command {
 			examples: ['unban @PenPow Successfully Appealed Punishment'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'MANAGE_ROLES'],
 			userPermissions: ['MANAGE_ROLES', 'MANAGE_MESSAGES'],
-			guilds: ['GLOBAL'],
 			guldOnly: true,
 		});
 	}

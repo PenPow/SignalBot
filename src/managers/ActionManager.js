@@ -25,12 +25,6 @@ class ActionManager {
 				const command = new Command(client);
 				if(command.name && !command.disabled) {
 					client.commands.set(command.name, command);
-
-					if(command.aliases) {
-						command.aliases.forEach((alias) => {
-							client.aliases.set(alias, command);
-						});
-					}
 				}
 			});
 		});

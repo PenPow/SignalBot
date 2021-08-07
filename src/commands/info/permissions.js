@@ -8,13 +8,10 @@ module.exports = class PermissionsCommand extends Command {
 		super(client, {
 			name: 'permissions',
 			usage: 'permissions [user]',
-			aliases: ['perms'],
 			description: 'Displays all current permissions for the specified user, defaulting to you.',
 			type: client.types.INFO,
-			examples: ['permissions', 'perms @PenPow', 'permissions 207198455301537793'],
+			examples: ['permissions'],
 			clientPermissions: ['EMBED_LINKS'],
-			//   userPermissions: ['CHANGE_NICKNAME'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

@@ -7,12 +7,10 @@ module.exports = class lmgtfyCommand extends Command {
 		super(client, {
 			name: 'lmgtfy',
 			usage: 'lmgtfy <query>',
-			aliases: ['letmegooglethatforyou', 'letmegooglethat'],
 			description: 'Send a LMGTFY (Let Me Google That For You) link.',
 			type: client.types.MISC,
-			examples: ['lmgtfy discord', 'letmegooglethatforyou signal bot', 'letmegooglethat internet'],
+			examples: ['lmgtfy discord'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

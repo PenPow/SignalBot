@@ -9,12 +9,10 @@ module.exports = class FeedbackCommand extends Command {
 		super(client, {
 			name: 'feedback',
 			usage: 'feedback <message>',
-			aliases: ['fb'],
 			description: 'Sends a message to our feedback server',
 			type: client.types.MISC,
 			examples: ['feedback I really like this bot', 'feedback Could you add a new feature?'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

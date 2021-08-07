@@ -9,12 +9,10 @@ module.exports = class BugReportCommand extends Command {
 		super(client, {
 			name: 'reportbug',
 			usage: 'reportbug <message>',
-			aliases: ['bugreport', 'report', 'bug', 'rb', 'br'],
 			description: 'Sends a message to our bug report server, include as much information as possible.',
 			type: client.types.MISC,
-			examples: ['reportbug The bot doesnt work', 'bugreport it broke', 'report it went offline', 'bug it didnt run command correctly', 'rb the profile was broken', 'br prefix didnt change'],
+			examples: ['reportbug The bot doesnt work'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

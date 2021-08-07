@@ -13,7 +13,6 @@ module.exports = class ReminderCommand extends Command {
 			type: client.types.MISC,
 			examples: ['remindme 2h go to the shops'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

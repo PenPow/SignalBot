@@ -16,7 +16,6 @@ module.exports = class RPSCommand extends Command {
 			type: client.types.FUN,
 			examples: ['rps rock'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

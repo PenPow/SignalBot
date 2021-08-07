@@ -13,7 +13,6 @@ module.exports = class AsciiCommand extends Command {
 			description: 'Converts text into ASCII',
 			type: client.types.FUN,
 			examples: ['ascii test', 'ascii Hi!'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

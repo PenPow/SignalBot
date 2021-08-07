@@ -14,7 +14,6 @@ module.exports = class ShibeCommand extends Command {
 			type: client.types.FUN,
 			examples: ['shibe'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

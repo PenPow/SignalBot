@@ -31,12 +31,6 @@ class Command {
 		this.name = options.name;
 
 		/**
-         * Aliases of the command
-         * @type {Array<string>}
-         */
-		this.aliases = options.aliases || null;
-
-		/**
          * The Arguments for the Command
          * @type {string}
          */
@@ -71,18 +65,6 @@ class Command {
          * @type {Array<string>}
          */
 		this.examples = options.examples || null;
-
-		/**
-         * If command can only be used by the owner
-         * @type {boolean}
-         */
-		this.ownerOnly = Boolean(options.ownerOnly || false);
-
-		/**
-         * Whether the command is locked to certain guilds
-         * @type {Array<string>}
-         */
-		this.guilds = options.guilds || ['GLOBAL'];
 
 		/**
          * Whether the command is locked to guild channels only
@@ -325,16 +307,6 @@ class Command {
 		if(options.name !== options.name.toLowerCase()) throw new Error('Command name is not lowecase');
 
 		if(client.commands.get(options.name)) throw new ReferenceError(`Command ${options.name} already exists`);
-
-		if(options.aliases) {
-			if(!Array.isArray(options.aliases) || options.aliases.some(alias => typeof alias !== 'string')) throw new TypeError('Aliases are not an array of strings');
-
-			if(options.aliases.some(alias => alias !== alias.toLowerCase())) throw new RangeError('Aliases are not lowercase');
-
-			for(const alias of options.aliases) {
-				if(client.aliases.get(alias)) throw new ReferenceError(`Alias ${alias} already exists`);
-			}
-		}
 
 		if(options.usage && typeof options.usage !== 'string') throw new TypeError('Command Usage is not a string');
 

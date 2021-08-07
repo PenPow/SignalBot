@@ -22,12 +22,10 @@ module.exports = class EmojifyCommand extends Command {
 		super(client, {
 			name: 'emojify',
 			usage: 'emojify <message>',
-			aliases: ['sayemoji'],
 			description: 'Converts message to emoji',
 			type: client.types.FUN,
-			examples: ['emojify Hello World', 'sayemoji How are you'],
+			examples: ['emojify Hello World'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

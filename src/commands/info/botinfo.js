@@ -8,12 +8,10 @@ module.exports = class BotInfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'botinfo',
-			aliases: ['bot', 'bi'],
 			usage: 'botinfo',
 			description: 'Fetches Signal\'s bot information.',
 			type: client.types.INFO,
-			guilds: ['GLOBAL'],
-			examples: ['botinfo', 'bot', 'bi'],
+			examples: ['botinfo'],
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}

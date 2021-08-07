@@ -7,11 +7,9 @@ module.exports = class OwoCommand extends Command {
 		super(client, {
 			name: 'owo',
 			usage: 'owo <text>',
-			aliases: ['owoify', 'uwu', 'uwuify'],
 			description: 'Converts text into OWO!',
 			type: client.types.FUN,
-			examples: ['owo test', 'owoify Hi!', 'uwu Hi!', 'uwuify test'],
-			guilds: ['GLOBAL'],
+			examples: ['owo test', 'owo Hi!'],
 		});
 	}
 

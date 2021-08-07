@@ -11,12 +11,10 @@ module.exports = class GModCommand extends Command {
 		super(client, {
 			name: 'gmod',
 			usage: 'gmod <ip>',
-			aliases: ['gmodlookup'],
 			description: 'Fetches information about a given Garry\'s Mod server!',
 			type: client.types.MISC,
-			examples: ['gmod <IP>', 'gmodlookup <IP>'],
+			examples: ['gmod <IP>'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -37,7 +35,7 @@ module.exports = class GModCommand extends Command {
 
 		const embed = new SignalEmbed(interaction);
 
-		await interaction.defer({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: true });
 
 		let json = null;
 

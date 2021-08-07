@@ -8,12 +8,10 @@ module.exports = class MaxCommand extends Command {
 		super(client, {
 			name: 'max',
 			usage: 'max <roll>',
-			aliases: ['maxroll', 'max-roll'],
 			description: 'Calculates the highest possible roll for a dice expression, in standard RP format.',
 			type: client.types.MISC,
-			examples: ['max 2d20', 'maxroll 1d8 - 2d4', 'max-roll 4d6 + 3d8 - 2d12'],
+			examples: ['max 2d20'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

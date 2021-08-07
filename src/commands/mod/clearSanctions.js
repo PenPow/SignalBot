@@ -8,13 +8,11 @@ module.exports = class ClearSanctionsCommand extends Command {
 		super(client, {
 			name: 'clearsanctions',
 			usage: 'clearsanctions <member>',
-			aliases: ['clearhistory'],
 			description: 'Clears the specified user\'s moderation history.',
 			type: client.types.MOD,
-			examples: ['clearsanctions @PenPow', 'clearhistory PenPow'],
+			examples: ['clearsanctions @PenPow'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			userPermissions: ['ADMINISTRATOR'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

@@ -14,7 +14,6 @@ module.exports = class MuteCommand extends Command {
 			examples: ['mute @PenPow 1w He was mean'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'MANAGE_ROLES'],
 			userPermissions: ['MANAGE_ROLES', 'MANAGE_MESSAGES'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

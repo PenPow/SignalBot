@@ -21,12 +21,10 @@ module.exports = class ServerInfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'serverinfo',
-			aliases: ['server', 'si'],
 			usage: 'serverinfo',
 			description: 'Fetches information and statistics about the server.',
 			type: client.types.INFO,
-			guilds: ['GLOBAL'],
-			examples: ['serverinfo', 'server', 'si'],
+			examples: ['serverinfo'],
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}

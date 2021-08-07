@@ -8,12 +8,10 @@ module.exports = class StatsCommand extends Command {
 		super(client, {
 			name: 'stats',
 			usage: 'stats',
-			aliases: ['statistics', 'metrics'],
 			description: 'Fetches Signal\'s statistics.',
 			type: client.types.INFO,
-			examples: ['stats', 'statistics', 'metrics'],
+			examples: ['stats'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -43,7 +41,6 @@ module.exports = class StatsCommand extends Command {
 		const embed = new SignalEmbed(interaction)
 			.setTitle('Signal\'s Statistics')
 			.addField('Commands', `\`${interaction.client.commands.size}\` commands`, true)
-			.addField('Aliases', `\`${interaction.client.aliases.size}\` aliases`, true)
 			.addField('Command Types', `\`${Object.keys(interaction.client.types).length}\` Command types`, true)
 			.addField('Client', `\`\`\`asciidoc\n${clientStats}\`\`\``)
 			.addField('Server', `\`\`\`asciidoc\n${serverStats}\`\`\``)

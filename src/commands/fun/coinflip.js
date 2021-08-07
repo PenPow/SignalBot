@@ -8,12 +8,10 @@ module.exports = class CoinFlipCommand extends Command {
 		super(client, {
 			name: 'coinflip',
 			usage: 'coinflip',
-			aliases: ['cointoss', 'coin', 'flip', 'cf'],
 			description: 'Flips a coin',
 			type: client.types.FUN,
-			examples: ['coinflip', 'cointoss', 'coin', 'flip', 'cf'],
+			examples: ['coinflip'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

@@ -11,12 +11,10 @@ module.exports = class ShortURLCommand extends Command {
 		super(client, {
 			name: 'shorturl',
 			usage: 'shorturl <URL>',
-			aliases: ['short', 'url'],
 			description: 'Shortens a URL down to a smaller one!',
 			type: client.types.MISC,
-			examples: ['shorturl www.google.com', 'short www.google.com', 'url www.google.com'],
+			examples: ['shorturl www.google.com'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

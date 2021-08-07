@@ -8,12 +8,10 @@ module.exports = class BinaryCommand extends Command {
 		super(client, {
 			name: 'binary',
 			usage: 'binary <text>',
-			aliases: ['t2b', 'texttobinary', 'ttb'],
 			description: 'Converts any text/message into binary notation (and any binary into text).',
 			type: client.types.MISC,
-			examples: ['binary Signal V3 When?', 't2b Signal V2?', 'texttobinary Signal is Awesome Bot', 'ttb Hello There'],
+			examples: ['binary Signal V3 When?'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

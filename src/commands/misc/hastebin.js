@@ -9,11 +9,9 @@ module.exports = class HastebinCommand extends Command {
 		super(client, {
 			name: 'hastebin',
 			usage: 'hastebin <text>',
-			aliases: ['pastebin', 'bin'],
 			description: 'Uploads the text provided into a hastebin',
 			type: client.types.MISC,
-			examples: ['hastebin hi', 'pastebin no', 'bin ive written over 100 examples 🎉'],
-			guilds: ['GLOBAL'],
+			examples: ['hastebin hi'],
 		});
 	}
 

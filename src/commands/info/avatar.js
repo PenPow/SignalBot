@@ -7,13 +7,10 @@ module.exports = class AvatarCommand extends Command {
 		super(client, {
 			name: 'avatar',
 			usage: 'avatar [user]',
-			aliases: ['profilepic', 'pic', 'av'],
 			description: 'Displays a user\'s avatar (or your own, if no user is mentioned).',
 			type: client.types.INFO,
-			examples: ['avatar', 'profilepic @PenPow', 'pic @PenPow', 'av @PenPow'],
+			examples: ['avatar'],
 			clientPermissions: ['EMBED_LINKS'],
-			//   userPermissions: ['CHANGE_NICKNAME'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

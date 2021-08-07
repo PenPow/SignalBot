@@ -8,11 +8,9 @@ module.exports = class yarrCommand extends Command {
 		super(client, {
 			name: 'piratespeak',
 			usage: 'piratespeak <text>',
-			aliases: ['ps', 'yarr', 'yarrspeak'],
 			description: 'Yarr! Me hearties.',
 			type: client.types.FUN,
-			examples: ['piratespeak test', 'ps Hi!', 'yarr Hi!', 'yarrspeak test'],
-			guilds: ['GLOBAL'],
+			examples: ['piratespeak test', 'piratespeak Hi!', 'piratespeak Hi!', 'piratespeak test'],
 		});
 	}
 

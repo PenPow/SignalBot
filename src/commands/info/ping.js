@@ -9,7 +9,6 @@ module.exports = class PingCommand extends Command {
 			usage: 'ping',
 			description: 'Fetches Signal\'s current latency and API latency.',
 			type: client.types.INFO,
-			guilds: ['GLOBAL'],
 			examples: ['ping'],
 			clientPermissions: ['EMBED_LINKS'],
 		});

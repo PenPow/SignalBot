@@ -25,12 +25,10 @@ module.exports = class UserInfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'userinfo',
-			aliases: ['user', 'ui', 'whois'],
 			usage: 'userinfo [user mention/ID]',
 			description: 'Fetches a user\'s information. If no user is given, your own information will be displayed.',
 			type: client.types.INFO,
-			guilds: ['GLOBAL'],
-			examples: ['userinfo @PenPow', 'user', 'ui @Discord', 'whois'],
+			examples: ['userinfo @PenPow'],
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}

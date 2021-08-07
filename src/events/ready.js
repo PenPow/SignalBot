@@ -139,7 +139,7 @@ class Ready {
 			this.client.logger.info('Started refreshing application (/) commands');
 
 			await rest.put(
-				Routes.applicationGuildCommands(this.client.user.id, process.env.DEVELOPER_CHANNEL),
+				Routes.applicationGuildCommands(this.client.user.id, process.env.DEVELOPER_GUILD),
 				{ body: array },
 			);
 

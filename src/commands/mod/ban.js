@@ -14,7 +14,6 @@ module.exports = class BanCommand extends Command {
 			examples: ['ban @PenPow He was mean', 'ban @PenPow 365y Naughty'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'BAN_MEMBERS'],
 			userPermissions: ['BAN_MEMBERS'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

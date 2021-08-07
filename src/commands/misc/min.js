@@ -8,12 +8,10 @@ module.exports = class MinCommand extends Command {
 		super(client, {
 			name: 'min',
 			usage: 'min <roll>',
-			aliases: ['minroll', 'min-roll'],
 			description: 'Calculates the minimum possible roll for a dice expression, in standard RP format.',
 			type: client.types.MISC,
-			examples: ['min 2d20', 'minroll 1d8 - 2d4', 'min-roll 4d6 + 3d8 - 2d12'],
+			examples: ['min 2d20'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

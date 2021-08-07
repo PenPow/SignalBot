@@ -12,7 +12,6 @@ module.exports = class WeatherCommand extends Command {
 			type: client.types.INFO,
 			examples: ['weather London'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

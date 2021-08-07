@@ -13,7 +13,6 @@ module.exports = class KickCommand extends Command {
 			examples: ['kick @PenPow He was mean', 'kick @PenPow Naughty'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS', 'KICK_MEMBERS'],
 			userPermissions: ['KICK_MEMBERS'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

@@ -9,7 +9,6 @@ module.exports = class ReverseCommand extends Command {
 			description: 'Reverses any text',
 			type: client.types.FUN,
 			examples: ['reverse test'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

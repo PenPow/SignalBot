@@ -1,4 +1,5 @@
 const Command = require('../../structures/Command');
+const { MessageAttachment } = require('discord.js');
 
 module.exports = class FacepalmCommand extends Command {
 	constructor(client) {
@@ -6,15 +7,14 @@ module.exports = class FacepalmCommand extends Command {
 			name: 'facepalm',
 			usage: 'facepalm',
 			description: '*facepalm*',
-			type: client.types.MISC,
+			type: client.types.FUN,
 			examples: ['facepalm'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
 	async run(interaction) {
-		interaction.reply({ content: 'https://ss.penpow.dev/i/UCGFnx.jpg' });
+		interaction.reply({ files: [new MessageAttachment('https://ss.penpow.dev/i/UCGFnx.jpg')] });
 	}
 
 	generateSlashCommand() {

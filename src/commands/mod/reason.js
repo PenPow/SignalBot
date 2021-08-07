@@ -13,7 +13,6 @@ module.exports = class ReasonCommand extends Command {
 			examples: ['ban @PenPow 1w He was mean', 'ban @PenPow 365y Naughty'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			userPermissions: ['ADMINISTRATOR'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

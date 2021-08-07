@@ -12,7 +12,6 @@ module.exports = class CovidCommand extends Command {
 			type: client.types.FUN,
 			examples: ['covid', 'covid world', 'covid USA'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

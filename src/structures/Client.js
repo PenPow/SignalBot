@@ -58,12 +58,6 @@ class Client extends Discord.Client {
 		this.commands = new Discord.Collection();
 
 		/**
-         * Collection of Aliases
-         * @type {Collection<string, Command>}
-         */
-		this.aliases = new Discord.Collection();
-
-		/**
          * Utility Functions
          * @type {Object}
          */

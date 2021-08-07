@@ -8,13 +8,10 @@ module.exports = class SanctionsCommand extends Command {
 		super(client, {
 			name: 'sanctions',
 			usage: 'sanctions <member>',
-			aliases: ['history'],
 			description: 'Shows the history for a user',
 			type: client.types.MOD,
-			examples: ['sanctions @PenPow', 'history PenPow'],
+			examples: ['sanctions @PenPow'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
-			userPermissions: [],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

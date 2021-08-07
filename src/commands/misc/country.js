@@ -16,7 +16,6 @@ module.exports = class CountryCommand extends Command {
 			type: client.types.MISC,
 			examples: ['country usa'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

@@ -9,12 +9,10 @@ module.exports = class RollCommand extends Command {
 		super(client, {
 			name: 'roll',
 			usage: 'roll [dice sides]',
-			aliases: ['dice', 'r'],
 			description: 'Rolls a dice with the specified number of sides. Will default to 6 sides if no number is given.',
 			type: client.types.FUN,
-			examples: ['roll 6', 'dice 12', 'r 20'],
+			examples: ['roll 6', 'roll 12', 'roll 20'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

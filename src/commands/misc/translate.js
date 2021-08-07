@@ -13,12 +13,10 @@ module.exports = class TranslateCommand extends Command {
 		super(client, {
 			name: 'translate',
 			usage: 'translate <language> <text>',
-			aliases: ['translation', 'trad' ],
 			description: 'Translates text into another language',
 			type: client.types.MISC,
-			examples: ['translate french Hi!', 'translation spanish How are you?', 'trad german Salut!'],
+			examples: ['translate french Hi!'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

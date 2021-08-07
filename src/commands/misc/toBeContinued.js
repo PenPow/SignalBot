@@ -11,14 +11,13 @@ module.exports = class ToBeContinuedCommand extends Command {
 			type: client.types.MISC,
 			examples: ['tobecontinued 207198455301537793', 'tobecontinued', 'tobecontinued @PenPow'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
 	async run(interaction, args) {
 		const member = args.get('member')?.member;
 
-		await interaction.defer();
+		await interaction.deferReply();
 
 		const buffer = await this.client.images.generate('tobecontinued', { url: member.user.displayAvatarURL({ format: 'png', size: 512 }) });
 		const attachment = new MessageAttachment(buffer, 'tobecontinued.png');

@@ -9,10 +9,9 @@ module.exports = class DisableCommand extends Command {
 			usage: 'disable <command | category>',
 			description: 'Disables a module/command',
 			type: client.types.ADMIN,
-			examples: ['disable music', 'disable cat'],
+			examples: ['disable mod', 'disable cat'],
 			clientPermissions: ['EMBED_LINKS'],
 			userPermissions: ['ADMINISTRATOR'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -24,9 +23,8 @@ module.exports = class DisableCommand extends Command {
 		if(Object.values(this.client.types).indexOf(toDisable.toLowerCase()) > -1) {
 			this.client.db.push(`${interaction.guild.id}-disabled-modules`, toDisable.toLowerCase());
 		}
-		else if (this.client.commands.get(toDisable.toLowerCase())?.name === 'eval') { return this.sendErrorMessage(interaction, 0, 'No Command/Module with that name found'); }
-		else if(this.client.commands.get(toDisable.toLowerCase()) || this.client.aliases.get(toDisable.toLowerCase())) {
-			const command = this.client.commands.get(toDisable.toLowerCase()) || this.client.aliases.get(toDisable.toLowerCase());
+		else if(this.client.commands.get(toDisable.toLowerCase())) {
+			const command = this.client.commands.get(toDisable.toLowerCase());
 
 			this.client.db.push(`${interaction.guild.id}-disabled-commands`, command.name.toLowerCase());
 		}

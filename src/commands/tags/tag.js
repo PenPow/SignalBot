@@ -8,12 +8,10 @@ module.exports = class TagCommand extends Command {
 		super(client, {
 			name: 'tag',
 			usage: 'tag <create | list | show | delete | edit | guide>',
-			aliases: ['tags'],
 			description: 'Creates/Lists/Shows/Edits/Deletes a tag (run s!tags guide for more information)',
 			type: client.types.TAG,
 			examples: ['tag create', 'tag show', 'tag list', 'tag delete', 'tag edit', 'tag guide'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
@@ -166,7 +164,7 @@ module.exports = class TagCommand extends Command {
 			break;
 		}
 		case 'create': {
-			if(this.client.commands.some((command) => command.name === args.get('create').options.get('name').value.toLowerCase()) || this.client.aliases.some((command) => command.aliases.includes(args.get('create').options.get('name')?.value.toLowerCase()))) {
+			if(this.client.commands.some((command) => command.name === args.get('create').options.get('name').value.toLowerCase())) {
 				embed.setTitle(`${store} Command Exists`)
 					.setDescription('A command/command alias already exists with that name, to avoid issues, we are cancelling the creation. Try again with another name');
 

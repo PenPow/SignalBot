@@ -6,12 +6,10 @@ module.exports = class GuildIconCommand extends Command {
 		super(client, {
 			name: 'guildicon',
 			usage: 'guildicon',
-			aliases: ['gicon', 'sicon', 'srvicn', 'servericon'],
 			description: 'Shows the current guild icon',
 			type: client.types.MISC,
-			examples: ['guildicon', 'gicon', 'sicon', 'srvicn', 'servericon'],
+			examples: ['guildicon'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

@@ -11,12 +11,10 @@ module.exports = class MinecraftCommand extends Command {
 		super(client, {
 			name: 'minecraft',
 			usage: 'minecraft <ip>',
-			aliases: ['mc', 'mclookup'],
 			description: 'Fetches information about a given minecraft server! (Java and Bedrock Supported)',
 			type: client.types.MISC,
-			examples: ['minecraft play.hypixel.net', 'mc play.hypixel.net', 'mclookup play.hypixel.net'],
+			examples: ['minecraft play.hypixel.net'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 
@@ -39,7 +37,7 @@ module.exports = class MinecraftCommand extends Command {
 
 		const embed = new SignalEmbed(interaction);
 
-		await interaction.defer({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: true });
 
 		let json = null;
 

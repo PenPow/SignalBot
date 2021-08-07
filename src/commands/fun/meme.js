@@ -14,7 +14,6 @@ module.exports = class MemeCommand extends Command {
 			type: client.types.FUN,
 			examples: ['meme'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

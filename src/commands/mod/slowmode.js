@@ -14,7 +14,6 @@ module.exports = class SlowmodeCommand extends Command {
 			examples: ['slowmode 10s', 'slowmode 10m'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			userPermissions: ['MANAGE_MESSAGES'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

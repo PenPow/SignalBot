@@ -10,12 +10,10 @@ module.exports = class BirdCommand extends Command {
 		super(client, {
 			name: 'bird',
 			usage: 'bird',
-			aliases: ['birdpic'],
 			description: 'Finds a random bird to watch',
 			type: client.types.FUN,
-			examples: ['bird', 'birdpic'],
+			examples: ['bird'],
 			clientPermissions: ['EMBED_LINKS'],
-			guilds: ['GLOBAL'],
 		});
 	}
 

@@ -8,13 +8,11 @@ module.exports = class CaseCommand extends Command {
 		super(client, {
 			name: 'case',
 			usage: 'case <caseID | latest>',
-			aliases: ['caseinfo'],
 			description: 'Gets the detailed information about a case.',
 			type: client.types.MOD,
-			examples: ['case 1', 'caseinfo latest'],
+			examples: ['case 1', 'case latest'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			userPermissions: [],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}

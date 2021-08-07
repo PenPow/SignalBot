@@ -8,12 +8,10 @@ module.exports = class RoleInfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'roleinfo',
-			aliases: ['role', 'ri'],
 			usage: 'roleinfo <role mention/ID>',
 			description: 'Fetches information about the provided role.',
 			type: client.types.INFO,
-			guilds: ['GLOBAL'],
-			examples: ['roleinfo @owner', 'ri 690664655751872564'],
+			examples: ['roleinfo @owner'],
 			clientPermissions: ['EMBED_LINKS'],
 		});
 	}

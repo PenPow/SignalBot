@@ -13,7 +13,6 @@ module.exports = class WarnCommand extends Command {
 			examples: ['warn @PenPow He was mean', 'warn @PenPow Naughty'],
 			clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
 			userPermissions: ['MANAGE_MESSAGES'],
-			guilds: ['GLOBAL'],
 			guildOnly: true,
 		});
 	}
