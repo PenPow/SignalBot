@@ -205,6 +205,9 @@ async function unmute(client, caseInfo) {
 		.setTimestamp()
 		.setColor(guild.me.displayHexColor);
 
+	client.db.push('alreadyProcessed', caseInfo.caseInfo.caseID);
+	client.db.push('alreadyProcessed', caseID);
+
 	member.send({ embeds: [embed] }).catch();
 }
 
@@ -258,7 +261,8 @@ async function unban(client, caseInfo) {
 	}
 
 	client.db.ensure('alreadyProcessed', []);
-	client.db.push(caseInfo.caseInfo.caseID, caseID);
+	client.db.push('alreadyProcessed', caseInfo.caseInfo.caseID);
+	client.db.push('alreadyProcessed', caseID);
 }
 
 /**
