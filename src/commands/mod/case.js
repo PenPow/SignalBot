@@ -18,7 +18,7 @@ module.exports = class CaseCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		let caseID = args.get('caseid')?.value || 'latest';
+		let caseID = args.get('caseid')?.value.replace('#', '') || 'latest';
 
 		if(caseID === 'latest') {
 			await interaction.guild.channels.fetch();
@@ -33,7 +33,7 @@ module.exports = class CaseCommand extends Command {
 			).first();
 			caseID = sentMessage.embeds[0].footer.text.substring(6);
 		}
-		else { caseID = args.get('caseid')?.value; }
+		else { caseID = args.get('caseid')?.value.replace('#', ''); }
 
 		const caseInfo = this.client.db.get(`case-${interaction.guild.id}-${caseID}`);
 		if(!caseInfo) return this.sendErrorMessage(interaction, 2, 'No Cases Found');
@@ -41,9 +41,14 @@ module.exports = class CaseCommand extends Command {
 			const target = await this.client.users.fetch(caseInfo.caseInfo.target);
 			const moderator = await interaction.guild.members.fetch(caseInfo.caseInfo.moderator);
 
+			let description = `**Member**\`${target.tag}\`(${caseInfo.caseInfo.target})\n**Moderator**\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Action:** \`${interaction.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`;
+
+			if(caseInfo.caseInfo.reference) description += `\n**Reference:** [#${caseInfo.caseInfo.reference.caseId}](${caseInfo.caseInfo.reference.url})`;
+			if(caseInfo.caseInfo.expiration) description += `\n**Expiration:** <t:${parseInt(caseInfo.caseInfo.expiration / 1000).toFixed(0)}:R> : '' }`;
+
 			const embed = new SignalEmbed(interaction)
 				.setTitle(`Case #${caseID} ${mod}`)
-				.setDescription(`**Member**\n\`${target.tag}\`(${caseInfo.caseInfo.target})\n**Action:** \`${interaction.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Moderator**\n\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`)
+				.setDescription(description)
 				.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
 			interaction.reply({ embeds: [embed], ephemeral: true });
@@ -54,7 +59,7 @@ module.exports = class CaseCommand extends Command {
 
 			const embed = new SignalEmbed(interaction)
 				.setTitle(`Case #${caseID} ${mod}`)
-				.setDescription(`**Channel**\n\`${target}\`(${target})\n**Action:** \`${interaction.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Moderator**\n\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`)
+				.setDescription(`**Channel**\`${target}\`(${target})\n\`**Moderator**\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Action:** \`${interaction.client.utils.capitalize(caseInfo.caseInfo.type)}\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`)
 				.setFooter(`Case #${caseID} • ${interaction.member.displayName}`, interaction.user.displayAvatarURL({ dynamic: true }));
 
 			interaction.reply({ embeds: [embed], ephemeral: true });
@@ -68,8 +73,7 @@ module.exports = class CaseCommand extends Command {
 			options: [{
 				name: 'caseid',
 				type: ApplicationCommandOptionType.Integer,
-				description: 'CaseID to edit the reason for',
-				required: false,
+				description: 'CaseID to get more information about',
 			}],
 		};
 	}

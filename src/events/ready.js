@@ -79,17 +79,6 @@ class Ready {
 				mutes.splice(i);
 				this.client.db.set('global_mutes', mutes);
 			}
-
-			const guild = await this.client.guilds.fetch(mutes[i]?.guild);
-
-			if(!guild.roles) return;
-			const muteRole = this.client.db.get(`muterole-${guild.id}`) || guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
-
-			if(!muteRole) return;
-
-			const member = await guild.members.fetch(mutes[i].caseInfo.target);
-
-			await member.roles.add(muteRole.id);
 		}
 
 		for(let i = 0; i < bans.length; i++) {

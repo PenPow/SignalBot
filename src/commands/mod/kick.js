@@ -18,6 +18,7 @@ module.exports = class KickCommand extends Command {
 	}
 
 	async run(interaction, args) {
+		await interaction.deferReply();
 		let member;
 
 		try {
@@ -59,6 +60,16 @@ module.exports = class KickCommand extends Command {
 
 		await member.kick({ reason: `Kicked by ${interaction.user.tag} | Case #${caseID}` });
 
+		let reference = this.client.db.get(`case-${interaction.guild.id}-${args.get('reference')?.value.replace('#', '')}`);
+
+		if(!reference) {reference = null;}
+
+		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+		const sentMessage = await modLog.messages.fetch(reference?.caseInfo?.auditId).catch();
+
+		reference = { caseId: reference?.caseInfo?.caseID, url: sentMessage?.url };
+		if(!sentMessage && !reference) reference = null;
+
 		const kickObject = {
 			guild: interaction.guild.id,
 			channel: interaction.channel.id,
@@ -69,7 +80,8 @@ module.exports = class KickCommand extends Command {
 				moderator: interaction.user.id,
 				reason: reason,
 				date: new Date(Date.now()).getTime(),
-				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'kick'),
+				reference: reference,
+				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'kick', caseID, null, reference),
 			},
 		};
 
@@ -78,7 +90,7 @@ module.exports = class KickCommand extends Command {
 		this.client.db.ensure(`sanctions-${member.id}`, []);
 		this.client.db.push(`sanctions-${member.id}`, kickObject);
 
-		interaction.reply({ ephemeral: false, embeds: [embed] });
+		interaction.editReply({ ephemeral: false, embeds: [embed] });
 	}
 
 	generateSlashCommand() {
@@ -95,6 +107,12 @@ module.exports = class KickCommand extends Command {
 				name: 'reason',
 				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
+				required: false,
+			},
+			{
+				name: 'reference',
+				type: ApplicationCommandOptionType.String,
+				description: '(Optional) Case for reference',
 				required: false,
 			}],
 		};

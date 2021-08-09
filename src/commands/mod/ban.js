@@ -19,6 +19,7 @@ module.exports = class BanCommand extends Command {
 	}
 
 	async run(interaction, args) {
+		await interaction.deferReply();
 		let member;
 
 		try {
@@ -34,7 +35,8 @@ module.exports = class BanCommand extends Command {
 		if (!member.bannable) return this.sendErrorMessage(interaction, 0, 'Provided member is not bannable');
 		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(interaction, 0, 'You cannot ban someone with an equal or higher role');
 		if (member.user.bot) return this.sendErrorMessage(interaction, 0, 'I cannot punish a bot.');
-		let time = ms(args.get('time')?.value);
+		let time;
+		if(args.get('time')?.value) time = ms(args.get('time')?.value);
 
 		if(!isNaN(time) && Math.sign(time) < 0) parseInt(time *= -1);
 
@@ -73,6 +75,18 @@ module.exports = class BanCommand extends Command {
 
 		const expireDate = new Date(Date.now()).getTime();
 
+		let reference = this.client.db.get(`case-${interaction.guild.id}-${args.get('reference')?.value.replace('#', '')}`);
+
+		if(!reference) {reference = null;}
+
+		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+		const sentMessage = await modLog.messages.fetch(reference?.caseInfo?.auditId).catch();
+
+		reference = { caseId: reference?.caseInfo?.caseID, url: sentMessage?.url };
+		if(!sentMessage && !reference) reference = null;
+
+		if(!time) time = ms('1000y');
+
 		const banObject = {
 			guild: interaction.guild.id,
 			channel: interaction.channel.id,
@@ -84,7 +98,8 @@ module.exports = class BanCommand extends Command {
 				reason: reason,
 				date: new Date(Date.now()).getTime(),
 				expiry: new Date(expireDate + time).getTime(),
-				auditId: await this.sendSlashModLogMessage(interaction, reason, member.id, 'ban'),
+				reference: reference,
+				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'ban', caseID, new Date(expireDate + time).getTime(), reference),
 			},
 		};
 
@@ -104,7 +119,7 @@ module.exports = class BanCommand extends Command {
 		this.client.db.ensure(`sanctions-${member.id}`, []);
 		this.client.db.push(`sanctions-${member.id}`, banObject);
 
-		interaction.reply({ ephemeral: false, embeds: [embed] });
+		interaction.editReply({ ephemeral: false, embeds: [embed] });
 	}
 
 	generateSlashCommand() {
@@ -127,6 +142,12 @@ module.exports = class BanCommand extends Command {
 				name: 'reason',
 				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
+				required: false,
+			},
+			{
+				name: 'reference',
+				type: ApplicationCommandOptionType.String,
+				description: '(Optional) Case for reference',
 				required: false,
 			}],
 		};
