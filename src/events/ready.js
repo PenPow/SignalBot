@@ -29,7 +29,7 @@ class Ready {
 
 				if(!info) return;
 
-				const author = await this.client.users.fetch(info.user);
+				const author = await this.client.users.fetch(info.user).catch();
 
 				if(!author) return;
 
@@ -58,7 +58,7 @@ class Ready {
 						this.client.db.set('global_mutes', mutes);
 					}
 
-					this.client.utils.unmute(this.client, caseInfo);
+					this.client.utils.unmute(this.client, caseInfo).catch();
 				}
 				else if(caseInfo.caseInfo.type === 'ban') {
 					for(let i = 0; i < bans.length; i++) {
@@ -67,7 +67,7 @@ class Ready {
 					}
 
 
-					this.client.utils.unban(this.client, caseInfo);
+					this.client.utils.unban(this.client, caseInfo).catch();
 				}
 			}
 
@@ -96,7 +96,7 @@ class Ready {
 				reminders.splice(i, 1);
 				this.client.db.set('global_reminders', reminders);
 
-				const author = await this.client.users.fetch(info.user);
+				const author = await this.client.users.fetch(info.user).catch();
 
 				if(!author) return;
 
