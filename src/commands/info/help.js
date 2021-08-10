@@ -18,7 +18,7 @@ module.exports = class HelpCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		const all = args?.first()?.value || '';
+		const all = args?.get('command')?.value || '';
 
 		const embed = new SignalEmbed(interaction);
 		const prefix = '/';
@@ -26,7 +26,7 @@ module.exports = class HelpCommand extends Command {
 		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, MUSIC } = interaction.client.types;
 		const { capitalize } = interaction.client.utils;
 
-		const command = interaction.client.commands.get(args?.first()?.value.toLowerCase());
+		const command = interaction.client.commands.get(args?.get('command')?.value.toLowerCase());
 		if(command && (command.type !== OWNER || interaction.client.isOwner(interaction.user))) {
 			embed
 				.setTitle(`Command: \`${command.name}\``)
@@ -37,7 +37,7 @@ module.exports = class HelpCommand extends Command {
 
 			if (command.examples) embed.addField('Examples', command.examples.map(c => `\`${prefix}${c}\``).join('\n'));
 		}
-		else if(args?.first()?.value && all) {
+		else if(args?.get('command')?.value && all) {
 			return this.sendErrorMessage(interaction, 0, 'Unable to find command, please check provided command');
 		}
 		else {

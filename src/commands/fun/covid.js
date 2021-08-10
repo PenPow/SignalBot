@@ -16,7 +16,7 @@ module.exports = class CovidCommand extends Command {
 	}
 
 	run(interaction, args) {
-		const countries = args.first()?.value || 'world';
+		const countries = args.get('country')?.value || 'world';
 
 		if(countries === 'world' || countries === 'global' || countries === 'all') {
 			fetch('https://covid19.mathdro.id/api')

@@ -15,7 +15,7 @@ module.exports = class AvatarCommand extends Command {
 	}
 
 	run(interaction, args) {
-		const member = args?.first()?.member || interaction.member;
+		const member = args?.get('user')?.member || interaction.member;
 
 		const embed = new SignalEmbed(interaction)
 			.setTitle(`${member.displayName}'s Avatar`)

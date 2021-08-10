@@ -16,7 +16,7 @@ module.exports = class PermissionsCommand extends Command {
 	}
 
 	run(interaction, args) {
-		const member = interaction.guild.members.cache.get(args?.first()?.user.id) || interaction.member;
+		const member = interaction.guild.members.cache.get(args?.get('user')?.user.id) || interaction.member;
 
 		const memberPermissions = member.permissions.toArray();
 		const finalPermissions = [];

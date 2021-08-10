@@ -19,7 +19,7 @@ module.exports = class TagCommand extends Command {
 	async run(interaction, args) {
 		await this.client.db.ensure(`guild_tags_${interaction.guild.id}`, []);
 		await this.client.db.ensure('guild_tags', []);
-		switch(args.first().name) {
+		switch(args.data[0].name) {
 		case 'guide': {
 			const embed = new SignalEmbed(interaction)
 				.setTitle(':green_book: Guide')

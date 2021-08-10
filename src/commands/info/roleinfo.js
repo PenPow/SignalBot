@@ -17,7 +17,7 @@ module.exports = class RoleInfoCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		const role = args.first().role;
+		const role = args.get('role').role;
 		if (!role) return this.sendErrorMessage(interaction, 0, 'Please mention a role or provide a valid role ID');
 
 		const rolePermissions = role.permissions.toArray();

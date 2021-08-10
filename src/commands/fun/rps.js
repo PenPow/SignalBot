@@ -20,7 +20,7 @@ module.exports = class RPSCommand extends Command {
 	}
 
 	run(interaction, args) {
-		const userChoice = rps.indexOf(args.first()?.value.toLowerCase());
+		const userChoice = rps.indexOf(args.get('option')?.value.toLowerCase());
 		const botChoice = Math.floor(Math.random() * 3);
 
 		let result;

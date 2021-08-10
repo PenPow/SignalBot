@@ -17,7 +17,7 @@ module.exports = class WeatherCommand extends Command {
 
 	run(interaction, args) {
 		try {
-			weather.find({ search: args.first().value, degreeType: 'C' }, (err, result) => {
+			weather.find({ search: args.get('location').value, degreeType: 'C' }, (err, result) => {
 				if(err) interaction.channel.send(err.message);
 				if(result.length === 0) return this.sendErrorMessage(interaction, 1, 'Please Enter a valid location!');
 				const current = result[0].current;

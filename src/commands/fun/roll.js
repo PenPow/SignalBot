@@ -17,7 +17,7 @@ module.exports = class RollCommand extends Command {
 	}
 
 	run(interaction, args) {
-		const limit = args.first()?.value || 6;
+		const limit = args.get('sides')?.value || 6;
 
 		const n = Math.floor(Math.random() * limit + 1);
 

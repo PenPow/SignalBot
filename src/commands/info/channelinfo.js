@@ -29,7 +29,7 @@ module.exports = class ChannelInfoCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		const channel = interaction.guild.channels.cache.get(args?.first()?.value) || interaction.channel;
+		const channel = interaction.guild.channels.cache.get(args?.get('channel')?.value) || interaction.channel;
 
 		const embed = new SignalEmbed(interaction)
 			.setTitle('Channel Information')

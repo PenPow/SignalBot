@@ -30,7 +30,7 @@ module.exports = class EmojifyCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		let msg = args.first()?.value.slice(args.first()?.value.indexOf(args.first()?.value), args.first()?.value.length);
+		let msg = args.get('message')?.value;
 		msg = msg.split('').map(c => {
 			if(c === ' ') return c;
 			else if (/[0-9]/.test(c)) return numberMap[c];

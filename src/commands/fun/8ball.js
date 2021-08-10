@@ -40,7 +40,7 @@ module.exports = class EightBallCommand extends Command {
 	}
 
 	run(interaction, args) {
-		const question = args.first()?.value;
+		const question = args.get('question')?.value;
 
 		const embed = new SignalEmbed(interaction)
 			.setTitle(`${fun} Magic 8-Ball 🎱`)

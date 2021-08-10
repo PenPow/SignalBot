@@ -18,7 +18,7 @@ module.exports = class NicknameCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		const nickname = args.first()?.value;
+		const nickname = args.get('nickname')?.value;
 
 		if (nickname.length > 32) {return this.sendErrorMessage(interaction, 0, 'Please ensure the nickname is no larger than 32 characters');}
 		else if(interaction.user.id === interaction.guild.ownerID) {return this.sendErrorMessage(interaction, 1, 'Unable to change the nickname of server owner');}

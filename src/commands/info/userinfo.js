@@ -34,7 +34,7 @@ module.exports = class UserInfoCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		const member = args?.first()?.member || interaction.member;
+		const member = args?.get('user')?.member || interaction.member;
 		const userFlags = (await member.user.fetchFlags()).toArray();
 
 		let roles = interaction.client.utils.trimArray(member.roles.cache.array().filter(r => !r.name.startsWith('#')));

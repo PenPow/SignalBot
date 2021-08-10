@@ -17,7 +17,7 @@ module.exports = class FeedbackCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		let feedback = args.first()?.value;
+		let feedback = args.get('message')?.value;
 
 		let feedbackChannel;
 
