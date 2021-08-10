@@ -206,10 +206,12 @@ class Command {
      * @param {interaction} interaction
      * @param {string} reason
 	 * @param {User} target
+	 * @param {number} exipration
      * @param {Object} fields
      */
-	async sendModLogMessage(interaction, reason, target, action, fields = {}) {
+	async sendModLogMessage(interaction, reason, target, action, caseNumber, expiration = null, reference = null, fields = {}) {
 		await interaction.guild.channels.fetch();
+
 		let user;
 		try {
 			user = await interaction.client.users.fetch(target);
@@ -221,63 +223,67 @@ class Command {
 		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
 
 		if(modLog && modLog.viewable && modLog.permissionsFor(interaction.guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])) {
-			const caseNumber = parseInt(interaction.client.utils.getCaseNumber(interaction.client, interaction.guild, modLog));
-			const prefix = interaction.client.db.get(`${interaction.guild.id}_prefix`) || interaction.client.prefix;
 			let reply = null;
 			if(interaction.replied) reply = await interaction.fetchReply();
 
-			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`${prefix}reason ${caseNumber} <...reason>\` to set the reason for this case.`;
-			const embed = new SignalEmbed(interaction)
+			if(reason == '`No Reason Provided`' || !reason) reason = `Use \`/reason ${caseNumber} <...reason>\` to set the reason for this case.`;
+			const embed = new SignalEmbed()
 				.setFooter(`Case #${caseNumber}`)
 				.setThumbnail(user?.displayAvatarURL({ dynamic: true }))
-				.setAuthor(`${interaction?.user?.tag} (${interaction?.user?.id})`, interaction?.user?.displayAvatarURL({ dynamic: true }));
+				.setTimestamp()
+				.setColor(interaction.guild.me.displayHexColor);
 
+			try {
+				embed.setAuthor(`${interaction?.user?.tag} (${interaction?.user?.id})`, interaction?.user?.displayAvatarURL({ dynamic: true }) || 'https://ss.penpow.dev/i/Signal.png');
+			}
+			catch {
+				embed.setAuthor(`${interaction?.user?.tag} (${interaction?.user?.id})`, 'https://ss.penpow.dev/i/Signal.png');
+			}
 			switch(action) {
 
 			case 'mute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Context:** ${reply ? `[Link](${reply?.url})` : 'N/A'}\n**Reason:** ${reason}`);
-				embed.setColor('#ffcc00');
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : ''}${reply ? `\n**Context:** [Link](${reply?.url})` : ''}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setColor('#FFDB5C');
 				break;
 
 			case 'warn':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Context:** ${reply ? `[Link](${reply?.url})` : 'Slash Command'}\n**Reason:** ${reason}`);
-				embed.setColor('#f9f906');
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${reply ? `\n**Context:** [Link](${reply?.url})` : ''}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setColor('#FFDB5C');
 				break;
 
 			case 'unmute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#7ef31f');
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setColor('#5CFF9D');
 				break;
 
 			case 'unban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#7ef31f');
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setColor('#5CFF9D');
 				break;
 
 			case 'ban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#ff1a00');
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration:** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : '' }\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setColor('#FF5C5C');
 				break;
 
 			case 'kick':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#f98406');
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : ''}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setColor('#FFDB5C');
 				break;
 
 			case 'softban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#f98406');
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setColor('#F79454');
 				break;
 
 			case 'slowmode':
-				embed.setDescription(`**Channel:** <#${target}> (${target})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#496bdd');
-				embed.setThumbnail();
+				embed.setDescription(`**Channel:** <#${target}> (${target})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setColor('#5C6CFF');
 				break;
 
-			case 'default':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** \`${interaction.client.utils.capitalize(this.name)}\`\n**Reason:** ${reason}`);
-				embed.setColor('#ff1a00');
+			case 'auto':
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** Remove Punishment\n**Reason:** Automatic unrole based on duration\n**Reference:** [#${reference.caseId}](${reference.url})`);
+				embed.setColor();
 				break;
 			}
 

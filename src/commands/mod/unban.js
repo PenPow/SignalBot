@@ -1,6 +1,5 @@
 const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
-const { promisify } = require('util');
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
 const { success, mod } = require('../../utils/emojis');
 
@@ -19,11 +18,11 @@ module.exports = class UnbanCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		const exists = promisify(this.client.redis.exists).bind(this.client.redis);
+		await interaction.deferReply();
 
 		let member;
 		try {
-			if(args.get('caseid')?.value) member = (await interaction.client.users.fetch(this.client.db.get(`case-${interaction.guild.id}-${args.get('caseid')?.value}`)?.caseInfo?.target));
+			if(args.get('caseid')?.value.replace('#', '')) member = (await interaction.client.users.fetch(this.client.db.get(`case-${interaction.guild.id}-${args.get('caseid')?.value.replace('#', '')}`)?.caseInfo?.target));
 			else member = (await interaction.client.users.fetch(args.get('user')?.value));
 		}
 		catch(e) {
@@ -51,6 +50,19 @@ module.exports = class UnbanCommand extends Command {
 
 		const redisClient = this.client.redis;
 
+		let reference = this.client.db.get(`case-${interaction.guild.id}-${args.get('reference')?.value.replace('#', '')}`) ?? oldCaseInfo;
+
+		if(!reference) {reference = null;}
+		else {
+			const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+			const sentMessage = await modLog.messages.fetch(reference.caseInfo.auditId);
+			reference = { caseId: reference.caseInfo.caseID, url: sentMessage.url };
+		}
+
+		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+
+		const sentMessage = await modLog.messages.fetch(oldCaseInfo.caseInfo.auditId);
+
 		const muteObject = {
 			guild: interaction.guild.id,
 			channel: interaction.channel.id,
@@ -62,7 +74,8 @@ module.exports = class UnbanCommand extends Command {
 				reason: reason,
 				expiry: null,
 				date: new Date(Date.now()).getTime(),
-				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'unban'),
+				reference: reference,
+				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'unban', caseID, Infinity, { caseId: oldCaseInfo.caseInfo.caseID, url: sentMessage.url }),
 			},
 		};
 
@@ -71,19 +84,20 @@ module.exports = class UnbanCommand extends Command {
 		this.client.db.ensure(`sanctions-${member.id}`, []);
 		this.client.db.push(`sanctions-${member.id}`, muteObject);
 
+		this.client.db.ensure('alreadyProcessed', []);
+		this.client.db.push('alreadyProcessed', oldCaseInfo.caseInfo.caseID);
+		this.client.db.push('alreadyProcessed', caseID);
+
 		if(oldCaseInfo) {
 			const redisKey = `ban-${interaction.guild.id}-${oldCaseInfo?.caseInfo?.caseID}`;
-			const keyExists = await exists(redisKey);
-			if(!keyExists) {
-				interaction.guild.members.unban(member, 'Ban Revoked/Expired');
+
+			try {
+				redisClient.del(redisKey);
+				await interaction.guild.bans.fetch();
+				await interaction.guild.bans.remove(member.id, 'Ban Revoked');
 			}
-			else {
-				try {
-					redisClient.expire(redisKey, 1);
-				}
-				catch(e) {
-					this.client.logger.error(e.stack);
-				}
+			catch(e) {
+				this.client.logger.error(e.stack);
 			}
 
 			const bans = this.client.db.get('global_bans');
@@ -92,11 +106,7 @@ module.exports = class UnbanCommand extends Command {
 			}
 		}
 
-		else {
-			interaction.guild.members.unban(member, 'Ban Revoked/Expired');
-		}
-
-		interaction.reply({ ephemeral: true, embeds: [embed] });
+		interaction.editReply({ ephemeral: true, embeds: [embed] });
 	}
 
 	generateSlashCommand() {
@@ -105,7 +115,7 @@ module.exports = class UnbanCommand extends Command {
 			description: this.description,
 			options: [{
 				name: 'user',
-				type: ApplicationCommandOptionType.User,
+				type: ApplicationCommandOptionType.String,
 				description: 'UserID to remove the ban for',
 				required: false,
 			},

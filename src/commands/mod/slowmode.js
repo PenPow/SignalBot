@@ -19,6 +19,8 @@ module.exports = class SlowmodeCommand extends Command {
 	}
 
 	async run(interaction, args) {
+		await interaction.deferReply();
+
 		const time = ms(args.get('time')?.value);
 		if(isNaN(time)) return this.sendErrorMessage(interaction, 0, 'Please specify a valid time. (ex. 10m, 10s, 1h)');
 		if(interaction.channel.type !== 'GUILD_TEXT') return this.sendErrorMessage(interaction, 0, 'Due to discord restrictions, we can only adjust the rate limit in guild text channels.');
@@ -34,6 +36,16 @@ module.exports = class SlowmodeCommand extends Command {
 
 		const caseID = this.client.utils.getCaseNumber(this.client, interaction.guild);
 
+		let reference = this.client.db.get(`case-${interaction.guild.id}-${args.get('reference')?.value.replace('#', '')}`);
+
+		if(!reference) {reference = null;}
+
+		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+		const sentMessage = await modLog.messages.fetch(reference?.caseInfo?.auditId).catch();
+
+		reference = { caseId: reference?.caseInfo?.caseID, url: sentMessage?.url };
+		if(!sentMessage && !reference) reference = null;
+
 		const dbObject = {
 			guild: interaction.guild.id,
 			channel: interaction.channel.id,
@@ -44,14 +56,15 @@ module.exports = class SlowmodeCommand extends Command {
 				moderator: interaction.user.id,
 				reason: reason,
 				date: new Date(Date.now()).getTime(),
-				auditId: await this.sendModLogMessage(interaction, reason, interaction.channel.id, 'slowmode'),
+				reference: reference,
+				auditId: await this.sendModLogMessage(interaction, reason, interaction.channel.id, 'slowmode', caseID, null, reference),
 			},
 		};
 
 		this.client.db.set(`case-${interaction.guild.id}`, caseID);
 		this.client.db.set(`case-${interaction.guild.id}-${caseID}`, dbObject);
 
-		interaction.reply({ ephemeral: true, embeds: [embed] });
+		interaction.editReply({ ephemeral: true, embeds: [embed] });
 	}
 
 	generateSlashCommand() {
@@ -68,6 +81,12 @@ module.exports = class SlowmodeCommand extends Command {
 				name: 'reason',
 				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
+				required: false,
+			},
+			{
+				name: 'reference',
+				type: ApplicationCommandOptionType.String,
+				description: '(Optional) Case for reference',
 				required: false,
 			}],
 		};

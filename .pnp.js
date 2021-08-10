@@ -52,7 +52,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["crypto-js", "npm:4.1.1"],
             ["dice-expression-evaluator", "npm:0.1.2"],
             ["discord-api-types", "npm:0.22.0"],
-            ["discord.js", "npm:13.0.0"],
+            ["discord.js", "npm:13.0.1"],
             ["dotenv", "npm:10.0.0"],
             ["enmap", "npm:5.8.7"],
             ["eslint", "npm:7.32.0"],
@@ -1628,10 +1628,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["discord.js", [
-        ["npm:13.0.0", {
-          "packageLocation": "./.yarn/cache/discord.js-npm-13.0.0-c56b6579cd-1ca2f17276.zip/node_modules/discord.js/",
+        ["npm:13.0.1", {
+          "packageLocation": "./.yarn/cache/discord.js-npm-13.0.1-c4c02100e3-795f0750a7.zip/node_modules/discord.js/",
           "packageDependencies": [
-            ["discord.js", "npm:13.0.0"],
+            ["discord.js", "npm:13.0.1"],
             ["@discordjs/builders", "npm:0.4.0"],
             ["@discordjs/collection", "npm:0.2.1"],
             ["@discordjs/form-data", "npm:3.0.1"],
@@ -5272,7 +5272,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["crypto-js", "npm:4.1.1"],
             ["dice-expression-evaluator", "npm:0.1.2"],
             ["discord-api-types", "npm:0.22.0"],
-            ["discord.js", "npm:13.0.0"],
+            ["discord.js", "npm:13.0.1"],
             ["dotenv", "npm:10.0.0"],
             ["enmap", "npm:5.8.7"],
             ["eslint", "npm:7.32.0"],

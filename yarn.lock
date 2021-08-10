@@ -1330,9 +1330,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord.js@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "discord.js@npm:13.0.0"
+"discord.js@npm:^13.0.1":
+  version: 13.0.1
+  resolution: "discord.js@npm:13.0.1"
   dependencies:
     "@discordjs/builders": ^0.4.0
     "@discordjs/collection": ^0.2.1
@@ -1342,7 +1342,7 @@ __metadata:
     discord-api-types: ^0.22.0
     node-fetch: ^2.6.1
     ws: ^7.5.1
-  checksum: 1ca2f17276ebfba289684abefcf2c9da1afe258451dce18cc3fe15b2270f4e193af2ee7c53647134125982ee3e72d35a68f201f536b849bbb29fabcf09cb823d
+  checksum: 795f0750a7d4a53930bfb8afd306b599dea867ae54a80806dc0a6385fd8c0921dd21539aeb7713bad8a9c2eb630b99a8a3bb5ab31a4f4d11a5404d8986bdbcd4
   languageName: node
   linkType: hard
 
@@ -4486,7 +4486,7 @@ fsevents@~2.3.2:
     crypto-js: ^4.0.0
     dice-expression-evaluator: ^0.1.2
     discord-api-types: ^0.22.0
-    discord.js: ^13.0.0
+    discord.js: ^13.0.1
     dotenv: ^10.0.0
     enmap: ^5.8.5
     eslint: ^7.32.0

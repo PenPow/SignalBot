@@ -18,7 +18,7 @@ module.exports = class ReasonCommand extends Command {
 	}
 
 	async run(interaction, args) {
-		const caseInformation = this.client.db.get(`case-${interaction.guild.id}-${args.get('caseid')?.value}`);
+		const caseInformation = this.client.db.get(`case-${interaction.guild.id}-${args.get('caseid')?.value.replace('#', '')}`);
 		if(!caseInformation) return this.sendErrorMessage(interaction, 1, 'No Case Found');
 		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
 
@@ -28,7 +28,12 @@ module.exports = class ReasonCommand extends Command {
 		const caseID = sentMessage.embeds[0].footer.text.substring(6);
 
 		const descriptionArray = sentMessage.embeds[0].description.split('\n');
-		descriptionArray[descriptionArray.length - 1] = `**Reason:** ${args.get('reason')?.value}`;
+		for(let i = 0; i < descriptionArray.length; i++) {
+			if(!descriptionArray[i].startsWith('**Reason:**')) continue;
+
+			descriptionArray[i] = `**Reason:** ${args.get('reason')?.value}`;
+			break;
+		}
 
 		const finalArray = descriptionArray.join('\n');
 		const embed = sentMessage.embeds[0];

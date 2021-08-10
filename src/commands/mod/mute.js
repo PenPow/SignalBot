@@ -19,21 +19,23 @@ module.exports = class MuteCommand extends Command {
 	}
 
 	async run(interaction, args) {
+		await interaction.deferReply();
 		const muteRole = this.client.db.get(`muterole-${interaction.guild.id}`) || interaction.guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
 
 		if(!muteRole) return this.sendErrorMessage(interaction, 1, 'There is currently no mute role set on this server');
 
-		const member = args.first()?.member;
+		const member = args.get('user')?.member;
 
 
 		if (!member) return this.sendErrorMessage(interaction, 0, 'Please mention a user or provide a valid user ID');
 		if (member === interaction.member) return this.sendErrorMessage(interaction, 0, 'You cannot mute yourself');
 		if (member === interaction.guild.me) return this.sendErrorMessage(interaction, 0, 'You cannot mute me');
 		if (member.roles.highest.position >= interaction.member.roles.highest.position || !member.manageable) return this.sendErrorMessage(interaction, 0, 'You cannot mute someone with an equal or higher role');
-		if (!args.get('time').value) return this.sendErrorMessage(interaction, 0, 'Please enter a length of time (1s/m/h/d/w/y)');
 		if (member.user.bot) return this.sendErrorMessage(interaction, 0, 'I cannot punish a bot.');
 
-		let time = ms(args.get('time').value);
+		let time = args.get('time')?.value;
+		if(!args.get('time')?.value) time = '1000y';
+		time = ms(time);
 
 		if(Math.sign(time) < 0) parseInt(time *= -1);
 
@@ -75,7 +77,19 @@ module.exports = class MuteCommand extends Command {
 
 		const redisClient = this.client.redis;
 
+		if(!time) time = ms('1000y');
+
 		const expireDate = new Date(Date.now()).getTime();
+
+		let reference = this.client.db.get(`case-${interaction.guild.id}-${args.get('reference')?.value.replace('#', '')}`);
+
+		if(!reference) {reference = null;}
+
+		const modLog = interaction.guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+		const sentMessage = await modLog.messages.fetch(reference?.caseInfo?.auditId).catch();
+
+		reference = { caseId: reference?.caseInfo?.caseID, url: sentMessage?.url };
+		if(!sentMessage && !reference) reference = null;
 
 		const muteObject = {
 			guild: interaction.guild.id,
@@ -88,7 +102,8 @@ module.exports = class MuteCommand extends Command {
 				reason: reason,
 				date: new Date(Date.now()).getTime(),
 				expiry: new Date(expireDate + time).getTime(),
-				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'mute'),
+				reference: reference,
+				auditId: await this.sendModLogMessage(interaction, reason, member.id, 'mute', caseID, new Date(expireDate + time).getTime(), reference),
 			},
 		};
 
@@ -107,7 +122,7 @@ module.exports = class MuteCommand extends Command {
 		this.client.db.ensure(`sanctions-${member.id}`, []);
 		this.client.db.push(`sanctions-${member.id}`, muteObject);
 
-		interaction.reply({ ephemeral: false, embeds: [embed] });
+		interaction.editReply({ ephemeral: false, embeds: [embed] });
 	}
 
 	generateSlashCommand() {
@@ -124,12 +139,18 @@ module.exports = class MuteCommand extends Command {
 				name: 'time',
 				type: ApplicationCommandOptionType.String,
 				description: 'Length of time (1s/m/h/d/w/y)',
-				required: true,
+				required: false,
 			},
 			{
 				name: 'reason',
 				type: ApplicationCommandOptionType.String,
 				description: '(Optional) Reason for the punishment',
+				required: false,
+			},
+			{
+				name: 'reference',
+				type: ApplicationCommandOptionType.String,
+				description: '(Optional) Case for reference',
 				required: false,
 			}],
 		};

@@ -152,10 +152,42 @@ async function confirmation() {
  * @param {Object} caseInfo
  */
 async function unmute(client, caseInfo) {
+	const alreadyProcessed = client.db.get('alreadyProcessed');
+
+	if(alreadyProcessed && alreadyProcessed.includes(caseInfo.caseInfo.caseID)) return;
+
 	const guild = await client.guilds.fetch(caseInfo.guild);
 	const member = await client.users.fetch(caseInfo.caseInfo.target);
 	const moderator = await client.users.fetch(caseInfo.caseInfo.moderator);
 	const role = client.db.get(`muterole-${guild.id}`) || guild.roles.cache.find(r => r.name.toLowerCase().replace(/[^a-z]/g, '') === 'muted');
+
+	const expiration = caseInfo.caseInfo.expiry || Infinity;
+
+	const modLog = guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+
+	const sentMessage = await modLog.messages.fetch(caseInfo.caseInfo.auditId);
+
+	const caseID = getCaseNumber(client, guild);
+
+	const muteObject = {
+		guild: guild.id,
+		channel: null,
+		caseInfo: {
+			caseID: caseID,
+			type: 'unban',
+			target: member.id,
+			moderator: null,
+			reason: 'Automatic Removal based on Duration',
+			expiry: null,
+			date: new Date(Date.now()).getTime(),
+			auditId: await client.commands.get('unban').sendModLogMessage({ client: client, guild: guild, user: { tag: 'Signal#0656', id: '789809995478597642' } }, null, member.id, 'auto', caseID, expiration, { url: sentMessage.url, caseId: caseInfo.caseInfo.caseID }),
+		},
+	};
+
+	client.db.set(`case-${guild.id}`, caseID);
+	client.db.set(`case-${guild.id}-${caseID}`, muteObject);
+	client.db.ensure(`sanctions-${member.id}`, []);
+	client.db.push(`sanctions-${member.id}`, muteObject);
 
 	client.redis.del(`mute-${guild.id}-${caseInfo.caseInfo.caseID}`);
 
@@ -173,6 +205,9 @@ async function unmute(client, caseInfo) {
 		.setTimestamp()
 		.setColor(guild.me.displayHexColor);
 
+	client.db.push('alreadyProcessed', caseInfo.caseInfo.caseID);
+	client.db.push('alreadyProcessed', caseID);
+
 	member.send({ embeds: [embed] }).catch();
 }
 
@@ -182,16 +217,52 @@ async function unmute(client, caseInfo) {
  * @param {Object} caseInfo
  */
 async function unban(client, caseInfo) {
+	const alreadyProcessed = client.db.get('alreadyProcessed');
+
+	if(alreadyProcessed && alreadyProcessed.includes(caseInfo.caseInfo.caseID)) return;
+
 	const guild = await client.guilds.fetch(caseInfo.guild);
 	const member = await client.users.fetch(caseInfo.caseInfo.target);
 
+	const expiration = caseInfo.caseInfo.expiry || Infinity;
+
+	const modLog = guild.channels.cache.find(c => c.name.replace('-', '') === 'modlogs' || c.name.replace('-', '') === 'modlog' || c.name.replace('-', '') === 'logs' || c.name.replace('-', '') === 'serverlogs' || c.name.replace('-', '') === 'auditlog' || c.name.replace('-', '') === 'auditlogs');
+
+	const sentMessage = await modLog.messages.fetch(caseInfo.caseInfo.auditId);
+
+	const caseID = getCaseNumber(client, guild);
+
+	const muteObject = {
+		guild: guild.id,
+		channel: null,
+		caseInfo: {
+			caseID: caseID,
+			type: 'unban',
+			target: member.id,
+			moderator: null,
+			reason: 'Automatic Removal based on Duration',
+			expiry: null,
+			date: new Date(Date.now()).getTime(),
+			auditId: await client.commands.get('unban').sendModLogMessage({ client: client, guild: guild, user: { tag: 'Signal#0656', id: '789809995478597642' } }, null, member.id, 'auto', caseID, expiration, { url: sentMessage.url, caseId: caseInfo.caseInfo.caseID }),
+		},
+	};
+
+	client.db.set(`case-${guild.id}`, caseID);
+	client.db.set(`case-${guild.id}-${caseID}`, muteObject);
+	client.db.ensure(`sanctions-${member.id}`, []);
+	client.db.push(`sanctions-${member.id}`, muteObject);
+
 	try {
 		await guild.bans.fetch();
-		await guild.bans.remove(member.id, 'Ban Revoked/Expired');
+		await guild.bans.remove(member.id, 'Ban Expired');
 	}
 	catch(e) {
 		// eslint disable-line
 	}
+
+	client.db.ensure('alreadyProcessed', []);
+	client.db.push('alreadyProcessed', caseInfo.caseInfo.caseID);
+	client.db.push('alreadyProcessed', caseID);
 }
 
 /**
