@@ -9,7 +9,7 @@ module.exports = class TagCommand extends Command {
 			name: 'tag',
 			usage: 'tag <create | list | show | delete | edit | guide>',
 			description: 'Creates/Lists/Shows/Edits/Deletes a tag (run s!tags guide for more information)',
-			type: client.types.TAG,
+			type: client.types.TAGS,
 			examples: ['tag create', 'tag show', 'tag list', 'tag delete', 'tag edit', 'tag guide'],
 			clientPermissions: ['EMBED_LINKS'],
 			guildOnly: true,

@@ -2,7 +2,7 @@ const Command = require('../../structures/Command');
 const SignalEmbed = require('../../structures/SignalEmbed');
 const { stripIndent } = require('common-tags');
 const { ApplicationCommandOptionType } = require('discord-api-types/v9');
-const { info, fun, misc, mod, admin } = require('../../utils/emojis');
+const { info, fun, misc, mod, admin, store } = require('../../utils/emojis');
 
 module.exports = class HelpCommand extends Command {
 	constructor(client) {
@@ -23,7 +23,7 @@ module.exports = class HelpCommand extends Command {
 		const embed = new SignalEmbed(interaction);
 		const prefix = '/';
 
-		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, MUSIC } = interaction.client.types;
+		const { INFO, FUN, MISC, MOD, ADMIN, OWNER, TAGS } = interaction.client.types;
 		const { capitalize } = interaction.client.utils;
 
 		const command = interaction.client.commands.get(args?.get('command')?.value.toLowerCase());
@@ -50,8 +50,8 @@ module.exports = class HelpCommand extends Command {
 			const emojiMap = {
 				[INFO]: `${info} ${capitalize(INFO)}`,
 				[FUN]: `${fun} ${capitalize(FUN)}`,
-				[MUSIC]: `:musical_note: ${capitalize(MUSIC)}`,
 				[MISC]: `${misc} ${capitalize(MISC)}`,
+				[TAGS]: `${store} ${capitalize(TAGS)}`,
 				[MOD]: `${mod} ${capitalize(MOD)}`,
 				[ADMIN]: `${admin} ${capitalize(ADMIN)}`,
 			};
