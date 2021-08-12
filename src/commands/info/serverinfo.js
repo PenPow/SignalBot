@@ -34,7 +34,7 @@ module.exports = class ServerInfoCommand extends Command {
 
 		const guildOwner = await interaction.client.users.fetch(interaction.guild.ownerID);
 
-		const members = interaction.guild.members.cache.array();
+		const members = [...interaction.guild.members.cache.values()];
 		const memberCount = members.length;
 		const online = members.filter((m) => m.presence.status === 'online').length;
 		const offline = members.filter((m) => m.presence.status === 'offline').length;
@@ -42,7 +42,7 @@ module.exports = class ServerInfoCommand extends Command {
 		const afk = members.filter((m) => m.presence.status === 'idle').length;
 		const bots = members.filter(b => b.user.bot).length;
 
-		const channels = interaction.guild.channels.cache.array();
+		const channels = [...interaction.guild.channels.cache.values()];
 		const channelCount = channels.length;
 		const textChannels = channels.filter(c => c.type === 'text' && c.viewable).sort((a, b) => a.rawPosition - b.rawPosition);
 		const voiceChannels = channels.filter(c => c.type === 'voice').length;

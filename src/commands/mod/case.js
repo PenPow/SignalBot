@@ -43,7 +43,7 @@ module.exports = class CaseCommand extends Command {
 
 			let description = `**Member**\`${target.tag}\`(${caseInfo.caseInfo.target})\n**Moderator**\`${moderator.displayName}\`(${caseInfo.caseInfo.moderator})\n**Action:** \`${interaction.client.utils.capitalize(caseInfo.caseInfo.type)}\`\n**Reason:** ${caseInfo.caseInfo.reason.replace(/`/g, '')}`;
 
-			if(caseInfo.caseInfo.reference) description += `\n**Reference:** [#${caseInfo.caseInfo.reference.caseId}](${caseInfo.caseInfo.reference.url})`;
+			if(caseInfo.caseInfo.reference) description += `\n**Reference:** [#${caseInfo.caseInfo.reference.caseId}](${caseInfo.caseInfo.reference?.url})`;
 			if(caseInfo.caseInfo.expiration) description += `\n**Expiration:** <t:${parseInt(caseInfo.caseInfo.expiration / 1000).toFixed(0)}:R> : '' }`;
 
 			const embed = new SignalEmbed(interaction)

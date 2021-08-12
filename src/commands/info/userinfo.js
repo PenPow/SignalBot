@@ -37,7 +37,7 @@ module.exports = class UserInfoCommand extends Command {
 		const member = args?.get('user')?.member || interaction.member;
 		const userFlags = (await member.user.fetchFlags()).toArray();
 
-		let roles = interaction.client.utils.trimArray(member.roles.cache.array().filter(r => !r.name.startsWith('#')));
+		let roles = interaction.client.utils.trimArray([...member.roles.cache.values()].filter(r => !r.name.startsWith('#')));
 		roles = interaction.client.utils.removeElement(roles, interaction.guild.roles.everyone)
 			.sort((a, b) => b.position - a.position).join(' ');
 

@@ -38,7 +38,7 @@ module.exports = class ChannelInfoCommand extends Command {
 			.addField('ID', `\`${channel.id}\``, true)
 			.addField('Type', `\`${channelTypes[channel.type]}\``, true)
 			.addField('Members', `\`${channel.members.size}\``, true)
-			.addField('Bots', `\`${channel.members.array().filter(b => b.user.bot).length}\``, true)
+			.addField('Bots', `\`${[...channel.members.values()].filter(b => b.user.bot).length}\``, true)
 			.addField('Created On', `\`${moment(channel.createdAt).format('MMM DD YYYY')}\``, true);
 
 		if(channel.type === 'GUILD_TEXT') {
@@ -55,8 +55,8 @@ module.exports = class ChannelInfoCommand extends Command {
 				.spliceFields(0, 1, { name: 'Channel', value: `${voice} ${channel.name}`, inline: true })
 				.spliceFields(5, 0, { name: 'User Limit', value: `\`${channel.userLimit}\``, inline: true })
 				.spliceFields(6, 0, { name: 'Full', value: `\`${channel.full}\``, inline: true });
-			const members = channel.members.array();
-			if (members.length > 0) {embed.addField('Members Joined', interaction.client.utils.trimArray(channel.members.array()).join(' '));}
+			const members = [...channel.members.values()];
+			if (members.length > 0) {embed.addField('Members Joined', interaction.client.utils.trimArray([...channel.members.values()]).join(' '));}
 		}
 		else if(['GUILD_PUBLIC_THREAD', 'GUILD_PRIVATE_THREAD', 'GUILD_NEWS_THREAD'].includes(channel.type)) {
 			embed

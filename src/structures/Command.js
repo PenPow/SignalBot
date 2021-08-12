@@ -242,47 +242,47 @@ class Command {
 			switch(action) {
 
 			case 'mute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : ''}${reply ? `\n**Context:** [Link](${reply?.url})` : ''}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : ''}${reply ? `\n**Context:** [Link](${reply?.url})` : ''}\n**Reason:** ${reason}${reference?.url ? `\n**Reference:** [#${reference.caseId}](${reference?.url})` : ''}`);
 				embed.setColor('#FFDB5C');
 				break;
 
 			case 'warn':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${reply ? `\n**Context:** [Link](${reply?.url})` : ''}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${reply ? `\n**Context:** [Link](${reply?.url})` : ''}\n**Reason:** ${reason}${reference?.url ? `\n**Reference:** [#${reference.caseId}](${reference?.url})` : ''}`);
 				embed.setColor('#FFDB5C');
 				break;
 
 			case 'unmute':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference?.url ? `\n**Reference:** [#${reference?.caseId}](${reference?.url})` : ''}`);
 				embed.setColor('#5CFF9D');
 				break;
 
 			case 'unban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference?.url ? `\n**Reference:** [#${reference?.caseId}](${reference?.url})` : ''}`);
 				embed.setColor('#5CFF9D');
 				break;
 
 			case 'ban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration:** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : '' }\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration:** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : '' }\n**Reason:** ${reason}${reference?.url ? `\n**Reference:** [#${reference.caseId}](${reference?.url})` : ''}`);
 				embed.setColor('#FF5C5C');
 				break;
 
 			case 'kick':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : ''}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}${expiration ? `\n**Expiration** <t:${parseInt(expiration / 1000).toFixed(0)}:R>` : ''}\n**Reason:** ${reason}${reference?.url ? `\n**Reference:** [#${reference.caseId}](${reference?.url})` : ''}`);
 				embed.setColor('#FFDB5C');
 				break;
 
 			case 'softban':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference?.url ? `\n**Reference:** [#${reference.caseId}](${reference?.url})` : ''}`);
 				embed.setColor('#F79454');
 				break;
 
 			case 'slowmode':
-				embed.setDescription(`**Channel:** <#${target}> (${target})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference.url ? `\n**Reference:** [#${reference.caseId}](${reference.url})` : ''}`);
+				embed.setDescription(`**Channel:** <#${target}> (${target})\n**Action:** ${interaction.client.utils.capitalize(this.name)}\n**Reason:** ${reason}${reference?.url ? `\n**Reference:** [#${reference.caseId}](${reference?.url})` : ''}`);
 				embed.setColor('#5C6CFF');
 				break;
 
 			case 'auto':
-				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** Remove Punishment\n**Reason:** Automatic unrole based on duration\n**Reference:** [#${reference.caseId}](${reference.url})`);
+				embed.setDescription(`**Member:** \`${user.tag}\` (${user.id})\n**Action:** Remove Punishment\n**Reason:** Automatic unrole based on duration\n**Reference:** [#${reference.caseId}](${reference?.url})`);
 				embed.setColor();
 				break;
 			}
